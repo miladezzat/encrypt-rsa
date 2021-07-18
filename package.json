@@ -1,0 +1,29 @@
+{
+  "name": "rsa-node",
+  "version": "1.0.0",
+  "description": "this is a little modul use to encrypt and decrypt strings with RSA keys (public and private keys)",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.28.3",
+    "@typescript-eslint/parser": "^4.28.3",
+    "eslint": "^7.31.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-plugin-import": "^2.23.4"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "rsa",
+    "node-rsa",
+    "encrypt",
+    "encrypt by public key",
+    "decrypt by private key"
+  ],
+  "author": {
+    "name": "Milad E. Fahmy",
+    "email": "miladezzat.f@gmail.com",
+    "url": "https://milad-ezzat.vercel.app"
+  }
+}
