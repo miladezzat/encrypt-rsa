@@ -1,6 +1,6 @@
 {
   "name": "rsa-node",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "this is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
   "main": "./build/index.js",
   "module": "./build/index.js",
