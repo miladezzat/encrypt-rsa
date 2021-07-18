@@ -58,14 +58,22 @@
     "encrypt by public key",
     "decrypt by private key"
   ],
-  "author": {
-    "name": "Milad E. Fahmy",
-    "email": "miladezzat.f@gmail.com",
-    "url": "https://milad-ezzat.vercel.app"
-  },
+  "author": "Milad E. Fahmy <miladezzat.f@gmail.com> (https://milad-ezzat.vercel.app)",
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/miladezzat/encrypt-rsa.git"
+  },
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/miladezzat/encrypt-rsa/issues"
+  },
+  "homepage": "https://milad-ezzat.vercel.app"
 }
