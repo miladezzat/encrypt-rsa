@@ -1,5 +1,5 @@
 {
-  "name": "rsa-node",
+  "name": "encrypt-rsa",
   "version": "1.0.0",
   "description": "this is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
   "main": "./build/index.js",
@@ -47,6 +47,11 @@
     "typescript": "^4.3.5"
   },
   "keywords": [
+    "algorith",
+    "node",
+    "encryption",
+    "public key",
+    "private ley",
     "rsa",
     "node-rsa",
     "encrypt",
