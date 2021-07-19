@@ -2,4 +2,3 @@ node_modules
 .husky
 tests
 .gitignore
-build
