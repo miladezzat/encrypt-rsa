@@ -1,6 +1,6 @@
-import crypto from 'crypto';
-import path from 'path';
-import fs from 'fs';
+import { publicEncrypt, privateDecrypt } from 'crypto';
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
 
 type parameters = {
   text: string,
@@ -33,11 +33,11 @@ class NodeRSA {
   public encryptStringWithRsaPublicKey(args: parameters): string {
     const { text, keyPath = this.publicKeyPath } = args;
 
-    const absolutePath: string = path.resolve(keyPath);
+    const absolutePath: string = resolve(keyPath);
 
-    const publicKey: string = fs.readFileSync(absolutePath, 'utf8');
+    const publicKey: string = readFileSync(absolutePath, 'utf8');
     const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = crypto.publicEncrypt(publicKey, buffer);
+    const encrypted: Buffer = publicEncrypt(publicKey, buffer);
 
     return encrypted.toString('base64');
   }
@@ -52,11 +52,11 @@ class NodeRSA {
    */
   public decryptStringWithRsaPrivateKey(args: parameters): string {
     const { text, keyPath = this.privateKeyPath } = args;
-    const absolutePath: string = path.resolve(keyPath);
+    const absolutePath: string = resolve(keyPath);
 
-    const privateKey: string = fs.readFileSync(absolutePath, 'utf8');
+    const privateKey: string = readFileSync(absolutePath, 'utf8');
     const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = crypto.privateDecrypt(privateKey, buffer);
+    const decrypted: Buffer = privateDecrypt(privateKey, buffer);
 
     return decrypted.toString('utf8');
   }
