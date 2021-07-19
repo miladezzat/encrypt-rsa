@@ -4,10 +4,11 @@
     "module": "commonjs",
     "declaration": true,
     "outDir": "./build",
-    "strict": true
+    "strict": true,
+    "esModuleInterop": true
   },
   "include": [
-    "src"
+    "./src/**/*"
   ],
   "exclude": [
     "node_modules",
