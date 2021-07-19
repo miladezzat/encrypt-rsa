@@ -5,7 +5,7 @@
   "main": "./build/index.js",
   "module": "./build/index.js",
   "files": [
-    "lib/**/*"
+    "build/**/*"
   ],
   "types": "./build/index.d.ts",
   "source": "./src/index.ts",
