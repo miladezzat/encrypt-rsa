@@ -1,3 +1,9 @@
+#### 1.0.10 (2021-07-20)
+
+##### Documentation Changes
+
+*  ✏️ update readme ([e29f1805](https://github.com/miladezzat/encrypt-rsa/commit/e29f180513d8f79daaad9fee7e0a532e2e94f076))
+
 #### 1.0.9 (2021-07-19)
 
 #### 1.0.8 (2021-07-19)
