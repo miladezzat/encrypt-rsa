@@ -1,6 +1,6 @@
 {
   "name": "encrypt-rsa",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "this is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
   "main": "./build/index.js",
   "module": "./build/index.js",
@@ -14,6 +14,7 @@
     "depcheck": "./node_modules/.bin/depcheck",
     "prepare": "husky install",
     "build": "tsc",
+    "git-cz": "./node_modules/.bin/git-cz",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
@@ -23,7 +24,6 @@
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
   },
-  "dependencies": {},
   "devDependencies": {
     "@types/chai": "^4.2.21",
     "@types/mocha": "^8.2.3",
@@ -38,6 +38,7 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.23.4",
     "generate-changelog": "^1.8.0",
+    "git-cz": "^4.7.6",
     "husky": "^7.0.1",
     "mocha": "^9.0.2",
     "pinst": "^2.1.6",
@@ -45,11 +46,11 @@
     "typescript": "^4.3.5"
   },
   "keywords": [
-    "algorith",
+    "algorithm",
     "node",
     "encryption",
     "public key",
-    "private ley",
+    "private key",
     "rsa",
     "node-rsa",
     "encrypt",

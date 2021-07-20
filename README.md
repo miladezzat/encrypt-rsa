@@ -1,7 +1,13 @@
+
 # Encrypt By RSA Algorithm
 
 [![npm version](https://badge.fury.io/js/encrypt-rsa.svg)](https://badge.fury.io/js/encrypt-rsa)&nbsp;
 
+> RSA is a public-key cryptosystem that is widely used for secure data transmission. It is also one of the oldest. The acronym RSA comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. [Wikipedia](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
+
+RSA algorithm is asymmetric cryptography algorithm. Asymmetric actually means that it works on two different keys i.e. Public Key and Private Key. As the name describes that the Public Key is given to everyone and Private key is kept private.
+
+### For more explanation about RSA Algorithm visit [https://milad-ezzat.vercel.app/rsa-encryption-algorithm](https://milad-ezzat.vercel.app/rsa-encryption-algorithm)
 
 1. [Installation](#installation)
 2. [Usage](#usage)
@@ -52,4 +58,4 @@ console.log({ decryptedText });
 // result: { decryptedText: 'hello' }
 
 ```
-
+for more information about RSA [https://simple.wikipedia.org/wiki/RSA_algorithm](https://simple.wikipedia.org/wiki/RSA_algorithm)
