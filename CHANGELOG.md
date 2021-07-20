@@ -1,3 +1,9 @@
+#### 1.0.11 (2021-07-20)
+
+##### Bug Fixes
+
+*  🐛 solve docs ([8a08c44e](https://github.com/miladezzat/encrypt-rsa/commit/8a08c44e767d5dcd242b5a5806602468cb663ec1))
+
 #### 1.0.10 (2021-07-20)
 
 ##### Documentation Changes
