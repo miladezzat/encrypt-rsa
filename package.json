@@ -55,7 +55,11 @@
     "node-rsa",
     "encrypt",
     "encrypt by public key",
-    "decrypt by private key"
+    "decrypt by private key",
+    "rsa encryption",
+    "node-rsa typescript",
+    "Crypto-js RSA",
+    "Javascript RSA encryption"
   ],
   "author": "Milad E. Fahmy <miladezzat.f@gmail.com> (https://milad-ezzat.vercel.app)",
   "config": {
