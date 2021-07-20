@@ -1,3 +1,9 @@
+#### 1.0.12 (2021-07-20)
+
+##### Chores
+
+*  🤖 update keywords ([b435e3ba](https://github.com/miladezzat/encrypt-rsa/commit/b435e3ba757a80dd66b95ed8a8a668952b66558e))
+
 #### 1.0.11 (2021-07-20)
 
 ##### Bug Fixes
