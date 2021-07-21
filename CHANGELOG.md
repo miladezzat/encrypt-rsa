@@ -1,3 +1,13 @@
+### 1.1.0 (2021-07-21)
+
+##### Documentation Changes
+
+*  ✏️ update docs for creating keys ([cebb2758](https://github.com/miladezzat/encrypt-rsa/commit/cebb2758ac55478d46f0ae6228a10f8f1f78b8c3))
+
+##### New Features
+
+*  🎸 add create public and private keys ([74c51131](https://github.com/miladezzat/encrypt-rsa/commit/74c51131a858ad28cdda605b479b6bd21297e730))
+
 #### 1.0.12 (2021-07-20)
 
 ##### Chores
