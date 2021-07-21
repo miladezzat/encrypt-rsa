@@ -2,6 +2,7 @@
 # Encrypt By RSA Algorithm
 
 [![npm version](https://badge.fury.io/js/encrypt-rsa.svg)](https://badge.fury.io/js/encrypt-rsa)&nbsp;
+![https://img.shields.io/npm/dm/encrypt-rsa.svg](https://img.shields.io/npm/dm/encrypt-rsa.svg)
 
 > RSA is a public-key cryptosystem that is widely used for secure data transmission. It is also one of the oldest. The acronym RSA comes from the surnames of Ron Rivest, Adi Shamir and Leonard Adleman, who publicly described the algorithm in 1977. [Wikipedia](https://en.wikipedia.org/wiki/RSA_(cryptosystem))
 
