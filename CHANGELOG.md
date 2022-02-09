@@ -1,3 +1,9 @@
+### 1.2.0 (2022-02-09)
+
+##### Documentation Changes
+
+*  set docs ([6f1fa5e3](https://github.com/miladezzat/encrypt-rsa/commit/6f1fa5e38e7d1ef0576a8e49501766f540715477))
+
 ### 1.1.0 (2021-07-21)
 
 ##### Documentation Changes
