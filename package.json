@@ -14,7 +14,8 @@
     "depcheck": "./node_modules/.bin/depcheck",
     "prepare": "husky install",
     "build": "tsc",
-    "git-cz": "./node_modules/.bin/git-cz",
+    "commit": "./node_modules/.bin/git-cz",
+    "docs:serve": "docsify serve docs",    
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
@@ -32,6 +33,7 @@
     "@typescript-eslint/parser": "^4.28.3",
     "chai": "^4.3.4",
     "commitizen": "^4.2.4",
+    "docsify-cli": "^4.4.3",
     "cz-conventional-changelog": "^3.3.0",
     "depcheck": "^1.4.2",
     "eslint": "^7.31.0",
@@ -78,5 +80,5 @@
   "bugs": {
     "url": "https://github.com/miladezzat/encrypt-rsa/issues"
   },
-  "homepage": "https://milad-ezzat.vercel.app"
+  "homepage": "https://miladezzat.github.io/encrypt-rsa/"
 }
