@@ -1,3 +1,13 @@
+#### 1.2.1 (2022-02-11)
+
+##### Documentation Changes
+
+*  update docs ([846687b4](https://github.com/miladezzat/encrypt-rsa/commit/846687b4226bad946b2c0a20636ebec433c9005a))
+
+##### New Features
+
+*  add encrypt-rsa.js.org ([3f6b0b4e](https://github.com/miladezzat/encrypt-rsa/commit/3f6b0b4e1fbc8082b9416f3dadd3be277a6e5c3f))
+
 ### 1.2.0 (2022-02-09)
 
 ##### Documentation Changes
