@@ -8,7 +8,7 @@
 
 RSA algorithm is asymmetric cryptography algorithm. Asymmetric actually means that it works on two different keys i.e. Public Key and Private Key. As the name describes that the Public Key is given to everyone and Private key is kept private.
 
-### For more explanation about RSA Algorithm visit [https://milad-ezzat.vercel.app/posts/rsa-encryption-algorithm](https://milad-ezzat.vercel.app/posts/rsa-encryption-algorithm)
+## For more explanation about RSA Algorithm visit [RSA algorithm](https://milad-ezzat.vercel.app/blog/encrypt-by-rsa-algorithm)
 
 1. [Installation](#installation)
 2. [Usage](#usage)
@@ -41,16 +41,12 @@ const nodeRSA = new NodeRSA();
 
 const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys()
 
-// to save your keys
-fs.writeFileSync('./private-key', privateKey);
-fs.writeFileSync('./public-key', publicKey);
-
 
 // you must have 'public-key' file the key you want to encrypt by it
 
 const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({ 
   text: 'hello', 
-  keyPath: path.join(__dirname, './public-key') 
+  publicKey: public 
 });
 
 console.log({ encryptedText });
@@ -63,12 +59,10 @@ console.log({ encryptedText });
 
 const decryptedText = nodeRSA.decryptStringWithRsaPrivateKey({ 
   text: encryptedText, 
-  keyPath: path.join(__dirname, './private-key') 
+  privateKey: private 
 });
 
 console.log({ decryptedText });
 // result: { decryptedText: 'hello' }
 
 ```
-for more information about RSA:
-[https://simple.wikipedia.org/wiki/RSA_algorithm](https://simple.wikipedia.org/wiki/RSA_algorithm)
