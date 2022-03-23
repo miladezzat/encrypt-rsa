@@ -1,44 +1,46 @@
-import { publicEncrypt, privateDecrypt } from 'crypto';
-import { readFileSync } from 'fs';
-import { resolve } from 'path';
-import { parametersOfEncryptAndDecrypt, returnCreateKeys } from './utils/types';
-
-const { generateKeyPairSync } = require('crypto');
+import { publicEncrypt, privateDecrypt, generateKeyPairSync } from 'crypto';
+import { decode, encode } from './utils/helpers';
+import {
+  parametersOfDecrypt,
+  parametersOfEncrypt,
+  returnCreateKeys,
+} from './utils/types';
 
 class NodeRSA {
-  private publicKeyPath: string;
+  private publicKey: string | undefined;
 
-  private privateKeyPath: string;
+  private privateKey: string | undefined;
 
-  private modulusLength: number ;
+  private modulusLength: number;
+
+  private keyBase64: string
 
   /**
    *
-   * @param publicKeyPath this should be absolute path
-   * @param privateKeyPath this should be absolute path
+   * @param publicKey
+   * @param privateKey
    */
-  constructor(publicKeyPath: string = '', privateKeyPath:string = '', modulusLength?:number) {
-    this.publicKeyPath = publicKeyPath;
-    this.privateKeyPath = privateKeyPath;
+  constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
+    this.publicKey = publicKey;
+    this.privateKey = privateKey;
     this.modulusLength = modulusLength || 2048;
+    this.keyBase64 = '';
   }
 
   /**
    *
    * @param {Object} args
-   * @param {String} args.publicKeyPath
+   * @param {String} args.publicKey
    * @param {String} args.text the text that you need to encrypt
    *
    * @returns {String}
    */
-  public encryptStringWithRsaPublicKey(args: parametersOfEncryptAndDecrypt): string {
-    const { text, keyPath = this.publicKeyPath } = args;
+  public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string {
+    const { text, publicKey = this.publicKey } = args;
+    const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
 
-    const absolutePath: string = resolve(keyPath);
-
-    const publicKey: string = readFileSync(absolutePath, 'utf8');
     const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = publicEncrypt(publicKey, buffer);
+    const encrypted: Buffer = publicEncrypt(publicKeyDecoded, buffer);
 
     return encrypted.toString('base64');
   }
@@ -46,23 +48,23 @@ class NodeRSA {
   /**
    *
    * @param {Object} args
-   * @param {String} args.privateKeyPath
+   * @param {String} args.privateKey
    * @param {String} args.text the text that you need to decrypt
    *
    * @returns {String}
    */
-  public decryptStringWithRsaPrivateKey(args: parametersOfEncryptAndDecrypt): string {
-    const { text, keyPath = this.privateKeyPath } = args;
-    const absolutePath: string = resolve(keyPath);
+  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
+    const { text, privateKey = this.privateKey } = args;
 
-    const privateKey: string = readFileSync(absolutePath, 'utf8');
+    const privateKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
+
     const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = privateDecrypt(privateKey, buffer);
+    const decrypted: Buffer = privateDecrypt(privateKeyDecoded as string, buffer);
 
     return decrypted.toString('utf8');
   }
 
-  public createPrivateAndPublicKeys(modulusLength:number = this.modulusLength):returnCreateKeys {
+  public createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): returnCreateKeys {
     const { privateKey, publicKey } = generateKeyPairSync('rsa', {
       modulusLength,
       publicKeyEncoding: {
@@ -76,6 +78,10 @@ class NodeRSA {
     });
 
     return { privateKey, publicKey };
+  }
+
+  private convertKetToBase64(key: string) {
+    return encode(key.replace(/^ +/gm, '') || this.keyBase64);
   }
 }
 
