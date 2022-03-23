@@ -3,7 +3,12 @@ export type returnCreateKeys = {
     publicKey:string
 }
 
-export type parametersOfEncryptAndDecrypt = {
+export type parametersOfEncrypt = {
   text: string,
-  keyPath: string
+  publicKey?: string
+}
+
+export type parametersOfDecrypt = {
+  text: string,
+  privateKey?: string
 }
