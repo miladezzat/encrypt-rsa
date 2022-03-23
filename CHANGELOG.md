@@ -1,3 +1,20 @@
+## 2.0.0 (2022-03-23)
+
+##### Documentation Changes
+
+*  update docs ([e4e3f254](https://github.com/miladezzat/encrypt-rsa/commit/e4e3f254a4819922138f1e1763415207dc1591c6))
+*  update docs ([de0f8024](https://github.com/miladezzat/encrypt-rsa/commit/de0f8024aad85c591273f93b50952cd72e230693))
+
+##### New Features
+
+*  make methods to take public and private keys as strings ([d47af0f5](https://github.com/miladezzat/encrypt-rsa/commit/d47af0f5c39d49cfb1589b0e236cc7c995bfb395))
+*  add new helper methods to decode and encode keys to base64 ([d3cba4c0](https://github.com/miladezzat/encrypt-rsa/commit/d3cba4c0f36d42e615f22c4ed4b828ed151faecb))
+*  update the docs ([4e470c6f](https://github.com/miladezzat/encrypt-rsa/commit/4e470c6feabfc828172bc484285239a24df064a4))
+
+##### Tests
+
+*  add tests ([373d6c12](https://github.com/miladezzat/encrypt-rsa/commit/373d6c125184bd2e1394091def64280a5392413e))
+
 #### 1.2.1 (2022-02-11)
 
 ##### Documentation Changes
