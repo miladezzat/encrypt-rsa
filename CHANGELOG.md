@@ -1,3 +1,13 @@
+### 2.1.0 (2022-06-02)
+
+##### Documentation Changes
+
+*  ✏️ update docs ([dbb771af](https://github.com/miladezzat/encrypt-rsa/commit/dbb771afe73af68dd6982790f3e6f9924d639077))
+
+##### Tests
+
+*  💍 add tests ([79b17826](https://github.com/miladezzat/encrypt-rsa/commit/79b178268fc6c5f821f9655f64c3342425066ad8))
+
 #### 2.0.1 (2022-06-02)
 
 ##### Documentation Changes
