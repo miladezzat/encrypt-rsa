@@ -1,49 +1,52 @@
 {
   "name": "encrypt-rsa",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "This is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
   "main": "./build/index.js",
   "module": "./build/index.js",
   "files": [
     "build/**/*"
   ],
+  "engines": {
+    "node": "16.x",
+    "npm": "8.x"
+  },
   "types": "./build/index.d.ts",
   "source": "./src/index.ts",
   "scripts": {
-    "test": "./node_modules/.bin/mocha -r ts-node/register tests/**/*.spec.ts",
-    "depcheck": "./node_modules/.bin/depcheck",
+    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
+    "depcheck": "npm-check",
     "prepare": "husky install",
     "build": "tsc",
-    "commit": "./node_modules/.bin/git-cz",
+    "commit": "git-cz",
     "docs:serve": "docsify serve docs",
     "postinstall": "husky install",
     "prepublishOnly": "pinst --disable",
     "postpublish": "pinst --enable",
-    "husky": "./node_modules/.bin/husky",
-    "lint": "./node_modules/.bin/eslint",
+    "husky": "husky",
+    "lint": "eslint",
     "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
     "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
     "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
   },
   "devDependencies": {
     "@types/chai": "^4.2.21",
-    "@types/mocha": "^8.2.3",
-    "@types/node": "^16.3.3",
-    "@typescript-eslint/eslint-plugin": "^4.28.3",
-    "@typescript-eslint/parser": "^4.28.3",
+    "@types/mocha": "^9.1.1",
+    "@types/node": "^17.0.38",
+    "@typescript-eslint/eslint-plugin": "^5.27.0",
+    "@typescript-eslint/parser": "^5.27.0",
     "chai": "^4.3.4",
     "commitizen": "^4.2.4",
-    "docsify-cli": "^4.4.3",
     "cz-conventional-changelog": "^3.3.0",
-    "depcheck": "^1.4.2",
-    "eslint": "^7.31.0",
-    "eslint-config-airbnb-base": "^14.2.1",
+    "docsify-cli": "^4.4.3",
+    "eslint": "^8.16.0",
+    "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.23.4",
     "generate-changelog": "^1.8.0",
     "git-cz": "^4.7.6",
-    "husky": "^7.0.1",
-    "mocha": "^9.0.2",
-    "pinst": "^2.1.6",
+    "husky": "^8.0.1",
+    "mocha": "^10.0.0",
+    "pinst": "^3.0.0",
     "ts-node": "^10.1.0",
     "typescript": "^4.3.5"
   },
@@ -80,5 +83,8 @@
   "bugs": {
     "url": "https://github.com/miladezzat/encrypt-rsa/issues"
   },
-  "homepage": "https://encrypt-rsa.js.org"
+  "homepage": "https://encrypt-rsa.js.org",
+  "dependencies": {
+    "npm-check": "^5.9.2"
+  }
 }
