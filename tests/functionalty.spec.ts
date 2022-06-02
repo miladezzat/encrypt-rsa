@@ -3,8 +3,8 @@ import { expect } from 'chai';
 import NodeRSA from '../src/index';
 
 describe('Functionality', () => {
-  const text:string = 'hell world';
-  let encryptedString:string = '';
+  const text: string = 'hell world';
+  let encryptedString: string = '';
 
   it('should create instance from NodeRSa', () => {
     const nodeRSA = new NodeRSA();
@@ -48,5 +48,33 @@ describe('Functionality', () => {
     });
 
     expect(encryptedText).to.be.a('string').and.equal(text);
+  });
+
+  it('should create private and public key', () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+
+    expect(privateKey).to.be.a('string');
+    expect(publicKey).to.be.a('string');
+  });
+
+  it('should encrypt and decrypt `hello world`', () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+
+    const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
+      text: 'hello world',
+      publicKey,
+    });
+
+    encryptedString = encryptedText;
+    expect(encryptedText).to.be.a('string').and.not.equal(text);
+
+    const decryptText = nodeRSA.decryptStringWithRsaPrivateKey({
+      text: encryptedText,
+      privateKey,
+    });
+
+    expect(decryptText).be.a.string('hello world');
   });
 });
