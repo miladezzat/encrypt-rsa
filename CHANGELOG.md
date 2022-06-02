@@ -1,3 +1,10 @@
+#### 2.1.1 (2022-06-02)
+
+##### Bug Fixes
+
+*  🐛 solve github work flow ([f5c1c45e](https://github.com/miladezzat/encrypt-rsa/commit/f5c1c45ee524645a00f1f6fb18ff4396674b344e))
+*  🐛 solvw conflicts ([00bd0481](https://github.com/miladezzat/encrypt-rsa/commit/00bd04814fe559c7134be82e41cca32cd5a97359))
+
 ### 2.1.0 (2022-06-02)
 
 ##### Documentation Changes
