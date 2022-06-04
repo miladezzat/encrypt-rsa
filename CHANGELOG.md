@@ -1,3 +1,14 @@
+#### 2.1.2 (2022-06-04)
+
+##### Chores
+
+*  🤖 add prebuilsh script ([8b49642f](https://github.com/miladezzat/encrypt-rsa/commit/8b49642f048c84623aefb6fe054c30f58461ff20))
+*  🤖 update npm ignore ([06a02399](https://github.com/miladezzat/encrypt-rsa/commit/06a023998a6dcc1db718d8caf8ee3f1065139a42))
+
+##### Documentation Changes
+
+*  ✏️ update docs ([0e0f4c9e](https://github.com/miladezzat/encrypt-rsa/commit/0e0f4c9e622340b3d03cfa1e8af14de2ee83fc77))
+
 #### 2.1.1 (2022-06-02)
 
 ##### Bug Fixes
