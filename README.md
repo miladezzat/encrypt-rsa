@@ -20,9 +20,9 @@ RSA algorithm is asymmetric cryptography algorithm. Asymmetric actually means th
 ## Installation
 
 ```bash
-  npm i encrypt-rsa
+  npm i encrypt-rsa --only=production
   // OR
-  yarn add encrypt-rsa
+  yarn add encrypt-rsa --only=production
 ```
 
 ## Usage
