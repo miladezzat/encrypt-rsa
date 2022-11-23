@@ -86,6 +86,6 @@
   },
   "homepage": "https://encrypt-rsa.js.org",
   "dependencies": {
-    "npm-check": "^5.9.2"
+    "npm-check": "^6.0.1"
   }
 }
