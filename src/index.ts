@@ -1,4 +1,4 @@
-import { publicEncrypt, privateDecrypt, generateKeyPairSync } from 'crypto';
+import * as crypto from 'crypto';
 import { decode, encode } from './utils/helpers';
 import {
   parametersOfDecrypt,
@@ -13,7 +13,7 @@ class NodeRSA {
 
   private modulusLength: number;
 
-  private keyBase64: string
+  private keyBase64: string;
 
   /**
    *
@@ -40,7 +40,7 @@ class NodeRSA {
     const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
 
     const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = publicEncrypt(publicKeyDecoded, buffer);
+    const encrypted: Buffer = crypto?.publicEncrypt(publicKeyDecoded, buffer);
 
     return encrypted.toString('base64');
   }
@@ -59,25 +59,29 @@ class NodeRSA {
     const privateKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
 
     const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = privateDecrypt(privateKeyDecoded as string, buffer);
+    const decrypted: Buffer = crypto?.privateDecrypt(privateKeyDecoded as string, buffer);
 
     return decrypted.toString('utf8');
   }
 
   public createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): returnCreateKeys {
-    const { privateKey, publicKey } = generateKeyPairSync('rsa', {
-      modulusLength,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
-      },
-    });
+    if (typeof crypto.generateKeyPairSync === 'function') {
+      const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
+        modulusLength,
+        publicKeyEncoding: {
+          type: 'spki',
+          format: 'pem',
+        },
+        privateKeyEncoding: {
+          type: 'pkcs8',
+          format: 'pem',
+        },
+      });
 
-    return { privateKey, publicKey };
+      return { privateKey, publicKey };
+    }
+
+    return { privateKey: '', publicKey: '' };
   }
 
   private convertKetToBase64(key: string) {
