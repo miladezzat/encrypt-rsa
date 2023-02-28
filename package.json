@@ -8,8 +8,8 @@
     "build/**/*"
   ],
   "engines": {
-    "node": "18.x",
-    "npm": "8.x"
+    "node": ">=18.x",
+    "npm": ">=8.x"
   },
   "types": "./build/index.d.ts",
   "source": "./src/index.ts",
