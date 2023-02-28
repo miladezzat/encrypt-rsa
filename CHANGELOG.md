@@ -1,3 +1,9 @@
+#### 2.1.5 (2023-02-28)
+
+##### Chores
+
+*  support node greater than 18 and npm greater than 8 ([005cf394](https://github.com/miladezzat/encrypt-rsa/commit/005cf3942d4503b474f86bc9a8015cc67107e0a2))
+
 #### 2.1.4 (2023-01-24)
 
 #### 2.1.2 (2022-06-04)
