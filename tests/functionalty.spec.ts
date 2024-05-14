@@ -17,7 +17,7 @@ describe('Functionality', () => {
     const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
       text,
       // eslint-disable-next-line max-len
-      publicKey: '-----BEGIN PUBLIC KEY-----\nMIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEzCqLqxWSiOTkWFQaPhY6X+qom8\nzzbidCpNu/zxwTieMvnBE4yPCeSRwJMFjJD2UGr7I/WunOsx+rAxYbzoMELw6TdZ\naaKygSLfkncUmbL6MQ1ZCSQQR6weaQj8VeYKNaA3QSqJYXCRPky6LI/o73brTCpE\nsWuVWp577q2PbTDbAgMBAAE=\n-----END PUBLIC KEY-----',
+      privateKey: '-----BEGIN PUBLIC KEY-----\nMIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEzCqLqxWSiOTkWFQaPhY6X+qom8\nzzbidCpNu/zxwTieMvnBE4yPCeSRwJMFjJD2UGr7I/WunOsx+rAxYbzoMELw6TdZ\naaKygSLfkncUmbL6MQ1ZCSQQR6weaQj8VeYKNaA3QSqJYXCRPky6LI/o73brTCpE\nsWuVWp577q2PbTDbAgMBAAE=\n-----END PUBLIC KEY-----',
     });
     encryptedString = encryptedText;
     expect(encryptedText).to.be.a('string').and.not.equal(text);
@@ -44,7 +44,7 @@ describe('Functionality', () => {
 
     const encryptedText = nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedString,
-      privateKey: key,
+      publicKey: key,
     });
 
     expect(encryptedText).to.be.a('string').and.equal(text);
@@ -64,7 +64,7 @@ describe('Functionality', () => {
 
     const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
       text: 'hello world',
-      publicKey,
+      privateKey,
     });
 
     encryptedString = encryptedText;
@@ -72,7 +72,27 @@ describe('Functionality', () => {
 
     const decryptText = nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedText,
+      publicKey,
+    });
+
+    expect(decryptText).be.a.string('hello world');
+  });
+
+  it('should encrypt and decrypt `hello world`', () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+
+    const encryptedText = nodeRSA.encrypt({
+      text: 'hello world',
       privateKey,
+    });
+
+    encryptedString = encryptedText;
+    expect(encryptedText).to.be.a('string').and.not.equal(text);
+
+    const decryptText = nodeRSA.decrypt({
+      text: encryptedText,
+      publicKey,
     });
 
     expect(decryptText).be.a.string('hello world');

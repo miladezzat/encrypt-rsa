@@ -5,10 +5,10 @@ export type returnCreateKeys = {
 
 export type parametersOfEncrypt = {
   text: string,
-  publicKey?: string
+  privateKey?: string
 }
 
 export type parametersOfDecrypt = {
   text: string,
-  privateKey?: string
+  publicKey?: string
 }

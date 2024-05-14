@@ -7,10 +7,6 @@
   "files": [
     "build/**/*"
   ],
-  "engines": {
-    "node": ">=18.x",
-    "npm": ">=8.x"
-  },
   "types": "./build/index.d.ts",
   "source": "./src/index.ts",
   "scripts": {
@@ -26,9 +22,7 @@
     "prepublish": "npm run build",
     "husky": "husky",
     "lint": "eslint",
-    "release:major": "changelog -M && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version major && git push origin && git push origin --tags",
-    "release:minor": "changelog -m && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version minor && git push origin && git push origin --tags",
-    "release:patch": "changelog -p && git add CHANGELOG.md && git commit -m 'updated CHANGELOG.md' && npm version patch && git push origin && git push origin --tags"
+    "release": "standard-version && git push --follow-tags"
   },
   "devDependencies": {
     "@types/chai": "^4.2.21",
@@ -49,6 +43,7 @@
     "mocha": "^10.0.0",
     "pinst": "^3.0.0",
     "ts-node": "^10.1.0",
+    "standard-version": "^9.5.0",
     "typescript": "^4.3.5"
   },
   "keywords": [

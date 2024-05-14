@@ -47,21 +47,19 @@ const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
 ### Encrypt Text
 
 ```js
-const encryptedText = encryptRsa.encryptStringWithRsaPublicKey({ 
+const encryptedText = encryptRsa.encrypt({ 
   text: 'hello world',   
-  publicKey,
+  privateKey,
 });
 console.log(encryptedText);
-
-// QMPLJN3KzvXxkll18wax+KxqC0UqiHrwMxYGNUmJWMi98diapGOL/WzliPP3bTrHu7yWU1DnaB3f71w6JBYP+wG98fWLaz8+rwemerVja8B0FJVUphjBUmoDhX52JSoLFI0YVHtihXtoRk1pVaRFWm8FmZPZAcCKL7a0YDI1wABGvcSbLhaacmgX6zR6fzyltWVCrXn0NcVGox7WK7x4sCtywNhZx2XuUVSztr7QYcV2OQe8aDTUd7NXtaBVkj9RUYUR2QvhIpETksx14WD4ytohM68RUIJLRmU3y761mxcF+7Pjw/Utcirqu2Ohg0K18xGqlaE6fdifh0vIlfH+kA==
 ```
 
 ### Decrypt Encrypted Text
 
 ```js
-const decryptedText = nodeRSA.decryptStringWithRsaPrivateKey({ 
+const decryptedText = nodeRSA.decrypt({ 
   text: encryptedText, 
-  privateKey
+  publicKey
 });
 console.log(decryptedText);
 // hello world

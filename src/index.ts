@@ -16,10 +16,10 @@ class NodeRSA {
   private keyBase64: string;
 
   /**
-   *
-   * @param publicKey
-   * @param privateKey
-   */
+     *
+     * @param publicKey
+     * @param privateKey
+     */
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
     this.publicKey = publicKey;
     this.privateKey = privateKey;
@@ -28,16 +28,16 @@ class NodeRSA {
   }
 
   /**
-   *
-   * @param {Object} args
-   * @param {String} args.publicKey
-   * @param {String} args.text the text that you need to encrypt
-   *
-   * @returns {String}
-   */
+     *
+     * @param {Object} args
+     * @param {String} args.privateKey
+     * @param {String} args.text the text that you need to encrypt
+     * @deprecated
+     * @returns {String}
+     */
   public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string {
-    const { text, publicKey = this.publicKey } = args;
-    const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
+    const { text, privateKey = this.privateKey } = args;
+    const publicKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
 
     const buffer: Buffer = Buffer.from(text);
     const encrypted: Buffer = crypto?.publicEncrypt(publicKeyDecoded, buffer);
@@ -46,20 +46,57 @@ class NodeRSA {
   }
 
   /**
+     *
+     * @param {Object} args
+     * @param {String} args.privateKey
+     * @param {String} args.text the text that you need to decrypt
+     * @deprecated
+     * @returns {String}
+     */
+  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
+    const { text, publicKey = this.publicKey } = args;
+
+    const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
+
+    const buffer: Buffer = Buffer.from(text, 'base64');
+    const decrypted: Buffer = crypto?.privateDecrypt(publicKeyDecoded as string, buffer);
+
+    return decrypted.toString('utf8');
+  }
+
+  /**
    *
    * @param {Object} args
    * @param {String} args.privateKey
-   * @param {String} args.text the text that you need to decrypt
+   * @param {String} args.text the text that you need to encrypt
    *
    * @returns {String}
    */
-  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
+  public encrypt(args: parametersOfEncrypt): string {
     const { text, privateKey = this.privateKey } = args;
+    const publicKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
 
-    const privateKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
+    const buffer: Buffer = Buffer.from(text);
+    const encrypted: Buffer = crypto?.publicEncrypt(publicKeyDecoded, buffer);
+
+    return encrypted.toString('base64');
+  }
+
+  /**
+     *
+     * @param {Object} args
+     * @param {String} args.privateKey
+     * @param {String} args.text the text that you need to decrypt
+     *
+     * @returns {String}
+     */
+  public decrypt(args: parametersOfDecrypt): string {
+    const { text, publicKey = this.publicKey } = args;
+
+    const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
 
     const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = crypto?.privateDecrypt(privateKeyDecoded as string, buffer);
+    const decrypted: Buffer = crypto?.privateDecrypt(publicKeyDecoded as string, buffer);
 
     return decrypted.toString('utf8');
   }
@@ -78,7 +115,7 @@ class NodeRSA {
         },
       });
 
-      return { privateKey, publicKey };
+      return { publicKey: privateKey, privateKey: publicKey };
     }
 
     return { privateKey: '', publicKey: '' };
