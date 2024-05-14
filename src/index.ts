@@ -77,7 +77,7 @@ class NodeRSA {
     const publicKeyDecoded: string = decode(this.convertKetToBase64(privateKey as string));
 
     const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = crypto?.publicEncrypt(publicKeyDecoded, buffer);
+    const encrypted: Buffer = crypto?.privateEncrypt(publicKeyDecoded, buffer);
 
     return encrypted.toString('base64');
   }
@@ -96,7 +96,7 @@ class NodeRSA {
     const publicKeyDecoded: string = decode(this.convertKetToBase64(publicKey as string));
 
     const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = crypto?.privateDecrypt(publicKeyDecoded as string, buffer);
+    const decrypted: Buffer = crypto?.publicDecrypt(publicKeyDecoded as string, buffer);
 
     return decrypted.toString('utf8');
   }
@@ -115,7 +115,7 @@ class NodeRSA {
         },
       });
 
-      return { publicKey: privateKey, privateKey: publicKey };
+      return { publicKey, privateKey }; // Corrected order
     }
 
     return { privateKey: '', publicKey: '' };

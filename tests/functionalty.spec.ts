@@ -64,7 +64,7 @@ describe('Functionality', () => {
 
     const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
       text: 'hello world',
-      privateKey,
+      privateKey: publicKey,
     });
 
     encryptedString = encryptedText;
@@ -72,13 +72,13 @@ describe('Functionality', () => {
 
     const decryptText = nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedText,
-      publicKey,
+      publicKey: privateKey,
     });
 
     expect(decryptText).be.a.string('hello world');
   });
 
-  it('should encrypt and decrypt `hello world`', () => {
+  it('should encrypt and decrypt `hello world 2`', () => {
     const nodeRSA = new NodeRSA();
     const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
 
