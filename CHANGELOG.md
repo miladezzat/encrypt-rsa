@@ -1,3 +1,14 @@
+# Changelog
+
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+
+## [2.2.0](https://github.com/miladezzat/encrypt-rsa/compare/v2.1.4...v2.2.0) (2024-05-14)
+
+
+### Features
+
+* **change the main functions:** deprectate the old encrypt and decrypt function and create new ([01288ba](https://github.com/miladezzat/encrypt-rsa/commit/01288ba879ffacf7e60acf0d8d2d3c96023d9edf))
+
 #### 2.1.5 (2023-02-28)
 
 ##### Chores
@@ -133,4 +144,3 @@
 ##### Other Changes
 
 * miladezzat/rsa-node (5f3c40de)
-
