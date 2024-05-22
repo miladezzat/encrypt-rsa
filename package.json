@@ -1,6 +1,6 @@
 {
   "name": "encrypt-rsa",
-  "version": "3.0.1",
+  "version": "3.0.2",
   "description": "This is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
   "main": "./build/index.js",
   "module": "./build/index.js",
