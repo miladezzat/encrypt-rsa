@@ -17,7 +17,7 @@ describe('Functionality', () => {
     const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
       text,
       // eslint-disable-next-line max-len
-      privateKey: '-----BEGIN PUBLIC KEY-----\nMIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEzCqLqxWSiOTkWFQaPhY6X+qom8\nzzbidCpNu/zxwTieMvnBE4yPCeSRwJMFjJD2UGr7I/WunOsx+rAxYbzoMELw6TdZ\naaKygSLfkncUmbL6MQ1ZCSQQR6weaQj8VeYKNaA3QSqJYXCRPky6LI/o73brTCpE\nsWuVWp577q2PbTDbAgMBAAE=\n-----END PUBLIC KEY-----',
+      publicKey: '-----BEGIN PUBLIC KEY-----\nMIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEzCqLqxWSiOTkWFQaPhY6X+qom8\nzzbidCpNu/zxwTieMvnBE4yPCeSRwJMFjJD2UGr7I/WunOsx+rAxYbzoMELw6TdZ\naaKygSLfkncUmbL6MQ1ZCSQQR6weaQj8VeYKNaA3QSqJYXCRPky6LI/o73brTCpE\nsWuVWp577q2PbTDbAgMBAAE=\n-----END PUBLIC KEY-----',
     });
     encryptedString = encryptedText;
     expect(encryptedText).to.be.a('string').and.not.equal(text);
@@ -44,7 +44,7 @@ describe('Functionality', () => {
 
     const encryptedText = nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedString,
-      publicKey: key,
+      privateKey: key,
     });
 
     expect(encryptedText).to.be.a('string').and.equal(text);
@@ -64,7 +64,7 @@ describe('Functionality', () => {
 
     const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
       text: 'hello world',
-      privateKey: publicKey,
+      publicKey,
     });
 
     encryptedString = encryptedText;
@@ -72,7 +72,7 @@ describe('Functionality', () => {
 
     const decryptText = nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedText,
-      publicKey: privateKey,
+      privateKey,
     });
 
     expect(decryptText).be.a.string('hello world');
