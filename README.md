@@ -177,3 +177,36 @@ console.log('Decrypted Credentials:', decryptedCredentials);
 #### Digital Signatures
 
 Although not directly covered by the current implementation, RSA can also be used for creating and verifying digital signatures to ensure data integrity and authenticity.
+
+
+## Contribution
+We welcome contributions to the NodeRSA library! If you'd like to contribute, please follow these steps:
+
+1. Fork the repository on GitHub.
+2. Clone your forked repository to your local machine.
+```bash
+git clone https://github.com/your-username/node-rsa.git
+```
+3. Create a new branch for your feature or bugfix.
+```bash
+git checkout -b feature/your-feature-name
+```
+4. Make your changes to the codebase.
+5. Commit your changes with a clear and descriptive commit message.
+```bash
+git commit -m "Description of your feature or fix"
+```
+6. Push your changes to your forked repository.
+```bash
+git push origin feature/your-feature-name
+```
+7. Create a pull request on the original repository. Be sure to include a detailed description of your changes and the problem they solve.
+
+## Code of Conduct
+Please note that this project is released with a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project you agree to abide by its terms.
+
+
+## Reporting Issues
+If you encounter any issues, please report them using the GitHub issue tracker. Include details about the problem and your environment (OS, Node.js version, etc.).
+
+Thank you for contributing to NodeRSA!
