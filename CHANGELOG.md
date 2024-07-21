@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.1.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.0.1...v3.1.0) (2024-07-21)
+
+
+### Bug Fixes
+
+* **resolve issue with enctypt and descrpt:** resolve issue ([#36](https://github.com/miladezzat/encrypt-rsa/issues/36)) ([a828288](https://github.com/miladezzat/encrypt-rsa/commit/a82828867db21feaecaa0c146f021b688b24a414))
+
 ### [3.0.1](https://github.com/miladezzat/encrypt-rsa/compare/v3.0.0...v3.0.1) (2024-05-14)
 
 
