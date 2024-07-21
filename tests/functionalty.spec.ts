@@ -88,10 +88,11 @@ describe('Functionality', () => {
     });
 
     encryptedString = encryptedText;
+
     expect(encryptedText).to.be.a('string').and.not.equal(text);
 
     const decryptText = nodeRSA.decrypt({
-      text: encryptedText,
+      text: encryptedString,
       publicKey,
     });
 

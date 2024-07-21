@@ -28,6 +28,7 @@
     "@types/chai": "^4.2.21",
     "@types/mocha": "^9.1.1",
     "@types/node": "^17.0.38",
+    "npm-check": "^6.0.1",
     "@typescript-eslint/eslint-plugin": "^5.27.0",
     "@typescript-eslint/parser": "^5.27.0",
     "chai": "^4.3.4",
@@ -79,8 +80,5 @@
   "bugs": {
     "url": "https://github.com/miladezzat/encrypt-rsa/issues"
   },
-  "homepage": "https://encrypt-rsa.js.org",
-  "dependencies": {
-    "npm-check": "^6.0.1"
-  }
+  "homepage": "https://encrypt-rsa.js.org"
 }
