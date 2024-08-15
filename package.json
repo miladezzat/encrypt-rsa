@@ -55,6 +55,7 @@
     "private key",
     "rsa",
     "node-rsa",
+    "encrypt-rsa",
     "encrypt",
     "encrypt by public key",
     "decrypt by private key",

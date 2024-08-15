@@ -18,16 +18,16 @@ RSA algorithm is asymmetric cryptography algorithm. Asymmetric actually means th
 
 ## Installation
 ```bash
-npm install node-rsa
+npm install encrypt-rsa
 // OR
-yarn add node-rsa
+yarn add encrypt-rsa
 ```
 
 ## Usage
 **Importing the Library**
 
 ```ts
-import NodeRSA from 'node-rsa';
+import NodeRSA from 'encrypt-rsa';
 ```
 
 ## Creating an Instance

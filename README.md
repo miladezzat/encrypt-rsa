@@ -4,16 +4,16 @@
 
 ## Installation
 ```bash
-npm install node-rsa
+npm install encrypt-rsa
 // OR
-yarn add node-rsa
+yarn add encrypt-rsa
 ```
 
 ## Usage
 **Importing the Library**
 
 ```ts
-import NodeRSA from 'node-rsa';
+import NodeRSA from 'encrypt-rsa';
 ```
 
 ## Creating an Instance
@@ -185,7 +185,7 @@ We welcome contributions to the NodeRSA library! If you'd like to contribute, pl
 1. Fork the repository on GitHub.
 2. Clone your forked repository to your local machine.
 ```bash
-git clone https://github.com/your-username/node-rsa.git
+git clone git@github.com:miladezzat/encrypt-rsa.git
 ```
 3. Create a new branch for your feature or bugfix.
 ```bash
