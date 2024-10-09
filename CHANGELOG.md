@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [3.2.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.1.1...v3.2.0) (2024-10-09)
+
+
+### Features
+
+* **index.ts:** add support for encrypt and decrypt buffer ([4737bae](https://github.com/miladezzat/encrypt-rsa/commit/4737bae13d90f8fabebfdb5579d0308ea5845872)), closes [#26](https://github.com/miladezzat/encrypt-rsa/issues/26)
+
 ### [3.1.1](https://github.com/miladezzat/encrypt-rsa/compare/v3.1.0...v3.1.1) (2024-08-15)
 
 
