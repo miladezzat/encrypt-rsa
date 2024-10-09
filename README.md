@@ -174,6 +174,31 @@ const decryptedCredentials = nodeRSA.decryptStringWithRsaPrivateKey({ text: encr
 console.log('Decrypted Credentials:', decryptedCredentials);
 ```
 
+### Buffer Encryption/Decryption Methods:
+
+1. `encryptBufferWithRsaPublicKey`: Converts a buffer to Base64 and then encrypts the Base64 string.
+2. `decryptBufferWithRsaPrivateKey`: Decrypts the Base64 string and converts it back to a buffer.
+
+#### Example Usage
+```ts
+const nodeRSA = new NodeRSA();
+
+// Generate keys
+const { publicKey, privateKey } = nodeRSA.createPrivateAndPublicKeys();
+
+// Example buffer
+const buffer = Buffer.from('This is some binary data');
+
+// Encrypt the buffer
+const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+console.log('Encrypted Buffer:', encryptedBuffer);
+
+// Decrypt back to buffer
+const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+console.log('Decrypted Buffer:', decryptedBuffer.toString());  // should log: 'This is some binary data'
+```
+
+
 #### Digital Signatures
 
 Although not directly covered by the current implementation, RSA can also be used for creating and verifying digital signatures to ensure data integrity and authenticity.

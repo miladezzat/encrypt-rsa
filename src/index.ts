@@ -16,7 +16,7 @@ class NodeRSA {
 
   private modulusLength: number;
 
-  private keyBase64: string;
+  private keyBase64: 'base64';
 
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
     this.publicKey = publicKey;
@@ -47,6 +47,18 @@ class NodeRSA {
 
   public createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): returnCreateKeys {
     return createPrivateAndPublicKeys(modulusLength);
+  }
+
+  // Encrypt buffer using RSA public key (new)
+  public encryptBufferWithRsaPublicKey(buffer: Buffer, publicKey?: string): string {
+    const base64String = buffer.toString(this.keyBase64);
+    return this.encryptStringWithRsaPublicKey({ text: base64String, publicKey });
+  }
+
+  // Decrypt buffer using RSA private key (new)
+  public decryptBufferWithRsaPrivateKey(encryptedText: string, privateKey?: string): Buffer {
+    const decryptedBase64 = this.decryptStringWithRsaPrivateKey({ text: encryptedText, privateKey });
+    return Buffer.from(decryptedBase64, this.keyBase64);
   }
 }
 

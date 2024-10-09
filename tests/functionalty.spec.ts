@@ -98,4 +98,32 @@ describe('Functionality', () => {
 
     expect(decryptText).be.a.string('hello world');
   });
+
+  it('should encrypt and decrypt a buffer', () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+
+    const buffer = Buffer.from('This is a buffer test');
+
+    const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+    expect(encryptedBuffer).to.be.a('string');
+
+    const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+    expect(decryptedBuffer).to.be.an.instanceOf(Buffer);
+    expect(decryptedBuffer.toString()).to.equal(buffer.toString());
+  });
+
+  it('should encrypt and decrypt an empty buffer', () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+
+    const buffer = Buffer.from('');
+
+    const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+    expect(encryptedBuffer).to.be.a('string');
+
+    const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+    expect(decryptedBuffer).to.be.an.instanceOf(Buffer);
+    expect(decryptedBuffer.toString()).to.equal(buffer.toString());
+  });
 });
