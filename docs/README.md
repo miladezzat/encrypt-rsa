@@ -74,6 +74,31 @@ const decryptedString = nodeRSA.decrypt({ text: encryptedString, publicKey });
 console.log('Decrypted with Public Key:', decryptedString);
 ```
 
+
+### Buffer Encryption/Decryption Methods:
+
+1. `encryptBufferWithRsaPublicKey`: Converts a buffer to Base64 and then encrypts the Base64 string.
+2. `decryptBufferWithRsaPrivateKey`: Decrypts the Base64 string and converts it back to a buffer.
+
+#### Example Usage
+```ts
+const nodeRSA = new NodeRSA();
+
+// Generate keys
+const { publicKey, privateKey } = nodeRSA.createPrivateAndPublicKeys();
+
+// Example buffer
+const buffer = Buffer.from('This is some binary data');
+
+// Encrypt the buffer
+const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+console.log('Encrypted Buffer:', encryptedBuffer);
+
+// Decrypt back to buffer
+const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+console.log('Decrypted Buffer:', decryptedBuffer.toString());  // should log: 'This is some binary data'
+```
+
 ## API
 ### NodeRSA Class
 
@@ -109,6 +134,8 @@ constructor(publicKey?: string, privateKey?: string, modulusLength?: number)
     - Decrypts a string with the given RSA public key.
     - `args`: Object containing `text` and optionally `publicKey`.
     - Returns the decrypted string.
+6. `encryptBufferWithRsaPublicKey`: Converts a buffer to Base64 and then encrypts the Base64 string.
+7. `decryptBufferWithRsaPrivateKey`: Decrypts the Base64 string and converts it back to a buffer. 
   
 ### Types
 1. parametersOfEncrypt
