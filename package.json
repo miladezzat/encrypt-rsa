@@ -22,6 +22,7 @@
     "prepublish": "npm run build",
     "husky": "husky",
     "lint": "eslint",
+    "docs": "npx @compodoc/compodoc -p tsconfig.json -d docs",
     "release": "standard-version"
   },
   "devDependencies": {

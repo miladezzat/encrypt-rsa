@@ -1,0 +1,320 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>encrypt-rsa documentation</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
+	   <link rel="stylesheet" href="./styles/style.css">
+        <link rel="stylesheet" href="./styles/dark.css">
+    </head>
+    <body>
+          <script>
+               // Blocking script to avoid flickering dark mode
+               // Dark mode toggle button
+               var useDark = window.matchMedia('(prefers-color-scheme: dark)');
+               var darkModeState = useDark.matches;
+               var $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               var $darkModeToggles = document.querySelectorAll('.dark-mode-switch');
+               var darkModeStateLocal = localStorage.getItem('compodoc_darkmode-state');
+
+               function checkToggle(check) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].checked = check;
+                    }
+               }
+
+               function toggleDarkMode(state) {
+                    if (window.localStorage) {
+                         localStorage.setItem('compodoc_darkmode-state', state);
+                    }
+
+                    checkToggle(state);
+
+                    const hasClass = document.body.classList.contains('dark');
+
+                    if (state) {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.add('dark');
+                         }
+                         if (!hasClass) {
+                              document.body.classList.add('dark');
+                         }
+                    } else {
+                         for (var i = 0; i < $darkModeToggles.length; i++) {
+                              $darkModeToggles[i].classList.remove('dark');
+                         }
+                         if (hasClass) {
+                              document.body.classList.remove('dark');
+                         }
+                    }
+               }
+
+               useDark.addEventListener('change', function (evt) {
+                    toggleDarkMode(evt.matches);
+               });
+               if (darkModeStateLocal) {
+                    darkModeState = darkModeStateLocal === 'true';
+               }
+               toggleDarkMode(darkModeState);
+          </script>
+
+        <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
+               <div class="d-flex">
+                    <a href="./" class="navbar-brand">encrypt-rsa documentation</a>
+                    <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
+               </div>
+        </div>
+
+        <div class="xs-menu menu" id="mobile-menu">
+                <div id="book-search-input" role="search"><input type="text" placeholder="Type to search"></div>            <compodoc-menu></compodoc-menu>
+        </div>
+
+        <div class="container-fluid main">
+           <div class="row main">
+               <div class="d-none d-md-block menu">
+                   <compodoc-menu mode="normal"></compodoc-menu>
+               </div>
+               <!-- START CONTENT -->
+               <div class="content getting-started">
+                   <div class="content-data">
+
+<h1>Changelog</h1>
+<p>All notable changes to this project will be documented in this file. See <a href="https://github.com/conventional-changelog/standard-version">standard-version</a> for commit guidelines.</p>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.1.1...v3.2.0">3.2.0</a> (2024-10-09)</h2>
+<h3>Features</h3>
+<ul>
+<li><strong>index.ts:</strong> add support for encrypt and decrypt buffer (<a href="https://github.com/miladezzat/encrypt-rsa/commit/4737bae13d90f8fabebfdb5579d0308ea5845872">4737bae</a>), closes <a href="https://github.com/miladezzat/encrypt-rsa/issues/26">#26</a></li>
+</ul>
+<h3><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.1.0...v3.1.1">3.1.1</a> (2024-08-15)</h3>
+<h3>Bug Fixes</h3>
+<ul>
+<li>docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/ce1f0319f12d6b242191c1c4b344cc3d91807f9c">ce1f031</a>)</li>
+</ul>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.0.1...v3.1.0">3.1.0</a> (2024-07-21)</h2>
+<h3>Bug Fixes</h3>
+<ul>
+<li><strong>resolve issue with enctypt and descrpt:</strong> resolve issue (<a href="https://github.com/miladezzat/encrypt-rsa/issues/36">#36</a>) (<a href="https://github.com/miladezzat/encrypt-rsa/commit/a82828867db21feaecaa0c146f021b688b24a414">a828288</a>)</li>
+</ul>
+<h3><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.0.0...v3.0.1">3.0.1</a> (2024-05-14)</h3>
+<h3>Bug Fixes</h3>
+<ul>
+<li>issue (<a href="https://github.com/miladezzat/encrypt-rsa/commit/1bd3dbaebd679c04019e92fb774eb110f2c304c4">1bd3dba</a>)</li>
+</ul>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v2.2.3...v3.0.0">3.0.0</a> (2024-05-14)</h2>
+<h3><a href="https://github.com/miladezzat/encrypt-rsa/compare/v2.2.2...v2.2.3">2.2.3</a> (2024-05-14)</h3>
+<h3><a href="https://github.com/miladezzat/encrypt-rsa/compare/v2.2.1...v2.2.2">2.2.2</a> (2024-05-14)</h3>
+<h3><a href="https://github.com/miladezzat/encrypt-rsa/compare/v2.2.0...v2.2.1">2.2.1</a> (2024-05-14)</h3>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v2.1.4...v2.2.0">2.2.0</a> (2024-05-14)</h2>
+<h3>Features</h3>
+<ul>
+<li><strong>change the main functions:</strong> deprectate the old encrypt and decrypt function and create new (<a href="https://github.com/miladezzat/encrypt-rsa/commit/01288ba879ffacf7e60acf0d8d2d3c96023d9edf">01288ba</a>)</li>
+</ul>
+<h4>2.1.5 (2023-02-28)</h4>
+<h5>Chores</h5>
+<ul>
+<li>support node greater than 18 and npm greater than 8 (<a href="https://github.com/miladezzat/encrypt-rsa/commit/005cf3942d4503b474f86bc9a8015cc67107e0a2">005cf394</a>)</li>
+</ul>
+<h4>2.1.4 (2023-01-24)</h4>
+<h4>2.1.2 (2022-06-04)</h4>
+<h5>Chores</h5>
+<ul>
+<li>🤖 add prebuilsh script (<a href="https://github.com/miladezzat/encrypt-rsa/commit/8b49642f048c84623aefb6fe054c30f58461ff20">8b49642f</a>)</li>
+<li>🤖 update npm ignore (<a href="https://github.com/miladezzat/encrypt-rsa/commit/06a023998a6dcc1db718d8caf8ee3f1065139a42">06a02399</a>)</li>
+</ul>
+<h5>Documentation Changes</h5>
+<ul>
+<li>✏️ update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/0e0f4c9e622340b3d03cfa1e8af14de2ee83fc77">0e0f4c9e</a>)</li>
+</ul>
+<h4>2.1.1 (2022-06-02)</h4>
+<h5>Bug Fixes</h5>
+<ul>
+<li>🐛 solve github work flow (<a href="https://github.com/miladezzat/encrypt-rsa/commit/f5c1c45ee524645a00f1f6fb18ff4396674b344e">f5c1c45e</a>)</li>
+<li>🐛 solvw conflicts (<a href="https://github.com/miladezzat/encrypt-rsa/commit/00bd04814fe559c7134be82e41cca32cd5a97359">00bd0481</a>)</li>
+</ul>
+<h3>2.1.0 (2022-06-02)</h3>
+<h5>Documentation Changes</h5>
+<ul>
+<li>✏️ update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/dbb771afe73af68dd6982790f3e6f9924d639077">dbb771af</a>)</li>
+</ul>
+<h5>Tests</h5>
+<ul>
+<li>💍 add tests (<a href="https://github.com/miladezzat/encrypt-rsa/commit/79b178268fc6c5f821f9655f64c3342425066ad8">79b17826</a>)</li>
+</ul>
+<h4>2.0.1 (2022-06-02)</h4>
+<h5>Documentation Changes</h5>
+<ul>
+<li>✏️ update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/dbb771afe73af68dd6982790f3e6f9924d639077">dbb771af</a>)</li>
+</ul>
+<h5>Tests</h5>
+<ul>
+<li>💍 add tests (<a href="https://github.com/miladezzat/encrypt-rsa/commit/79b178268fc6c5f821f9655f64c3342425066ad8">79b17826</a>)</li>
+</ul>
+<h2>2.0.0 (2022-03-23)</h2>
+<h5>Documentation Changes</h5>
+<ul>
+<li>update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/e4e3f254a4819922138f1e1763415207dc1591c6">e4e3f254</a>)</li>
+<li>update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/de0f8024aad85c591273f93b50952cd72e230693">de0f8024</a>)</li>
+</ul>
+<h5>New Features</h5>
+<ul>
+<li>make methods to take public and private keys as strings (<a href="https://github.com/miladezzat/encrypt-rsa/commit/d47af0f5c39d49cfb1589b0e236cc7c995bfb395">d47af0f5</a>)</li>
+<li>add new helper methods to decode and encode keys to base64 (<a href="https://github.com/miladezzat/encrypt-rsa/commit/d3cba4c0f36d42e615f22c4ed4b828ed151faecb">d3cba4c0</a>)</li>
+<li>update the docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/4e470c6feabfc828172bc484285239a24df064a4">4e470c6f</a>)</li>
+</ul>
+<h5>Tests</h5>
+<ul>
+<li>add tests (<a href="https://github.com/miladezzat/encrypt-rsa/commit/373d6c125184bd2e1394091def64280a5392413e">373d6c12</a>)</li>
+</ul>
+<h4>1.2.1 (2022-02-11)</h4>
+<h5>Documentation Changes</h5>
+<ul>
+<li>update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/846687b4226bad946b2c0a20636ebec433c9005a">846687b4</a>)</li>
+</ul>
+<h5>New Features</h5>
+<ul>
+<li>add encrypt-rsa.js.org (<a href="https://github.com/miladezzat/encrypt-rsa/commit/3f6b0b4e1fbc8082b9416f3dadd3be277a6e5c3f">3f6b0b4e</a>)</li>
+</ul>
+<h3>1.2.0 (2022-02-09)</h3>
+<h5>Documentation Changes</h5>
+<ul>
+<li>set docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/6f1fa5e38e7d1ef0576a8e49501766f540715477">6f1fa5e3</a>)</li>
+</ul>
+<h3>1.1.0 (2021-07-21)</h3>
+<h5>Documentation Changes</h5>
+<ul>
+<li>✏️ update docs for creating keys (<a href="https://github.com/miladezzat/encrypt-rsa/commit/cebb2758ac55478d46f0ae6228a10f8f1f78b8c3">cebb2758</a>)</li>
+</ul>
+<h5>New Features</h5>
+<ul>
+<li>🎸 add create public and private keys (<a href="https://github.com/miladezzat/encrypt-rsa/commit/74c51131a858ad28cdda605b479b6bd21297e730">74c51131</a>)</li>
+</ul>
+<h4>1.0.12 (2021-07-20)</h4>
+<h5>Chores</h5>
+<ul>
+<li>🤖 update keywords (<a href="https://github.com/miladezzat/encrypt-rsa/commit/b435e3ba757a80dd66b95ed8a8a668952b66558e">b435e3ba</a>)</li>
+</ul>
+<h4>1.0.11 (2021-07-20)</h4>
+<h5>Bug Fixes</h5>
+<ul>
+<li>🐛 solve docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/8a08c44e767d5dcd242b5a5806602468cb663ec1">8a08c44e</a>)</li>
+</ul>
+<h4>1.0.10 (2021-07-20)</h4>
+<h5>Documentation Changes</h5>
+<ul>
+<li>✏️ update readme (<a href="https://github.com/miladezzat/encrypt-rsa/commit/e29f180513d8f79daaad9fee7e0a532e2e94f076">e29f1805</a>)</li>
+</ul>
+<h4>1.0.9 (2021-07-19)</h4>
+<h4>1.0.8 (2021-07-19)</h4>
+<h4>1.0.8 (2021-07-19)</h4>
+<h4>1.0.5 (2021-07-19)</h4>
+<h4>1.0.4 (2021-07-19)</h4>
+<h4>1.0.4 (2021-07-19)</h4>
+<h4>1.0.3 (2021-07-19)</h4>
+<h4>1.0.2 (2021-07-19)</h4>
+<h4>1.0.1 (2021-07-19)</h4>
+<h5>Other Changes</h5>
+<ul>
+<li>miladezzat/rsa-node (<a href="https://github.com/miladezzat/encrypt-rsa/commit/5f3c40deb5cf9424bee39bfae4620866e828fcf8">5f3c40de</a>)</li>
+</ul>
+<h2>1.0.0 (2021-07-18)</h2>
+<h5>Other Changes</h5>
+<ul>
+<li>miladezzat/rsa-node (5f3c40de)</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                   </div><div class="search-results">
+    <div class="has-results">
+        <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
+        <ul class="search-results-list"></ul>
+    </div>
+    <div class="no-results">
+        <h1 class="search-results-title">No results matching "<span class='search-query'></span>"</h1>
+    </div>
+</div>
+</div>
+               <!-- END CONTENT -->
+           </div>
+       </div>
+
+          <label class="dark-mode-switch">
+               <input type="checkbox">
+               <span class="slider">
+                    <svg class="slider-icon" viewBox="0 0 24 24" fill="none" height="20" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" width="20" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                    </svg>
+               </span>
+          </label>
+
+       <script>
+            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_URL = 'changelog.html';
+            var MAX_SEARCH_RESULTS = 15;
+       </script>
+
+       <script>
+               $darkModeToggleSwitchers = document.querySelectorAll('.dark-mode-switch input');
+               checkToggle(darkModeState);
+               if ($darkModeToggleSwitchers.length > 0) {
+                    for (var i = 0; i < $darkModeToggleSwitchers.length; i++) {
+                         $darkModeToggleSwitchers[i].addEventListener('change', function (event) {
+                              darkModeState = !darkModeState;
+                              toggleDarkMode(darkModeState);
+                         });
+                    }
+               }
+          </script>
+
+       <script src="./js/libs/custom-elements.min.js"></script>
+       <script src="./js/libs/lit-html.js"></script>
+
+       <script src="./js/menu-wc.js" defer></script>
+       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+
+       <script src="./js/libs/bootstrap-native.js"></script>
+
+       <script src="./js/libs/es6-shim.min.js"></script>
+       <script src="./js/libs/EventDispatcher.js"></script>
+       <script src="./js/libs/promise.min.js"></script>
+       <script src="./js/libs/zepto.min.js"></script>
+
+       <script src="./js/compodoc.js"></script>
+
+       <script src="./js/tabs.js"></script>
+       <script src="./js/menu.js"></script>
+       <script src="./js/libs/clipboard.min.js"></script>
+       <script src="./js/libs/prism.js"></script>
+       <script src="./js/sourceCode.js"></script>
+          <script src="./js/search/search.js"></script>
+          <script src="./js/search/lunr.min.js"></script>
+          <script src="./js/search/search-lunr.js"></script>
+          <script src="./js/search/search_index.js"></script>
+       <script src="./js/lazy-load-graphs.js"></script>
+
+
+    </body>
+</html>
