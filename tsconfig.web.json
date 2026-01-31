@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build/web",
+    "lib": ["es2017", "es7", "es6", "dom"],
+    "types": []
+  },
+  "include": [
+    "./src/web/**/*",
+    "./src/shared/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ]
+}

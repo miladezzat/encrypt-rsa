@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -99,6 +113,10 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Miscellaneous</li>
   <li class="breadcrumb-item">Variables</li>
@@ -112,10 +130,25 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#decode" title="src/utils/helpers.ts" ><b>decode</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                            <a href="#decode" title="src/shared/helpers.ts" ><b>decode</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
-                            <a href="#encode" title="src/utils/helpers.ts" ><b>encode</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                            <a href="#encode" title="src/shared/helpers.ts" ><b>encode</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#OAEP_OPTIONS" title="src/node/crypto.ts" ><b>OAEP_OPTIONS</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PEM_PRIVATE_FOOTER" title="src/shared/helpers.ts" ><b>PEM_PRIVATE_FOOTER</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PEM_PRIVATE_HEADER" title="src/shared/helpers.ts" ><b>PEM_PRIVATE_HEADER</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PEM_PUBLIC_FOOTER" title="src/shared/helpers.ts" ><b>PEM_PUBLIC_FOOTER</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#PEM_PUBLIC_HEADER" title="src/shared/helpers.ts" ><b>PEM_PUBLIC_HEADER</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -124,7 +157,7 @@
     </table>
 </section>
 
-    <h3>src/utils/helpers.ts</h3>
+    <h3>src/shared/helpers.ts</h3>
     <section data-compodoc="block-properties">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
@@ -139,9 +172,16 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(str: string): string &#x3D;&gt; {
   try {
-    return Buffer.from(str, &#x27;base64&#x27;).toString(&#x27;utf-8&#x27;);
+    const bytes &#x3D; base64ToBytes(str);
+    return new TextDecoder().decode(bytes);
   } catch (error) {
     throw new Error(&#x27;Failed to decode base64 string&#x27;);
   }
@@ -171,9 +211,16 @@
             </tr>
                 <tr>
                     <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
                         <i>Default value : </i><code>(str: string): string &#x3D;&gt; {
   try {
-    return Buffer.from(str, &#x27;utf-8&#x27;).toString(&#x27;base64&#x27;);
+    const bytes &#x3D; new TextEncoder().encode(str);
+    return bytesToBase64(bytes);
   } catch (error) {
     throw new Error(&#x27;Failed to encode string to base64&#x27;);
   }
@@ -187,6 +234,142 @@
 </div>
                 </td>
             </tr>
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PEM_PRIVATE_FOOTER"></a>
+                    <span class="name">
+                        <span ><b>PEM_PRIVATE_FOOTER</b></span>
+                        <a href="#PEM_PRIVATE_FOOTER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;-----END PRIVATE KEY-----&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PEM_PRIVATE_HEADER"></a>
+                    <span class="name">
+                        <span ><b>PEM_PRIVATE_HEADER</b></span>
+                        <a href="#PEM_PRIVATE_HEADER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;-----BEGIN PRIVATE KEY-----&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PEM_PUBLIC_FOOTER"></a>
+                    <span class="name">
+                        <span ><b>PEM_PUBLIC_FOOTER</b></span>
+                        <a href="#PEM_PUBLIC_FOOTER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;-----END PUBLIC KEY-----&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="PEM_PUBLIC_HEADER"></a>
+                    <span class="name">
+                        <span ><b>PEM_PUBLIC_HEADER</b></span>
+                        <a href="#PEM_PUBLIC_HEADER"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;-----BEGIN PUBLIC KEY-----&#x27;</code>
+                    </td>
+                </tr>
+
+
+        </tbody>
+    </table>
+</section>
+    <h3>src/node/crypto.ts</h3>
+    <section data-compodoc="block-properties">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="OAEP_OPTIONS"></a>
+                    <span class="name">
+                        <span ><b>OAEP_OPTIONS</b></span>
+                        <a href="#OAEP_OPTIONS"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/object" target="_blank" >object</a></code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>{
+  padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
+  oaepHash: &#x27;sha1&#x27; as const,
+}</code>
+                    </td>
+                </tr>
+
 
         </tbody>
     </table>
@@ -248,7 +431,6 @@
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

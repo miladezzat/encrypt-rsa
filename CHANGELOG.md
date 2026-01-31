@@ -1,6 +1,32 @@
 # Changelog
 
-All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
+All notable changes to this project will be documented in this file.
+
+**Generating the changelog**
+
+- **From commits (since last tag):** `npm run changelog` — updates CHANGELOG.md from [conventional commits](https://www.conventionalcommits.org/) (e.g. `feat:`, `fix:`, `BREAKING CHANGE:`).
+- **Full release (bump version + changelog + tag):** `npm run release -- --release-as major|minor|patch` — uses [standard-version](https://github.com/conventional-changelog/standard-version); bump and changelog are driven by commit messages.
+
+## [4.0.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v4.0.0) - 2025-02-01
+
+### BREAKING CHANGES
+
+- **Async API**: All crypto methods now return Promises instead of synchronous values. Migrate by adding `await` or `.then()` to every call to:
+  - `encryptStringWithRsaPublicKey`
+  - `decryptStringWithRsaPrivateKey`
+  - `encrypt`
+  - `decrypt`
+  - `createPrivateAndPublicKeys`
+  - `encryptBufferWithRsaPublicKey`
+  - `decryptBufferWithRsaPrivateKey`
+- **Entry points**: Package now ships separate Node and Web builds. `main`/`module`/`types` point to `./build/node/node/index.js`; `browser` and conditional `exports` point to the Web build. The old single entry `./build/index.js` is no longer published.
+- **Buffer return type**: `decryptBufferWithRsaPrivateKey` return type is now `Promise<Uint8Array>` (was `Buffer`). In Node the runtime value is still a `Buffer`; use `Uint8Array` in shared or cross-environment code.
+
+### Features
+
+- **Node and Web builds**: Same package works in Node.js and in the browser. Conditional exports select the correct build; same `NodeRSA` class and `INodeRSA` interface in both environments.
+- **Web Crypto (browser)**: Browser build uses the Web Crypto API (RSA-OAEP, SHA-1) for encrypt/decrypt with public/private key and for key generation. `encrypt(privateKey)` / `decrypt(publicKey)` throw in the browser (not supported by Web Crypto).
+- **Shared interface**: Both builds implement the shared `INodeRSA` interface; buffer methods use `Uint8Array` in the type signature.
 
 ## [3.3.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.1.0...v3.3.0) (2024-10-12)
 
