@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -81,6 +95,10 @@
                <!-- START CONTENT -->
                <div class="content class">
                    <div class="content-data">
+
+
+
+
 
 
 
@@ -119,20 +137,18 @@
             <h3>File</h3>
         </p>
         <p class="comment">
-            <code>src/index.ts</code>
+            <code>src/node/index.ts</code>
         </p>
 
 
+
+
             <p class="comment">
-                <h3>Description</h3>
+                <h3>Implements</h3>
             </p>
             <p class="comment">
-                <p>NodeRSA class provides encryption and decryption methods using RSA keys.
-It supports string and buffer encryption/decryption with both public and private keys.</p>
-
+                            <code><a href="../interfaces/INodeRSA.html" target="_self" >INodeRSA</a></code>
             </p>
-
-
 
 
             <section data-compodoc="block-index">
@@ -226,14 +242,12 @@ It supports string and buffer encryption/decryption with both public and private
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/index.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/node/index.ts:35</a></div>
                             </td>
                         </tr>
 
                 <tr>
                     <td class="col-md-4">
-                            <div class="io-description"><p>Constructs a new instance of the NodeRSA class.</p>
-</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -242,7 +256,6 @@ It supports string and buffer encryption/decryption with both public and private
                                                 <td>Name</td>
                                                     <td>Type</td>
                                                 <td>Optional</td>
-                                                    <td>Description</td>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -257,12 +270,6 @@ It supports string and buffer encryption/decryption with both public and private
                                                             Yes
                                                     </td>
                                                     
-                                                        <td>
-                                                                <ul>
-<li>Optional public key for encryption.</li>
-</ul>
-
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>privateKey</td>
@@ -275,12 +282,6 @@ It supports string and buffer encryption/decryption with both public and private
                                                             Yes
                                                     </td>
                                                     
-                                                        <td>
-                                                                <ul>
-<li>Optional private key for decryption.</li>
-</ul>
-
-                                                        </td>
                                                 </tr>
                                                 <tr>
                                                         <td>modulusLength</td>
@@ -293,12 +294,6 @@ It supports string and buffer encryption/decryption with both public and private
                                                             Yes
                                                     </td>
                                                     
-                                                        <td>
-                                                                <ul>
-<li>Length of the RSA modulus in bits.</li>
-</ul>
-
-                                                        </td>
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -326,18 +321,23 @@ It supports string and buffer encryption/decryption with both public and private
                     </span>
                 </td>
             </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Type : </i>    <code>unknown</code>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-4">
+                        <i>Default value : </i><code>&#x27;base64&#x27;</code>
+                    </td>
+                </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="46" class="link-to-prism">src/index.ts:46</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/node/index.ts:35</a></div>
                         </td>
                     </tr>
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Encoding format for the keys.</p>
-</div>
-                </td>
-            </tr>
 
         </tbody>
     </table>
@@ -361,16 +361,10 @@ It supports string and buffer encryption/decryption with both public and private
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="39" class="link-to-prism">src/index.ts:39</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/node/index.ts:34</a></div>
                         </td>
                     </tr>
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Length of the RSA modulus, defaults to 2048 bits.</p>
-</div>
-                </td>
-            </tr>
 
         </tbody>
     </table>
@@ -394,16 +388,10 @@ It supports string and buffer encryption/decryption with both public and private
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/index.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/node/index.ts:33</a></div>
                         </td>
                     </tr>
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Private key used for decryption.</p>
-</div>
-                </td>
-            </tr>
 
         </tbody>
     </table>
@@ -427,16 +415,10 @@ It supports string and buffer encryption/decryption with both public and private
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="25" class="link-to-prism">src/index.ts:25</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/node/index.ts:32</a></div>
                         </td>
                     </tr>
 
-            <tr>
-                <td class="col-md-4">
-                    <div class="io-description"><p>Public key used for encryption.</p>
-</div>
-                </td>
-            </tr>
 
         </tbody>
     </table>
@@ -469,16 +451,14 @@ It supports string and buffer encryption/decryption with both public and private
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="112"
-                                    class="link-to-prism">src/index.ts:112</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">src/node/index.ts:71</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Creates a pair of RSA private and public keys with the given modulus length.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -490,7 +470,6 @@ It supports string and buffer encryption/decryption with both public and private
                                                 <td>Type</td>
                                             <td>Optional</td>
                                                 <td>Default value</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -508,23 +487,16 @@ It supports string and buffer encryption/decryption with both public and private
                                                     <code>this.modulusLength</code>
                                             </td>
 
-                                            <td>
-                                                    <ul>
-<li>Length of the RSA modulus in bits.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#returnCreateKeys" target="_self" >returnCreateKeys</a></code>
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#returnCreateKeys" target="_self" >Promise&lt;returnCreateKeys&gt;</a></code>
 
                         </div>
                             <div class="io-description">
-                                <p>The generated RSA private and public keys.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -545,23 +517,21 @@ It supports string and buffer encryption/decryption with both public and private
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>decrypt(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
+                    <code>decrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="101"
-                                    class="link-to-prism">src/index.ts:101</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="64"
+                                    class="link-to-prism">src/node/index.ts:64</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a string using the RSA public key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -572,7 +542,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -587,23 +556,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Parameters for decryption, including the encrypted text and public key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Decrypted plain text string.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -631,16 +593,14 @@ It supports string and buffer encryption/decryption with both public and private
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="135"
-                                    class="link-to-prism">src/index.ts:135</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="84"
+                                    class="link-to-prism">src/node/index.ts:84</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a buffer using the RSA private key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -651,7 +611,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -666,12 +625,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>The encrypted base64 string to decrypt.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                         <tr>
                                                 <td>privateKey</td>
@@ -684,23 +637,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Optional private key for decryption.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>    <code>Buffer</code>
+                            <b>Returns : </b>    <code>Promise&lt;Uint8Array&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Decrypted buffer.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -721,23 +667,21 @@ It supports string and buffer encryption/decryption with both public and private
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+                    <code>decryptStringWithRsaPrivateKey(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="79"
-                                    class="link-to-prism">src/index.ts:79</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="50"
+                                    class="link-to-prism">src/node/index.ts:50</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a string using the RSA private key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -748,7 +692,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -763,23 +706,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Parameters for decryption, including the encrypted text and private key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Decrypted plain text string.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -800,23 +736,21 @@ It supports string and buffer encryption/decryption with both public and private
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encrypt(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
+                    <code>encrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="90"
-                                    class="link-to-prism">src/index.ts:90</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="57"
+                                    class="link-to-prism">src/node/index.ts:57</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Encrypts a string using the RSA private key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -827,7 +761,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -842,23 +775,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Parameters for encryption, including the text and private key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Encrypted string in base64 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -879,23 +805,21 @@ It supports string and buffer encryption/decryption with both public and private
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encryptBufferWithRsaPublicKey(buffer: Buffer, publicKey?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                    <code>encryptBufferWithRsaPublicKey(buffer: Uint8Array, publicKey?: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="123"
-                                    class="link-to-prism">src/index.ts:123</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="75"
+                                    class="link-to-prism">src/node/index.ts:75</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Encrypts a buffer using the RSA public key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -906,14 +830,13 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         <tr>
                                                 <td>buffer</td>
                                             <td>
-                                                        <code>Buffer</code>
+                                                        <code>Uint8Array</code>
                                             </td>
 
                                             <td>
@@ -921,12 +844,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>The buffer to encrypt.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                         <tr>
                                                 <td>publicKey</td>
@@ -939,23 +856,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Optional public key for encryption.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Encrypted buffer as a base64 string.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -976,23 +886,21 @@ It supports string and buffer encryption/decryption with both public and private
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+                    <code>encryptStringWithRsaPublicKey(args: <a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="68"
-                                    class="link-to-prism">src/index.ts:68</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="43"
+                                    class="link-to-prism">src/node/index.ts:43</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Encrypts a string using the RSA public key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -1003,7 +911,6 @@ It supports string and buffer encryption/decryption with both public and private
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1018,23 +925,16 @@ It supports string and buffer encryption/decryption with both public and private
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>Parameters for encryption, including the text and public key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
 
                         </div>
                             <div class="io-description">
-                                <p>Encrypted string in base64 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -1050,143 +950,92 @@ It supports string and buffer encryption/decryption with both public and private
 
 
     <div class="tab-pane fade  tab-source-code" id="source">
-        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import convertKetToBase64 from &#x27;./functions/convertKetToBase64&#x27;;
-import createPrivateAndPublicKeys from &#x27;./functions/createPrivateAndPublicKeys&#x27;;
-import decrypt from &#x27;./functions/decrypt&#x27;;
-import decryptStringWithRsaPrivateKey from &#x27;./functions/decryptStringWithRsaPrivateKey&#x27;;
-import encrypt from &#x27;./functions/encrypt&#x27;;
-import encryptStringWithRsaPublicKey from &#x27;./functions/encryptStringWithRsaPublicKey&#x27;;
+        <pre class="line-numbers compodoc-sourcecode"><code class="language-typescript">import convertKetToBase64 from &#x27;./convertKetToBase64&#x27;;
 import {
+  createPrivateAndPublicKeys,
+  decryptStringWithRsaPrivateKey,
+  decryptPublic,
+  encryptStringWithRsaPublicKey,
+  encryptPrivate,
+} from &#x27;./crypto&#x27;;
+import type {
   parametersOfDecrypt,
   parametersOfDecryptPublic,
   parametersOfEncrypt,
   parametersOfEncryptPrivate,
   returnCreateKeys,
-} from &#x27;./utils/types&#x27;;
+  INodeRSA,
+} from &#x27;../shared/types&#x27;;
 
-/**
- * NodeRSA class provides encryption and decryption methods using RSA keys.
- * It supports string and buffer encryption/decryption with both public and private keys.
- */
-class NodeRSA {
-  /**
-     * @private
-     * @type {string | undefined}
-     * Public key used for encryption.
-     */
+export type {
+  returnCreateKeys,
+  parametersOfEncrypt,
+  parametersOfDecrypt,
+  parametersOfEncryptPrivate,
+  parametersOfDecryptPublic,
+  INodeRSA,
+} from &#x27;../shared/types&#x27;;
+
+class NodeRSA implements INodeRSA {
   private publicKey: string | undefined;
-
-  /**
-     * @private
-     * @type {string | undefined}
-     * Private key used for decryption.
-     */
   private privateKey: string | undefined;
-
-  /**
-     * @private
-     * @type {number}
-     * Length of the RSA modulus, defaults to 2048 bits.
-     */
   private modulusLength: number;
+  private keyBase64: &#x27;base64&#x27; &#x3D; &#x27;base64&#x27;;
 
-  /**
-     * @private
-     * @type {&#x27;base64&#x27;}
-     * Encoding format for the keys.
-     */
-  private keyBase64: &#x27;base64&#x27;;
-
-  /**
-     * Constructs a new instance of the NodeRSA class.
-     *
-     * @param {string} [publicKey] - Optional public key for encryption.
-     * @param {string} [privateKey] - Optional private key for decryption.
-     * @param {number} [modulusLength&#x3D;2048] - Length of the RSA modulus in bits.
-     */
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
     this.publicKey &#x3D; publicKey;
     this.privateKey &#x3D; privateKey;
-    this.modulusLength &#x3D; modulusLength || 2048;
-    this.keyBase64 &#x3D; &#x27;base64&#x27;;
+    this.modulusLength &#x3D; modulusLength ?? 2048;
   }
 
-  /**
-     * Encrypts a string using the RSA public key.
-     *
-     * @param {parametersOfEncrypt} args - Parameters for encryption, including the text and public key.
-     * @returns {string} Encrypted string in base64 format.
-     */
-  public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string {
+  public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise&lt;string&gt; {
     const { publicKey &#x3D; this.publicKey } &#x3D; args;
-    return encryptStringWithRsaPublicKey({ ...args, publicKey: convertKetToBase64(publicKey as string) });
+    return Promise.resolve(
+      encryptStringWithRsaPublicKey({ ...args, publicKey: convertKetToBase64(publicKey as string) })
+    );
   }
 
-  /**
-     * Decrypts a string using the RSA private key.
-     *
-     * @param {parametersOfDecrypt} args - Parameters for decryption, including the encrypted text and private key.
-     * @returns {string} Decrypted plain text string.
-     */
-  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
+  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise&lt;string&gt; {
     const { privateKey &#x3D; this.privateKey } &#x3D; args;
-    return decryptStringWithRsaPrivateKey({ ...args, privateKey: convertKetToBase64(privateKey as string) });
+    return Promise.resolve(
+      decryptStringWithRsaPrivateKey({ ...args, privateKey: convertKetToBase64(privateKey as string) })
+    );
   }
 
-  /**
-     * Encrypts a string using the RSA private key.
-     *
-     * @param {parametersOfEncryptPrivate} args - Parameters for encryption, including the text and private key.
-     * @returns {string} Encrypted string in base64 format.
-     */
-  public encrypt(args: parametersOfEncryptPrivate): string {
+  public encrypt(args: parametersOfEncryptPrivate): Promise&lt;string&gt; {
     const { privateKey &#x3D; this.privateKey } &#x3D; args;
-    return encrypt({ ...args, privateKey: convertKetToBase64(privateKey as string) });
+    return Promise.resolve(
+      encryptPrivate({ ...args, privateKey: convertKetToBase64(privateKey as string) })
+    );
   }
 
-  /**
-     * Decrypts a string using the RSA public key.
-     *
-     * @param {parametersOfDecryptPublic} args - Parameters for decryption, including the encrypted text and public key.
-     * @returns {string} Decrypted plain text string.
-     */
-  public decrypt(args: parametersOfDecryptPublic): string {
+  public decrypt(args: parametersOfDecryptPublic): Promise&lt;string&gt; {
     const { publicKey &#x3D; this.publicKey } &#x3D; args;
-    return decrypt({ ...args, publicKey: convertKetToBase64(publicKey as string) });
+    return Promise.resolve(
+      decryptPublic({ ...args, publicKey: convertKetToBase64(publicKey as string) })
+    );
   }
 
-  /**
-     * Creates a pair of RSA private and public keys with the given modulus length.
-     *
-     * @param {number} [modulusLength&#x3D;this.modulusLength] - Length of the RSA modulus in bits.
-     * @returns {returnCreateKeys} The generated RSA private and public keys.
-     */
-  public createPrivateAndPublicKeys(modulusLength: number &#x3D; this.modulusLength): returnCreateKeys {
-    return createPrivateAndPublicKeys(modulusLength);
+  public createPrivateAndPublicKeys(modulusLength: number &#x3D; this.modulusLength): Promise&lt;returnCreateKeys&gt; {
+    return Promise.resolve(createPrivateAndPublicKeys(modulusLength));
   }
 
-  /**
-     * Encrypts a buffer using the RSA public key.
-     *
-     * @param {Buffer} buffer - The buffer to encrypt.
-     * @param {string} [publicKey] - Optional public key for encryption.
-     * @returns {string} Encrypted buffer as a base64 string.
-     */
-  public encryptBufferWithRsaPublicKey(buffer: Buffer, publicKey?: string): string {
-    const base64String &#x3D; buffer.toString(this.keyBase64);
+  public encryptBufferWithRsaPublicKey(
+    buffer: Uint8Array,
+    publicKey?: string
+  ): Promise&lt;string&gt; {
+    const buf &#x3D; Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
+    const base64String &#x3D; buf.toString(this.keyBase64);
     return this.encryptStringWithRsaPublicKey({ text: base64String, publicKey });
   }
 
-  /**
-     * Decrypts a buffer using the RSA private key.
-     *
-     * @param {string} encryptedText - The encrypted base64 string to decrypt.
-     * @param {string} [privateKey] - Optional private key for decryption.
-     * @returns {Buffer} Decrypted buffer.
-     */
-  public decryptBufferWithRsaPrivateKey(encryptedText: string, privateKey?: string): Buffer {
-    const decryptedBase64 &#x3D; this.decryptStringWithRsaPrivateKey({ text: encryptedText, privateKey });
-    return Buffer.from(decryptedBase64, this.keyBase64);
+  public decryptBufferWithRsaPrivateKey(
+    encryptedText: string,
+    privateKey?: string
+  ): Promise&lt;Uint8Array&gt; {
+    return this.decryptStringWithRsaPrivateKey({ text: encryptedText, privateKey }).then(
+      (decryptedBase64) &#x3D;&gt; Buffer.from(decryptedBase64, this.keyBase64) as Uint8Array
+    );
   }
 }
 
@@ -1257,7 +1106,6 @@ export default NodeRSA;
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

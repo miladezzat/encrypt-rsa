@@ -1,19 +1,33 @@
 {
   "name": "encrypt-rsa",
-  "version": "3.3.0",
+  "version": "4.0.0",
   "description": "This is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
-  "main": "./build/index.js",
-  "module": "./build/index.js",
+  "main": "./build/node/node/index.js",
+  "module": "./build/node/node/index.js",
+  "browser": "./build/web/web/index.js",
+  "types": "./build/node/node/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "node": "./build/node/node/index.js",
+        "default": "./build/web/web/index.js"
+      },
+      "require": {
+        "node": "./build/node/node/index.js",
+        "default": "./build/web/web/index.js"
+      }
+    }
+  },
   "files": [
-    "build/**/*"
+    "build/node/**/*",
+    "build/web/**/*"
   ],
-  "types": "./build/index.d.ts",
-  "source": "./src/index.ts",
+  "source": "./src/node/index.ts",
   "scripts": {
     "test": "mocha -r ts-node/register tests/**/*.spec.ts",
     "depcheck": "npm-check -u",
     "prepare": "husky install",
-    "build": "tsc",
+    "build": "tsc -p tsconfig.node.json && tsc -p tsconfig.web.json",
     "commit": "git-cz",
     "docs:serve": "docsify serve docs",
     "postinstall": "husky install",
@@ -22,7 +36,8 @@
     "prepublish": "npm run build",
     "husky": "husky",
     "lint": "eslint",
-    "docs": "npx @compodoc/compodoc -p tsconfig.json -d docs",
+    "docs": "npx @compodoc/compodoc -p tsconfig.doc.json -d docs",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release": "standard-version"
   },
   "devDependencies": {
@@ -33,6 +48,7 @@
     "@typescript-eslint/parser": "^5.27.0",
     "chai": "^4.3.4",
     "commitizen": "^4.2.4",
+    "conventional-changelog-cli": "^4.1.0",
     "cz-conventional-changelog": "^3.3.0",
     "docsify-cli": "^4.4.3",
     "eslint": "^8.16.0",

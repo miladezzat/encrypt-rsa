@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -83,6 +97,10 @@
                    <div class="content-data">
 
 
+
+
+
+
 <ol class="breadcrumb">
     <li class="breadcrumb-item">Overview</li>
 </ol>
@@ -94,6 +112,24 @@
                 <div class="card-block">
                     <h4 class="card-title"><span class="icon ion-ios-paper"></span></h4>
                     <p class="card-text">1 Class</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-block">
+                    <h4 class="card-title"><span class="icon ion-md-information-circle-outline"></span></h4>
+                    <p class="card-text">1 Interface</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div class="card text-center">
+                <div class="card-block">
+                    <h4 class="card-title"><span class="icon ion-ios-git-branch"></span></h4>
+                    <p class="card-text">
+                        <a href="./routes.html">0 </a>
+                    </p>
                 </div>
             </div>
         </div>
@@ -173,7 +209,6 @@
        <script src="./js/libs/es6-shim.min.js"></script>
        <script src="./js/libs/EventDispatcher.js"></script>
        <script src="./js/libs/promise.min.js"></script>
-       <script src="./js/libs/zepto.min.js"></script>
 
        <script src="./js/compodoc.js"></script>
 

@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -81,6 +95,10 @@
                <!-- START CONTENT -->
                <div class="content coverage">
                    <div class="content-data">
+
+
+
+
 
 
 
@@ -121,7 +139,7 @@
         <tr class="very-good">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#convertKetToBase64">src/functions/convertKetToBase64.ts</a>
+                        <a href="./miscellaneous/functions.html#convertKetToBase64">src/node/convertKetToBase64.ts</a>
             </td>
             <td>function</td>
             <td>convertKetToBase64</td>
@@ -130,61 +148,97 @@
                 <span class="coverage-count">(1/1)</span>
             </td>
         </tr>
-        <tr class="very-good">
+        <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#createPrivateAndPublicKeys">src/functions/createPrivateAndPublicKeys.ts</a>
+                        <a href="./miscellaneous/functions.html#createPrivateAndPublicKeys">src/node/crypto.ts</a>
             </td>
             <td>function</td>
             <td>createPrivateAndPublicKeys</td>
-            <td align="right" data-sort="100">
-                <span class="coverage-percent">100 %</span>
-                <span class="coverage-count">(1/1)</span>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
             </td>
         </tr>
-        <tr class="very-good">
+        <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#decrypt">src/functions/decrypt.ts</a>
+                        <a href="./miscellaneous/functions.html#decryptPublic">src/node/crypto.ts</a>
             </td>
             <td>function</td>
-            <td>decrypt</td>
-            <td align="right" data-sort="100">
-                <span class="coverage-percent">100 %</span>
-                <span class="coverage-count">(1/1)</span>
+            <td>decryptPublic</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
             </td>
         </tr>
-        <tr class="very-good">
+        <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#decryptStringWithRsaPrivateKey">src/functions/decryptStringWithRsaPrivateKey.ts</a>
+                        <a href="./miscellaneous/functions.html#decryptStringWithRsaPrivateKey">src/node/crypto.ts</a>
             </td>
             <td>function</td>
             <td>decryptStringWithRsaPrivateKey</td>
-            <td align="right" data-sort="100">
-                <span class="coverage-percent">100 %</span>
-                <span class="coverage-count">(1/1)</span>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
             </td>
         </tr>
-        <tr class="very-good">
+        <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#encrypt">src/functions/encrypt.ts</a>
+                        <a href="./miscellaneous/functions.html#encryptPrivate">src/node/crypto.ts</a>
             </td>
             <td>function</td>
-            <td>encrypt</td>
-            <td align="right" data-sort="100">
-                <span class="coverage-percent">100 %</span>
-                <span class="coverage-count">(1/1)</span>
+            <td>encryptPrivate</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
             </td>
         </tr>
-        <tr class="very-good">
+        <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/functions.html#encryptStringWithRsaPublicKey">src/functions/encryptStringWithRsaPublicKey.ts</a>
+                        <a href="./miscellaneous/functions.html#encryptStringWithRsaPublicKey">src/node/crypto.ts</a>
             </td>
             <td>function</td>
             <td>encryptStringWithRsaPublicKey</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#OAEP_OPTIONS">src/node/crypto.ts</a>
+            </td>
+            <td>variable</td>
+            <td>OAEP_OPTIONS</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./classes/NodeRSA.html">src/node/index.ts</a>
+            </td>
+            <td>class</td>
+            <td>NodeRSA</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/13)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#base64ToBytes">src/shared/helpers.ts</a>
+            </td>
+            <td>function</td>
+            <td>base64ToBytes</td>
             <td align="right" data-sort="100">
                 <span class="coverage-percent">100 %</span>
                 <span class="coverage-count">(1/1)</span>
@@ -193,19 +247,55 @@
         <tr class="very-good">
             <td>
                 <!-- miscellaneous -->
-                <a href="./classes/NodeRSA.html">src/index.ts</a>
+                        <a href="./miscellaneous/functions.html#binaryToPem">src/shared/helpers.ts</a>
             </td>
-            <td>class</td>
-            <td>NodeRSA</td>
+            <td>function</td>
+            <td>binaryToPem</td>
             <td align="right" data-sort="100">
                 <span class="coverage-percent">100 %</span>
-                <span class="coverage-count">(13/13)</span>
+                <span class="coverage-count">(1/1)</span>
             </td>
         </tr>
         <tr class="very-good">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/variables.html#decode">src/utils/helpers.ts</a>
+                        <a href="./miscellaneous/functions.html#bytesToBase64">src/shared/helpers.ts</a>
+            </td>
+            <td>function</td>
+            <td>bytesToBase64</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#pemToBase64">src/shared/helpers.ts</a>
+            </td>
+            <td>function</td>
+            <td>pemToBase64</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#pemToBinary">src/shared/helpers.ts</a>
+            </td>
+            <td>function</td>
+            <td>pemToBinary</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#decode">src/shared/helpers.ts</a>
             </td>
             <td>variable</td>
             <td>decode</td>
@@ -217,10 +307,130 @@
         <tr class="very-good">
             <td>
                 <!-- miscellaneous -->
-                <a href="./miscellaneous/variables.html#encode">src/utils/helpers.ts</a>
+                        <a href="./miscellaneous/variables.html#encode">src/shared/helpers.ts</a>
             </td>
             <td>variable</td>
             <td>encode</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#PEM_PRIVATE_FOOTER">src/shared/helpers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>PEM_PRIVATE_FOOTER</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#PEM_PRIVATE_HEADER">src/shared/helpers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>PEM_PRIVATE_HEADER</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#PEM_PUBLIC_FOOTER">src/shared/helpers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>PEM_PUBLIC_FOOTER</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/variables.html#PEM_PUBLIC_HEADER">src/shared/helpers.ts</a>
+            </td>
+            <td>variable</td>
+            <td>PEM_PUBLIC_HEADER</td>
+            <td align="right" data-sort="0">
+                <span class="coverage-percent">0 %</span>
+                <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./interfaces/INodeRSA.html">src/shared/types.ts</a>
+            </td>
+            <td>interface</td>
+            <td>INodeRSA</td>
+            <td align="right" data-sort="12">
+                <span class="coverage-percent">12 %</span>
+                <span class="coverage-count">(1/8)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#parametersOfDecrypt">src/shared/types.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>parametersOfDecrypt</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#parametersOfDecryptPublic">src/shared/types.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>parametersOfDecryptPublic</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#parametersOfEncrypt">src/shared/types.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>parametersOfEncrypt</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#parametersOfEncryptPrivate">src/shared/types.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>parametersOfEncryptPrivate</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/typealiases.html#returnCreateKeys">src/shared/types.ts</a>
+            </td>
+            <td>type alias</td>
+            <td>returnCreateKeys</td>
             <td align="right" data-sort="100">
                 <span class="coverage-percent">100 %</span>
                 <span class="coverage-count">(1/1)</span>
@@ -289,7 +499,6 @@
        <script src="./js/libs/es6-shim.min.js"></script>
        <script src="./js/libs/EventDispatcher.js"></script>
        <script src="./js/libs/promise.min.js"></script>
-       <script src="./js/libs/zepto.min.js"></script>
 
        <script src="./js/compodoc.js"></script>
 

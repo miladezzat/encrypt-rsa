@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -79,184 +93,254 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content getting-started">
+               <div class="content readme">
                    <div class="content-data">
 
+
 <h1>NodeRSA</h1>
-<p><strong>NodeRSA</strong> is a library that provides easy-to-use methods for RSA encryption and decryption. It allows generating RSA key pairs, encrypting, and decrypting strings with RSA public and private keys. This library is ideal for secure data transmission, authentication systems, and any application requiring cryptographic security.</p>
+<p><strong>NodeRSA</strong> is a library that provides easy-to-use methods for RSA encryption and decryption. It supports <strong>Node.js</strong> and <strong>browser</strong> (web) with the same API. Generate RSA key pairs, encrypt and decrypt strings with public and private keys. Ideal for secure data transmission, authentication systems, and any application requiring cryptographic security.</p>
 <h2>Installation</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm install encrypt-rsa
-// OR
-yarn add encrypt-rsa</code></pre></div><h2>Usage</h2>
-<p><strong>Importing the Library</strong></p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">import NodeRSA from &#39;encrypt-rsa&#39;;</code></pre></div><h2>Creating an Instance</h2>
-<p>You can create an instance of the NodeRSA class with optional public and private keys and modulus length.</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const nodeRSA = new NodeRSA(publicKey, privateKey, modulusLength);</code></pre></div><h2>Generating RSA Key Pairs</h2>
-<p>To generate a new pair of RSA keys:</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const { publicKey, privateKey } = nodeRSA.createPrivateAndPublicKeys(modulusLength);
+# OR
+yarn add encrypt-rsa</code></pre></div><h2>Breaking changes (vs 3.x)</h2>
+<p>If you are upgrading from <strong>3.x</strong>, this release includes breaking changes. You should bump to <strong>4.0.0</strong> when publishing:</p>
+<ol>
+<li><strong>Async API</strong> – All crypto methods now return <strong>Promises</strong> (sync → async). You must use <code>await</code> or <code>.then()</code>.<ul>
+<li><strong>Before (3.x):</strong> <code>const encrypted = nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });</code></li>
+<li><strong>After (4.x):</strong> <code>const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });</code></li>
+</ul>
+</li>
+<li><strong>Entry points</strong> – The package now has separate Node and Web builds. <code>main</code>/<code>module</code>/<code>types</code> point to the Node build; the <code>browser</code> field and conditional <code>exports</code> point to the Web build. If you required a specific path (e.g. <code>encrypt-rsa/build/index.js</code>), update to the new entry points or use the package root <code>encrypt-rsa</code>.</li>
+<li><strong>Buffer methods</strong> – <code>decryptBufferWithRsaPrivateKey</code> now returns <code>Promise&lt;Uint8Array&gt;</code> (type). In Node the runtime value is still a <code>Buffer</code> (extends <code>Uint8Array</code>). Prefer <code>Uint8Array</code> in types; avoid relying on <code>instanceof Buffer</code> in shared code.</li>
+</ol>
+<p>See <a href="./CHANGELOG.md">CHANGELOG.md</a> for the full list of changes.</p>
+<h2>Node and Web (browser)</h2>
+<p>One package, two environments:</p>
+<ul>
+<li><strong>Node.js</strong>: Uses the built-in <code>crypto</code> module. All crypto methods return <strong>Promises</strong> (async API).</li>
+<li><strong>Browser</strong>: Uses the Web Crypto API. Same async API; bundlers resolve the web build via <code>exports</code> / <code>browser</code> field.</li>
+</ul>
+<p>You use the same import; the correct implementation is chosen at build/runtime:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">import NodeRSA from &#39;encrypt-rsa&#39;;</code></pre></div><ul>
+<li>In Node (or when your bundler targets Node), you get the Node build.</li>
+<li>When your bundler targets the browser, you get the web build.</li>
+</ul>
+<p><strong>Browser note:</strong> In the browser build, <code>encrypt(privateKey)</code> and <code>decrypt(publicKey)</code> are not supported (Web Crypto does not support that flow) and will throw. Use <code>encryptStringWithRsaPublicKey</code> / <code>decryptStringWithRsaPrivateKey</code> for encryption and decryption.</p>
+<h3>Same interface (Node and Web)</h3>
+<p>Both the Node and Web builds expose the <strong>same class and method signatures</strong> (they implement the shared <code>INodeRSA</code> interface). You write the same code; only the resolved implementation changes:</p>
+<ul>
+<li><strong>Same class:</strong> <code>NodeRSA</code></li>
+<li><strong>Same constructor:</strong> <code>(publicKey?: string, privateKey?: string, modulusLength?: number)</code></li>
+<li><strong>Same methods:</strong> <code>encryptStringWithRsaPublicKey</code>, <code>decryptStringWithRsaPrivateKey</code>, <code>encrypt</code>, <code>decrypt</code>, <code>createPrivateAndPublicKeys</code>, <code>encryptBufferWithRsaPublicKey</code>, <code>decryptBufferWithRsaPrivateKey</code></li>
+<li><strong>Same parameter and return types:</strong> All crypto methods return <code>Promise&lt;...&gt;</code>; buffer methods use <code>Uint8Array</code> (in Node, <code>Buffer</code> extends <code>Uint8Array</code> so it works as well).</li>
+</ul>
+<p>See <a href="docs/FEATURE_PARITY.md">docs/FEATURE_PARITY.md</a> for a feature-by-feature comparison of Node vs Web (including the browser limitation for <code>encrypt</code>/<code>decrypt</code> with private/public key).</p>
+<h2>Usage</h2>
+<h3>Example: Node.js</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Node (CommonJS or ESM)
+import NodeRSA from &#39;encrypt-rsa&#39;;
+
+const nodeRSA = new NodeRSA();
+const { publicKey, privateKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({
+  text: &#39;Secret message&#39;,
+  publicKey,
+});
+console.log(&#39;Encrypted:&#39;, encrypted);
+
+const decrypted = await nodeRSA.decryptStringWithRsaPrivateKey({
+  text: encrypted,
+  privateKey,
+});
+console.log(&#39;Decrypted:&#39;, decrypted);</code></pre></div><h3>Example: Browser (Web)</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Browser (ESM or bundled) – same API
+import NodeRSA from &#39;encrypt-rsa&#39;;
+
+const nodeRSA = new NodeRSA();
+const { publicKey, privateKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({
+  text: &#39;Secret message&#39;,
+  publicKey,
+});
+console.log(&#39;Encrypted:&#39;, encrypted);
+
+const decrypted = await nodeRSA.decryptStringWithRsaPrivateKey({
+  text: encrypted,
+  privateKey,
+});
+console.log(&#39;Decrypted:&#39;, decrypted);</code></pre></div><p>When your bundler targets the browser, it resolves the web build; the code above is unchanged.</p>
+<h3>Creating an instance</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const nodeRSA = new NodeRSA(publicKey?, privateKey?, modulusLength?);</code></pre></div><h3>Generating RSA key pairs</h3>
+<p>All crypto methods return <strong>Promises</strong>. Use <code>await</code> or <code>.then()</code>:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const { publicKey, privateKey } = await nodeRSA.createPrivateAndPublicKeys(modulusLength);
 console.log(&#39;Public Key:&#39;, publicKey);
-console.log(&#39;Private Key:&#39;, privateKey);</code></pre></div><h2>Encrypting and Decrypting Strings</h2>
-<h3>Encrypting with RSA Public Key</h3>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const text = &quot;Hello, World!&quot;;
-const encryptedString = nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });
-console.log(&#39;Encrypted:&#39;, encryptedString);</code></pre></div><h3>Decrypting with RSA Private Key</h3>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const decryptedString = nodeRSA.decryptStringWithRsaPrivateKey({ text: encryptedString, privateKey });
-console.log(&#39;Decrypted:&#39;, decryptedString);</code></pre></div><h3>Encrypting with RSA Private Key</h3>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const text = &quot;Hello, World!&quot;;
-const encryptedString = nodeRSA.encrypt({ text, privateKey });
-console.log(&#39;Encrypted with Private Key:&#39;, encryptedString);</code></pre></div><h3>Decrypting with RSA Public Key</h3>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const decryptedString = nodeRSA.decrypt({ text: encryptedString, publicKey });
-console.log(&#39;Decrypted with Public Key:&#39;, decryptedString);</code></pre></div><h2>API</h2>
-<h3>NodeRSA Class</h3>
-<h3>Constructor</h3>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">constructor(publicKey?: string, privateKey?: string, modulusLength?: number)</code></pre></div><ul>
-<li><code>publicKey</code>: Optional. The RSA public key.</li>
-<li><code>privateKey</code>: Optional. The RSA private key.</li>
-<li><code>modulusLength</code>: Optional. The modulus length for the RSA key pair (default is 2048).</li>
-</ul>
-<h3>Methods</h3>
-<ol>
-<li><p><code>createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): returnCreateKeys</code></p>
-<ul>
-<li>Generates a new pair of RSA keys.</li>
-<li><code>modulusLength</code>: Optional. The modulus length for the RSA key pair (default is the instance&#39;s modulus length).</li>
-<li>Returns an object containing the <code>publicKey</code> and <code>privateKey</code>.</li>
-</ul>
-</li>
-<li><p><code>encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string</code></p>
-<ul>
-<li>Encrypts a string with the given RSA public key.</li>
-<li><code>args</code>: Object containing <code>text</code> and optionally <code>publicKey</code>.</li>
-<li>Returns the encrypted string in base64 format.</li>
-</ul>
-</li>
-<li><p><code>decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string</code></p>
-<ul>
-<li>Decrypts a string with the given RSA private key.</li>
-<li><code>args</code>: Object containing <code>text</code> and optionally <code>privateKey</code>.</li>
-<li>Returns the decrypted string.</li>
-</ul>
-</li>
-<li><h2><code>encrypt(args: parametersOfEncryptPrivate): string</code>
- - Encrypts a string with the given RSA private key.
- - <code>args</code>: Object containing <code>text</code> and optionally <code>privateKey</code>.
- - Returns the encrypted string in base64 format.</h2>
-</li>
-<li><p><code>decrypt(args: parametersOfDecryptPublic): string</code></p>
-<ul>
-<li>Decrypts a string with the given RSA public key.</li>
-<li><code>args</code>: Object containing <code>text</code> and optionally <code>publicKey</code>.</li>
-<li>Returns the decrypted string.</li>
-</ul>
-</li>
-</ol>
-<h3>Types</h3>
-<ol>
-<li>parametersOfEncrypt</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">{
-  text: string;
-  publicKey?: string;
-}</code></pre></div><ol start="2">
-<li>parametersOfDecrypt</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">{
-  text: string;
-  privateKey?: string;
-}</code></pre></div><ol start="3">
-<li>parametersOfEncryptPrivate</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">{
-  text: string;
-  privateKey?: string;
-}</code></pre></div><ol start="4">
-<li>parametersOfDecryptPublic</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">{
-  text: string;
-  publicKey?: string;
-}</code></pre></div><ol start="5">
-<li>returnCreateKeys</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">{
-  publicKey: string;
-  privateKey: string;
-}</code></pre></div><h3>Utilities</h3>
-<ol>
-<li><code>convertKetToBase64(key: string): string</code> 
-Converts a given key to base64 format.</li>
-</ol>
-<h3>Helper Functions</h3>
-<ol>
-<li><p><code>encode</code>
-Encodes a string to base64.</p>
-</li>
-<li><p><code>decode</code>
-Decodes a base64 string.</p>
-</li>
-</ol>
-<h3>Use Cases</h3>
-<h4>Secure Data Transmission</h4>
-<p>NodeRSA can be used to securely transmit sensitive data over insecure channels. Encrypt data with the recipient&#39;s public key before sending it. Only the recipient can decrypt the data with their private key.</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Sender
-const encryptedMessage = nodeRSA.encryptStringWithRsaPublicKey({ text: &quot;Sensitive data&quot;, publicKey: recipientPublicKey });
-// Send `encryptedMessage` to the recipient
+console.log(&#39;Private Key:&#39;, privateKey);</code></pre></div><h3>Encrypting and decrypting strings</h3>
+<h4>Encrypt with public key, decrypt with private key</h4>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const text = &#39;Hello, World!&#39;;
+const encryptedString = await nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });
+console.log(&#39;Encrypted:&#39;, encryptedString);
 
-// Recipient
-const decryptedMessage = nodeRSA.decryptStringWithRsaPrivateKey({ text: encryptedMessage, privateKey: recipientPrivateKey });
-console.log(&#39;Decrypted Message:&#39;, decryptedMessage);</code></pre></div><h4>Authentication Systems</h4>
-<p>NodeRSA can be used in authentication systems to encrypt credentials and sensitive information.</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Encrypting user credentials
-const encryptedCredentials = nodeRSA.encryptStringWithRsaPublicKey({ text: &quot;username:password&quot;, publicKey: serverPublicKey });
+const decryptedString = await nodeRSA.decryptStringWithRsaPrivateKey({
+  text: encryptedString,
+  privateKey,
+});
+console.log(&#39;Decrypted:&#39;, decryptedString);</code></pre></div><h4>Encrypt with private key, decrypt with public key (Node only)</h4>
+<p>In the <strong>browser build</strong>, these methods throw. In <strong>Node</strong>, they work:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const encryptedString = await nodeRSA.encrypt({ text, privateKey });
+console.log(&#39;Encrypted with Private Key:&#39;, encryptedString);
 
-// Decrypting credentials on the server
-const decryptedCredentials = nodeRSA.decryptStringWithRsaPrivateKey({ text: encryptedCredentials, privateKey: serverPrivateKey });
-console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre></div><h3>Buffer Encryption/Decryption Methods:</h3>
-<ol>
-<li><code>encryptBufferWithRsaPublicKey</code>: Converts a buffer to Base64 and then encrypts the Base64 string.</li>
-<li><code>decryptBufferWithRsaPrivateKey</code>: Decrypts the Base64 string and converts it back to a buffer.</li>
-</ol>
-<h4>Example Usage</h4>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const nodeRSA = new NodeRSA();
-
-// Generate keys
-const { publicKey, privateKey } = nodeRSA.createPrivateAndPublicKeys();
-
-// Example buffer
+const decryptedString = await nodeRSA.decrypt({ text: encryptedString, publicKey });
+console.log(&#39;Decrypted with Public Key:&#39;, decryptedString);</code></pre></div><h3>Buffer encryption (same interface: <code>Uint8Array</code>)</h3>
+<p>Both Node and Web use <strong><code>Uint8Array</code></strong> in the method signature. In Node, <code>Buffer</code> extends <code>Uint8Array</code>, so you can pass a <code>Buffer</code> as well. Return type is <code>Promise&lt;Uint8Array&gt;</code> in both environments.</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Node
 const buffer = Buffer.from(&#39;This is some binary data&#39;);
 
-// Encrypt the buffer
-const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
-console.log(&#39;Encrypted Buffer:&#39;, encryptedBuffer);
+// Browser (or shared code)
+const buffer = new TextEncoder().encode(&#39;This is some binary data&#39;);
 
-// Decrypt back to buffer
-const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
-console.log(&#39;Decrypted Buffer:&#39;, decryptedBuffer.toString());  // should log: &#39;This is some binary data&#39;</code></pre></div><h4>Digital Signatures</h4>
-<p>Although not directly covered by the current implementation, RSA can also be used for creating and verifying digital signatures to ensure data integrity and authenticity.</p>
+const encryptedBuffer = await nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+const decryptedBuffer = await nodeRSA.decryptBufferWithRsaPrivateKey(
+  encryptedBuffer,
+  privateKey
+);
+
+// Node: decryptedBuffer is Buffer
+// Browser: decryptedBuffer is Uint8Array
+console.log(
+  decryptedBuffer instanceof Uint8Array
+    ? new TextDecoder().decode(decryptedBuffer)
+    : decryptedBuffer.toString()
+);</code></pre></div><h2>API</h2>
+<h3>NodeRSA class</h3>
+<h4>Constructor</h4>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">constructor(publicKey?: string, privateKey?: string, modulusLength?: number)</code></pre></div><ul>
+<li><code>publicKey</code>: Optional. RSA public key (PEM).</li>
+<li><code>privateKey</code>: Optional. RSA private key (PEM).</li>
+<li><code>modulusLength</code>: Optional. Modulus length in bits (default 2048).</li>
+</ul>
+<h4>Methods (all crypto methods return <code>Promise&lt;...&gt;</code>)</h4>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Method</th>
+<th>Returns</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>createPrivateAndPublicKeys(modulusLength?)</code></td>
+<td><code>Promise&lt;{ publicKey, privateKey }&gt;</code></td>
+<td>Generate RSA key pair (PEM).</td>
+</tr>
+<tr>
+<td><code>encryptStringWithRsaPublicKey(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Encrypt with public key.</td>
+</tr>
+<tr>
+<td><code>decryptStringWithRsaPrivateKey(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Decrypt with private key.</td>
+</tr>
+<tr>
+<td><code>encrypt(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Encrypt with private key. <strong>Node only.</strong></td>
+</tr>
+<tr>
+<td><code>decrypt(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Decrypt with public key. <strong>Node only.</strong></td>
+</tr>
+<tr>
+<td><code>encryptBufferWithRsaPublicKey(buffer, publicKey?)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Encrypt buffer; returns base64 string.</td>
+</tr>
+<tr>
+<td><code>decryptBufferWithRsaPrivateKey(encryptedText, privateKey?)</code></td>
+<td><code>Promise&lt;Uint8Array&gt;</code></td>
+<td>Decrypt to buffer (same type in Node and Web).</td>
+</tr>
+</tbody>
+</table>
+<h4>Parameter types</h4>
+<ul>
+<li><code>parametersOfEncrypt</code>: <code>{ text: string; publicKey?: string }</code></li>
+<li><code>parametersOfDecrypt</code>: <code>{ text: string; privateKey?: string }</code></li>
+<li><code>parametersOfEncryptPrivate</code>: <code>{ text: string; privateKey?: string }</code></li>
+<li><code>parametersOfDecryptPublic</code>: <code>{ text: string; publicKey?: string }</code></li>
+<li><code>returnCreateKeys</code>: <code>{ publicKey: string; privateKey: string }</code></li>
+</ul>
+<h3>Algorithm and key format</h3>
+<ul>
+<li><strong>RSA-OAEP</strong> with <strong>SHA-1</strong> for encrypt/decrypt with public/private key (cross-compatible between Node and browser).</li>
+<li>Keys are <strong>PEM</strong> (SPKI for public, PKCS#8 for private). Keys generated on one side work on the other.</li>
+</ul>
+<h2>Use cases</h2>
+<h3>Secure data transmission</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Sender
+const encryptedMessage = await nodeRSA.encryptStringWithRsaPublicKey({
+  text: &#39;Sensitive data&#39;,
+  publicKey: recipientPublicKey,
+});
+// Send encryptedMessage to the recipient
+
+// Recipient
+const decryptedMessage = await nodeRSA.decryptStringWithRsaPrivateKey({
+  text: encryptedMessage,
+  privateKey: recipientPrivateKey,
+});
+console.log(&#39;Decrypted Message:&#39;, decryptedMessage);</code></pre></div><h3>Authentication</h3>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const encryptedCredentials = await nodeRSA.encryptStringWithRsaPublicKey({
+  text: &#39;username:password&#39;,
+  publicKey: serverPublicKey,
+});
+
+const decryptedCredentials = await nodeRSA.decryptStringWithRsaPrivateKey({
+  text: encryptedCredentials,
+  privateKey: serverPrivateKey,
+});
+console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre></div><h2>Testing</h2>
+<p>The project includes tests for both the <strong>Node</strong> and <strong>web</strong> builds:</p>
+<ul>
+<li><strong>Node tests</strong> (<code>tests/functionalty.node.spec.ts</code>): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.</li>
+<li><strong>Web tests</strong> (<code>tests/functionalty.web.spec.ts</code>): Run against the web build; require <code>crypto.subtle</code> (Node 19+ or a browser). Skipped automatically when Web Crypto is not available.</li>
+</ul>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm test</code></pre></div><p>Both suites run with <code>npm test</code>. Web tests are skipped when <code>crypto.subtle</code> is not available (e.g. Node below 19).</p>
+<h2>Documentation</h2>
+<p>API documentation is generated with <a href="https://compodoc.app">Compodoc</a>. To generate the docs (from the Node build source):</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm run docs</code></pre></div><p>Generated files are written to the <code>docs/</code> folder. To serve them locally:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm run docs:serve</code></pre></div><p>The docs reflect the <strong>NodeRSA</strong> class and its async API (Node and web share the same interface).</p>
+<h2>Releasing</h2>
+<ul>
+<li><strong>Changelog from commits:</strong> Run <code>npm run changelog</code> to update <a href="./CHANGELOG.md">CHANGELOG.md</a> from conventional commits since the last tag (<code>feat:</code>, <code>fix:</code>, <code>BREAKING CHANGE:</code>, etc.).</li>
+<li><strong>Full release:</strong> Run <code>npm run release -- --release-as major|minor|patch</code> to bump version, update the changelog, commit, and tag. Push to <code>master</code> to trigger the publish workflow (see <a href="./.github/workflows/publish.yml">.github/workflows/publish.yml</a>).</li>
+</ul>
+<p><strong>Publish via GitHub Actions (on merge to <code>master</code>):</strong></p>
+<ol>
+<li><strong>Secret:</strong> In the repo go to <strong>Settings → Secrets and variables → Actions</strong> and add <strong>NPM_TOKEN</strong> (npm automation token with “Publish” permission).</li>
+<li><strong>Trigger:</strong> Merging (or pushing) to the <strong>master</strong> branch runs the workflow: install → test → build → publish. The <a href="https://github.com/JS-DevTools/npm-publish">JS-DevTools/npm-publish</a> action publishes only if the version in <code>package.json</code> is <strong>greater</strong> than the latest on npm; otherwise the job succeeds but skips publishing.</li>
+<li><strong>Optional:</strong> To make installs reproducible in CI, commit <code>package-lock.json</code> (remove it from <code>.gitignore</code>) and change the workflow step from <code>npm install</code> to <code>npm ci</code>.</li>
+</ol>
 <h2>Contribution</h2>
-<p>We welcome contributions to the NodeRSA library! If you&#39;d like to contribute, please follow these steps:</p>
 <ol>
 <li>Fork the repository on GitHub.</li>
-<li>Clone your forked repository to your local machine.</li>
+<li>Clone your fork: <code>git clone git@github.com:miladezzat/encrypt-rsa.git</code></li>
+<li>Create a branch: <code>git checkout -b feature/your-feature-name</code></li>
+<li>Make your changes, then commit with a clear message.</li>
+<li>Push to your fork and open a pull request with a description of your changes.</li>
 </ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git clone git&#64;github.com:miladezzat/encrypt-rsa.git</code></pre></div><ol start="3">
-<li>Create a new branch for your feature or bugfix.</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git checkout -b feature/your-feature-name</code></pre></div><ol start="4">
-<li>Make your changes to the codebase.</li>
-<li>Commit your changes with a clear and descriptive commit message.</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git commit -m &quot;Description of your feature or fix&quot;</code></pre></div><ol start="6">
-<li>Push your changes to your forked repository.</li>
-</ol>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">git push origin feature/your-feature-name</code></pre></div><ol start="7">
-<li>Create a pull request on the original repository. Be sure to include a detailed description of your changes and the problem they solve.</li>
-</ol>
-<h2>Code of Conduct</h2>
-<p>Please note that this project is released with a <a href="./CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating in this project you agree to abide by its terms.</p>
-<h2>Reporting Issues</h2>
-<p>If you encounter any issues, please report them using the GitHub issue tracker. Include details about the problem and your environment (OS, Node.js version, etc.).</p>
-<p>Thank you for contributing to NodeRSA!</p>
+<h2>Code of conduct</h2>
+<p>This project is released with a <a href="./CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating you agree to abide by its terms.</p>
+<h2>Reporting issues</h2>
+<p>Please report issues via the <a href="https://github.com/miladezzat/encrypt-rsa/issues">GitHub issue tracker</a>. Include details about the problem and your environment (OS, Node.js version, bundler, etc.).</p>
+
+
+
 
 
 
@@ -303,7 +387,7 @@ console.log(&#39;Decrypted Buffer:&#39;, decryptedBuffer.toString());  // should
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'readme';
             var COMPODOC_CURRENT_PAGE_URL = 'index.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
@@ -332,7 +416,6 @@ console.log(&#39;Decrypted Buffer:&#39;, decryptedBuffer.toString());  // should
        <script src="./js/libs/es6-shim.min.js"></script>
        <script src="./js/libs/EventDispatcher.js"></script>
        <script src="./js/libs/promise.min.js"></script>
-       <script src="./js/libs/zepto.min.js"></script>
 
        <script src="./js/compodoc.js"></script>
 

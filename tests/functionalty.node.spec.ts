@@ -1,8 +1,8 @@
 /* eslint-disable max-len */
 import { expect } from 'chai';
-import NodeRSA from '../src/index';
+import NodeRSA from '../src/node/index';
 
-describe('Functionality', () => {
+describe('Functionality (node build)', () => {
   const text: string = 'hell world';
   let encryptedString: string = '';
 
@@ -11,10 +11,10 @@ describe('Functionality', () => {
     expect(nodeRSA).to.an.instanceOf(NodeRSA);
   });
 
-  it('should encrypt `hello world`', () => {
+  it('should encrypt `hello world`', async () => {
     const nodeRSA = new NodeRSA();
 
-    const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
+    const encryptedText = await nodeRSA.encryptStringWithRsaPublicKey({
       text,
       // eslint-disable-next-line max-len
       publicKey: '-----BEGIN PUBLIC KEY-----\nMIGeMA0GCSqGSIb3DQEBAQUAA4GMADCBiAKBgEzCqLqxWSiOTkWFQaPhY6X+qom8\nzzbidCpNu/zxwTieMvnBE4yPCeSRwJMFjJD2UGr7I/WunOsx+rAxYbzoMELw6TdZ\naaKygSLfkncUmbL6MQ1ZCSQQR6weaQj8VeYKNaA3QSqJYXCRPky6LI/o73brTCpE\nsWuVWp577q2PbTDbAgMBAAE=\n-----END PUBLIC KEY-----',
@@ -23,7 +23,7 @@ describe('Functionality', () => {
     expect(encryptedText).to.be.a('string').and.not.equal(text);
   });
 
-  it('should decrypt a string to `hello world`', () => {
+  it('should decrypt a string to `hello world`', async () => {
     const nodeRSA = new NodeRSA();
 
     const key = `-----BEGIN RSA PRIVATE KEY-----
@@ -42,27 +42,27 @@ describe('Functionality', () => {
     osWRyvZU4dRMwmNpo+m9YyKHDuQ/NwwMBhQtYlkzDw==
     -----END RSA PRIVATE KEY-----`;
 
-    const encryptedText = nodeRSA.decryptStringWithRsaPrivateKey({
+    const decryptedText = await nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedString,
       privateKey: key,
     });
 
-    expect(encryptedText).to.be.a('string').and.equal(text);
+    expect(decryptedText).to.be.a('string').and.equal(text);
   });
 
-  it('should create private and public key', () => {
+  it('should create private and public key', async () => {
     const nodeRSA = new NodeRSA();
-    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
 
     expect(privateKey).to.be.a('string');
     expect(publicKey).to.be.a('string');
   });
 
-  it('should encrypt and decrypt `hello world`', () => {
+  it('should encrypt and decrypt `hello world`', async () => {
     const nodeRSA = new NodeRSA();
-    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
 
-    const encryptedText = nodeRSA.encryptStringWithRsaPublicKey({
+    const encryptedText = await nodeRSA.encryptStringWithRsaPublicKey({
       text: 'hello world',
       publicKey,
     });
@@ -70,7 +70,7 @@ describe('Functionality', () => {
     encryptedString = encryptedText;
     expect(encryptedText).to.be.a('string').and.not.equal(text);
 
-    const decryptText = nodeRSA.decryptStringWithRsaPrivateKey({
+    const decryptText = await nodeRSA.decryptStringWithRsaPrivateKey({
       text: encryptedText,
       privateKey,
     });
@@ -78,11 +78,11 @@ describe('Functionality', () => {
     expect(decryptText).be.a.string('hello world');
   });
 
-  it('should encrypt and decrypt `hello world 2`', () => {
+  it('should encrypt and decrypt `hello world 2`', async () => {
     const nodeRSA = new NodeRSA();
-    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
 
-    const encryptedText = nodeRSA.encrypt({
+    const encryptedText = await nodeRSA.encrypt({
       text: 'hello world',
       privateKey,
     });
@@ -91,7 +91,7 @@ describe('Functionality', () => {
 
     expect(encryptedText).to.be.a('string').and.not.equal(text);
 
-    const decryptText = nodeRSA.decrypt({
+    const decryptText = await nodeRSA.decrypt({
       text: encryptedString,
       publicKey,
     });
@@ -99,31 +99,31 @@ describe('Functionality', () => {
     expect(decryptText).be.a.string('hello world');
   });
 
-  it('should encrypt and decrypt a buffer', () => {
+  it('should encrypt and decrypt a buffer', async () => {
     const nodeRSA = new NodeRSA();
-    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
 
     const buffer = Buffer.from('This is a buffer test');
 
-    const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+    const encryptedBuffer = await nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
     expect(encryptedBuffer).to.be.a('string');
 
-    const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+    const decryptedBuffer = await nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
     expect(decryptedBuffer).to.be.an.instanceOf(Buffer);
-    expect(decryptedBuffer.toString()).to.equal(buffer.toString());
+    expect((decryptedBuffer as Buffer).toString()).to.equal(buffer.toString());
   });
 
-  it('should encrypt and decrypt an empty buffer', () => {
+  it('should encrypt and decrypt an empty buffer', async () => {
     const nodeRSA = new NodeRSA();
-    const { privateKey, publicKey } = nodeRSA.createPrivateAndPublicKeys();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
 
     const buffer = Buffer.from('');
 
-    const encryptedBuffer = nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
+    const encryptedBuffer = await nodeRSA.encryptBufferWithRsaPublicKey(buffer, publicKey);
     expect(encryptedBuffer).to.be.a('string');
 
-    const decryptedBuffer = nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
+    const decryptedBuffer = await nodeRSA.decryptBufferWithRsaPrivateKey(encryptedBuffer, privateKey);
     expect(decryptedBuffer).to.be.an.instanceOf(Buffer);
-    expect(decryptedBuffer.toString()).to.equal(buffer.toString());
+    expect((decryptedBuffer as Buffer).toString()).to.equal(buffer.toString());
   });
 });

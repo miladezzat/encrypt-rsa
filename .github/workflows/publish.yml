@@ -1,5 +1,5 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
+# Runs on push to master: install deps, test, build, then publish to npm (if version bumped).
+# Requires: NPM_TOKEN secret in repo Settings > Secrets and variables > Actions.
 
 name: NPM publish
 
@@ -8,25 +8,37 @@ on:
     branches: [ master ]
 
 jobs:
-  build:
-
+  build-and-publish:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x]
+        node-version: [22.x]
     steps:
-    - uses: actions/checkout@v3
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v3
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm install
-    - run: npm run build
-    
-    - id: publish
-      uses: JS-DevTools/npm-publish@v1
-      with:
-        token: ${{ secrets.NPM_TOKEN}}
-    - if: steps.publish.outputs.type != 'none'
-      run: |
-        echo "Version changed: ${{ steps.publish.outputs.old-version }} => ${{ steps.publish.outputs.version }}"
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+        env:
+          HUSKY: 0
+
+      - name: Build
+        run: npm run build
+
+      - name: Publish to npm
+        id: publish
+        uses: JS-DevTools/npm-publish@v1
+        with:
+          token: ${{ secrets.NPM_TOKEN }}
+
+      - if: steps.publish.outputs.type != 'none'
+        run: |
+          echo "Published version ${{ steps.publish.outputs.version }} (previous: ${{ steps.publish.outputs.old-version }})"

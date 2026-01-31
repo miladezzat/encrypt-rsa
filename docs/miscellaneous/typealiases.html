@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -99,6 +113,10 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Miscellaneous</li>
   <li class="breadcrumb-item">Type aliases</li>
@@ -112,19 +130,19 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#parametersOfDecrypt" title="src/utils/types.ts" ><b>parametersOfDecrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                            <a href="#parametersOfDecrypt" title="src/shared/types.ts" ><b>parametersOfDecrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
-                            <a href="#parametersOfDecryptPublic" title="src/utils/types.ts" ><b>parametersOfDecryptPublic</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                            <a href="#parametersOfDecryptPublic" title="src/shared/types.ts" ><b>parametersOfDecryptPublic</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
-                            <a href="#parametersOfEncrypt" title="src/utils/types.ts" ><b>parametersOfEncrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                            <a href="#parametersOfEncrypt" title="src/shared/types.ts" ><b>parametersOfEncrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
-                            <a href="#parametersOfEncryptPrivate" title="src/utils/types.ts" ><b>parametersOfEncryptPrivate</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                            <a href="#parametersOfEncryptPrivate" title="src/shared/types.ts" ><b>parametersOfEncryptPrivate</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
-                            <a href="#returnCreateKeys" title="src/utils/types.ts" ><b>returnCreateKeys</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                            <a href="#returnCreateKeys" title="src/shared/types.ts" ><b>returnCreateKeys</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -133,7 +151,7 @@
     </table>
 </section>
 
-    <h3>src/utils/types.ts</h3>
+    <h3>src/shared/types.ts</h3>
     <section data-compodoc="block-typealias">
     <table class="table table-sm table-bordered">
         <tbody>
@@ -302,7 +320,6 @@
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

@@ -61,6 +61,20 @@
                }
                toggleDarkMode(darkModeState);
           </script>
+          <script>
+              // --- Iframe navigation tracking for Template Playground ---
+              function sendCurrentUrlToParent() {
+                  if (window.parent && window.parent !== window) {
+                      window.parent.postMessage({
+                          type: 'compodoc-iframe-navigate',
+                          url: window.location.pathname + window.location.hash
+                      }, '*');
+                  }
+              }
+              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
+              window.addEventListener('popstate', sendCurrentUrlToParent, false);
+              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
+          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -99,6 +113,10 @@
 
 
 
+
+
+
+
 <ol class="breadcrumb">
   <li class="breadcrumb-item">Miscellaneous</li>
   <li class="breadcrumb-item">Functions</li>
@@ -112,22 +130,37 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
-                            <a href="#convertKetToBase64" title="src/functions/convertKetToBase64.ts" ><b>convertKetToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../convertKetToBase64.ts)</a>
+                            <a href="#base64ToBytes" title="src/shared/helpers.ts" ><b>base64ToBytes</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
-                            <a href="#createPrivateAndPublicKeys" title="src/functions/createPrivateAndPublicKeys.ts" ><b>createPrivateAndPublicKeys</b>&nbsp;&nbsp;&nbsp;(src/.../createPrivateAndPublicKeys.ts)</a>
+                            <a href="#binaryToPem" title="src/shared/helpers.ts" ><b>binaryToPem</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
-                            <a href="#decrypt" title="src/functions/decrypt.ts" ><b>decrypt</b>&nbsp;&nbsp;&nbsp;(src/.../decrypt.ts)</a>
+                            <a href="#bytesToBase64" title="src/shared/helpers.ts" ><b>bytesToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
-                            <a href="#decryptStringWithRsaPrivateKey" title="src/functions/decryptStringWithRsaPrivateKey.ts" ><b>decryptStringWithRsaPrivateKey</b>&nbsp;&nbsp;&nbsp;(src/.../decryptStringWithRsaPrivateKey.ts)</a>
+                            <a href="#convertKetToBase64" title="src/node/convertKetToBase64.ts" ><b>convertKetToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../convertKetToBase64.ts)</a>
                         </li>
                         <li>
-                            <a href="#encrypt" title="src/functions/encrypt.ts" ><b>encrypt</b>&nbsp;&nbsp;&nbsp;(src/.../encrypt.ts)</a>
+                            <a href="#createPrivateAndPublicKeys" title="src/node/crypto.ts" ><b>createPrivateAndPublicKeys</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
-                            <a href="#encryptStringWithRsaPublicKey" title="src/functions/encryptStringWithRsaPublicKey.ts" ><b>encryptStringWithRsaPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../encryptStringWithRsaPublicKey.ts)</a>
+                            <a href="#decryptPublic" title="src/node/crypto.ts" ><b>decryptPublic</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#decryptStringWithRsaPrivateKey" title="src/node/crypto.ts" ><b>decryptStringWithRsaPrivateKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#encryptPrivate" title="src/node/crypto.ts" ><b>encryptPrivate</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#encryptStringWithRsaPublicKey" title="src/node/crypto.ts" ><b>encryptStringWithRsaPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#pemToBase64" title="src/shared/helpers.ts" ><b>pemToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#pemToBinary" title="src/shared/helpers.ts" ><b>pemToBinary</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -136,7 +169,336 @@
     </table>
 </section>
 
-    <h3>src/functions/convertKetToBase64.ts</h3>
+    <h3>src/shared/helpers.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="base64ToBytes"></a>
+                    <span class="name">
+                        <span ><b>base64ToBytes</b></span>
+                        <a href="#base64ToBytes"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>base64ToBytes(base64: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Decodes base64 to Uint8Array (environment-agnostic).</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>base64</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Uint8Array</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="binaryToPem"></a>
+                    <span class="name">
+                        <span ><b>binaryToPem</b></span>
+                        <a href="#binaryToPem"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>binaryToPem(binary: Uint8Array, type)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Wraps binary in PEM headers (SPKI for public, PKCS#8 for private).</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>binary</td>
+                                            <td>
+                                                        <code>Uint8Array</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>type</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="bytesToBase64"></a>
+                    <span class="name">
+                        <span ><b>bytesToBase64</b></span>
+                        <a href="#bytesToBase64"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>bytesToBase64(bytes: Uint8Array)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Shared helpers that work in both Node and browser (no Buffer or Node crypto).
+Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>bytes</td>
+                                            <td>
+                                                        <code>Uint8Array</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pemToBase64"></a>
+                    <span class="name">
+                        <span ><b>pemToBase64</b></span>
+                        <a href="#pemToBase64"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pemToBase64(pem: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Extracts base64 body from a PEM string (removes headers and newlines).</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pem</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="pemToBinary"></a>
+                    <span class="name">
+                        <span ><b>pemToBinary</b></span>
+                        <a href="#pemToBinary"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>pemToBinary(pem: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Converts PEM string to binary (Uint8Array) for Web Crypto importKey.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>pem</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Uint8Array</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/node/convertKetToBase64.ts</h3>
     <section data-compodoc="block-methods">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
@@ -160,9 +522,8 @@
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Converts an RSA key to a base64-encoded string.</p>
-<p>This function removes any leading spaces from each line of the key and then
-encodes it to base64 format.</p>
+                        <div class="io-description"><p>Converts an RSA key to a base64-encoded string.
+Removes leading spaces from each line, then base64-encodes.</p>
 </div>
 
                             <div class="io-description">
@@ -174,7 +535,6 @@ encodes it to base64 format.</p>
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -189,12 +549,6 @@ encodes it to base64 format.</p>
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>The RSA key to be converted to base64. It may contain leading spaces in each line.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -204,14 +558,13 @@ encodes it to base64 format.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>The base64-encoded version of the RSA key.</p>
-
+                                
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/functions/createPrivateAndPublicKeys.ts</h3>
+</section>    <h3>src/node/crypto.ts</h3>
     <section data-compodoc="block-methods">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
@@ -235,10 +588,6 @@ encodes it to base64 format.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Generates a pair of RSA private and public keys with the specified modulus length.</p>
-<p>If the <code>crypto.generateKeyPairSync</code> function is available, it generates the keys using the provided modulus length,
-otherwise, it returns empty strings for both keys.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -250,7 +599,6 @@ otherwise, it returns empty strings for both keys.</p>
                                                 <td>Type</td>
                                             <td>Optional</td>
                                                 <td>Default value</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -268,12 +616,6 @@ otherwise, it returns empty strings for both keys.</p>
                                                     <code>2048</code>
                                             </td>
 
-                                            <td>
-                                                    <ul>
-<li>The length of the RSA modulus in bits. Defaults to 2048 bits.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -283,29 +625,26 @@ otherwise, it returns empty strings for both keys.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>An object containing the generated RSA public and private keys in PEM format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/functions/decrypt.ts</h3>
-    <section data-compodoc="block-methods">
-    <h3></h3>    <table class="table table-sm table-bordered">
+    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="decrypt"></a>
+                    <a name="decryptPublic"></a>
                     <span class="name">
-                        <span ><b>decrypt</b></span>
-                        <a href="#decrypt"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>decryptPublic</b></span>
+                        <a href="#decryptPublic"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decrypt(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
+<code>decryptPublic(args: <a href="../miscellaneous/typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
@@ -314,10 +653,6 @@ otherwise, it returns empty strings for both keys.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a base64-encoded string using an RSA public key.</p>
-<p>The function first decodes the provided RSA public key and the base64-encoded text,
-then decrypts the text using the RSA public key.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -328,7 +663,6 @@ then decrypts the text using the RSA public key.</p>
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -343,12 +677,6 @@ then decrypts the text using the RSA public key.</p>
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>An object containing the text to decrypt and the RSA public key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -358,16 +686,13 @@ then decrypts the text using the RSA public key.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>The decrypted string in UTF-8 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/functions/decryptStringWithRsaPrivateKey.ts</h3>
-    <section data-compodoc="block-methods">
-    <h3></h3>    <table class="table table-sm table-bordered">
+    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
@@ -380,7 +705,7 @@ then decrypts the text using the RSA public key.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+<code>decryptStringWithRsaPrivateKey(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
@@ -389,9 +714,6 @@ then decrypts the text using the RSA public key.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a base64-encoded string using an RSA private key.</p>
-<p>This function decodes the provided RSA private key, then uses it to decrypt the base64-encoded string.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -402,7 +724,6 @@ then decrypts the text using the RSA public key.</p>
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -417,12 +738,6 @@ then decrypts the text using the RSA public key.</p>
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>An object containing the text to decrypt and the RSA private key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -432,29 +747,26 @@ then decrypts the text using the RSA public key.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>The decrypted string in UTF-8 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/functions/encrypt.ts</h3>
-    <section data-compodoc="block-methods">
-    <h3></h3>    <table class="table table-sm table-bordered">
+    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="encrypt"></a>
+                    <a name="encryptPrivate"></a>
                     <span class="name">
-                        <span ><b>encrypt</b></span>
-                        <a href="#encrypt"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>encryptPrivate</b></span>
+                        <a href="#encryptPrivate"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encrypt(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
+<code>encryptPrivate(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
@@ -463,10 +775,6 @@ then decrypts the text using the RSA public key.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Encrypts a string using an RSA private key.</p>
-<p>This function encodes the provided RSA private key, converts the input text to a buffer,
-and encrypts it using the private key. The result is returned as a base64-encoded string.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -477,7 +785,6 @@ and encrypts it using the private key. The result is returned as a base64-encode
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -492,12 +799,6 @@ and encrypts it using the private key. The result is returned as a base64-encode
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>An object containing the text to encrypt and the RSA private key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -507,16 +808,13 @@ and encrypts it using the private key. The result is returned as a base64-encode
 
                         </div>
                             <div class="io-description">
-                                <p>The encrypted string in base64 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/functions/encryptStringWithRsaPublicKey.ts</h3>
-    <section data-compodoc="block-methods">
-    <h3></h3>    <table class="table table-sm table-bordered">
+    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
@@ -529,7 +827,7 @@ and encrypts it using the private key. The result is returned as a base64-encode
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+<code>encryptStringWithRsaPublicKey(args: <a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
@@ -538,10 +836,6 @@ and encrypts it using the private key. The result is returned as a base64-encode
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Encrypts a string using an RSA public key.</p>
-<p>This function decodes the provided RSA public key, converts the input text into a buffer,
-and encrypts it using the public key. The encrypted result is returned as a base64-encoded string.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
@@ -552,7 +846,6 @@ and encrypts it using the public key. The encrypted result is returned as a base
                                             <td>Name</td>
                                                 <td>Type</td>
                                             <td>Optional</td>
-                                                <td>Description</td>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -567,12 +860,6 @@ and encrypts it using the public key. The encrypted result is returned as a base
                                             </td>
 
 
-                                            <td>
-                                                    <ul>
-<li>An object containing the text to encrypt and the RSA public key.</li>
-</ul>
-
-                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -582,8 +869,7 @@ and encrypts it using the public key. The encrypted result is returned as a base
 
                         </div>
                             <div class="io-description">
-                                <p>The encrypted string in base64 format.</p>
-
+                                
                             </div>
                 </td>
             </tr>
@@ -646,7 +932,6 @@ and encrypts it using the public key. The encrypted result is returned as a base
        <script src="../js/libs/es6-shim.min.js"></script>
        <script src="../js/libs/EventDispatcher.js"></script>
        <script src="../js/libs/promise.min.js"></script>
-       <script src="../js/libs/zepto.min.js"></script>
 
        <script src="../js/compodoc.js"></script>
 

@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./build/node",
+    "lib": ["es2017", "es7", "es6"],
+    "types": ["node"]
+  },
+  "include": [
+    "./src/node/**/*",
+    "./src/shared/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/__tests__/*"
+  ]
+}
