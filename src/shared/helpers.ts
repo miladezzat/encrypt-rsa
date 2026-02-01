@@ -100,3 +100,74 @@ export const encode = (str: string): string => {
     throw new Error('Failed to encode string to base64');
   }
 };
+
+/**
+ * Validates if a string is a valid PEM-formatted public key.
+ *
+ * @param {string} key - The key string to validate.
+ * @returns {boolean} True if the key is a valid PEM public key, false otherwise.
+ */
+export function isValidPEMPublicKey(key: unknown): boolean {
+  if (typeof key !== 'string') {
+    return false;
+  }
+  return key.includes(PEM_PUBLIC_HEADER) && key.includes(PEM_PUBLIC_FOOTER);
+}
+
+/**
+ * Validates if a string is a valid PEM-formatted private key.
+ *
+ * @param {string} key - The key string to validate.
+ * @returns {boolean} True if the key is a valid PEM private key, false otherwise.
+ */
+export function isValidPEMPrivateKey(key: unknown): boolean {
+  if (typeof key !== 'string') {
+    return false;
+  }
+  return key.includes(PEM_PRIVATE_HEADER) && key.includes(PEM_PRIVATE_FOOTER);
+}
+
+/**
+ * Validates if a string is a valid PEM key (either public or private).
+ *
+ * @param {string} key - The key string to validate.
+ * @returns {boolean} True if the key is a valid PEM key, false otherwise.
+ */
+export function isValidPEMKey(key: unknown): boolean {
+  return isValidPEMPublicKey(key) || isValidPEMPrivateKey(key);
+}
+
+/**
+ * Splits a string into chunks for encryption.
+ * RSA can only encrypt data smaller than the key modulus minus padding.
+ * For 2048-bit keys, this is approximately 245 bytes.
+ *
+ * @param {string} text - The text to split into chunks.
+ * @param {number} chunkSize - The size of each chunk in bytes (default 245 for 2048-bit RSA).
+ * @returns {string[]} Array of text chunks.
+ */
+export function splitIntoChunks(text: string, chunkSize: number = 245): string[] {
+  if (!text) {
+    return [''];
+  }
+
+  const chunks: string[] = [];
+  const bytes = new TextEncoder().encode(text);
+
+  for (let i = 0; i < bytes.length; i += chunkSize) {
+    const chunk = bytes.slice(i, i + chunkSize);
+    chunks.push(new TextDecoder().decode(chunk));
+  }
+
+  return chunks;
+}
+
+/**
+ * Joins chunks back into a single string.
+ *
+ * @param {string[]} chunks - Array of text chunks.
+ * @returns {string} The combined text.
+ */
+export function joinChunks(chunks: string[]): string {
+  return chunks.join('');
+}

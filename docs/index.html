@@ -304,7 +304,130 @@ const decryptedCredentials = await nodeRSA.decryptStringWithRsaPrivateKey({
   text: encryptedCredentials,
   privateKey: serverPrivateKey,
 });
-console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre></div><h2>Testing</h2>
+console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre></div><h2>Getting started with examples</h2>
+<p>We provide practical examples for both Node.js and browser environments to help you get started quickly:</p>
+<ul>
+<li><strong><a href="./examples/node-basic.js">Node.js example</a></strong> – Command-line demo showing key generation, encryption, and decryption</li>
+<li><strong><a href="./examples/browser-basic.html">Browser example</a></strong> – Interactive web interface with a UI for testing encryption/decryption</li>
+<li><strong><a href="./examples/README.md">Examples README</a></strong> – Detailed guide for running and understanding the examples</li>
+</ul>
+<p>To run the Node.js example:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">node examples/node-basic.js</code></pre></div><p>To view the browser example, open <code>examples/browser-basic.html</code> in your web browser.</p>
+<h2>Data size limitations</h2>
+<p>RSA encryption with OAEP padding has inherent size limitations based on the key size:</p>
+<h3>Maximum message sizes</h3>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Key Size</th>
+<th>Max Bytes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2048-bit</td>
+<td>~190 bytes</td>
+</tr>
+<tr>
+<td>4096-bit</td>
+<td>~446 bytes</td>
+</tr>
+</tbody>
+</table>
+<h3>Why the limitation?</h3>
+<p>RSA with OAEP padding requires overhead:</p>
+<ul>
+<li>OAEP padding scheme: 2 * hash_size + 2 bytes</li>
+<li>With SHA-1 (20 bytes): 2 * 20 + 2 = 42 bytes overhead</li>
+<li>Formula: <code>max_bytes = (key_size_bytes - 42 - 2) ≈ key_size_bytes / 8 - 46</code></li>
+</ul>
+<h3>Solutions for larger data</h3>
+<p>For encrypting larger messages, use <strong>hybrid encryption</strong>:</p>
+<ol>
+<li>Generate a random symmetric key (e.g., 32 bytes for AES-256)</li>
+<li>Encrypt the symmetric key with RSA (fits in ~190 bytes)</li>
+<li>Encrypt your large data with the symmetric key (no size limit)</li>
+<li>Send both encrypted key and encrypted data to the recipient</li>
+</ol>
+<p>Example libraries:</p>
+<ul>
+<li><code>crypto-js</code> – Symmetric encryption with AES</li>
+<li><code>tweetnacl-js</code> – Modern cryptography with libsodium</li>
+<li>TweetNaCl.js – XChaCha20-Poly1305</li>
+</ul>
+<h2>Error handling &amp; troubleshooting</h2>
+<h3>Common errors and solutions</h3>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Error</th>
+<th>Cause</th>
+<th>Solution</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&quot;data too large for key size&quot;</td>
+<td>Message exceeds RSA capacity (~190 bytes for 2048-bit keys)</td>
+<td>Use smaller message, larger key, or hybrid encryption</td>
+</tr>
+<tr>
+<td>&quot;Invalid public key format&quot;</td>
+<td>PEM key is malformed or wrong type</td>
+<td>Verify key starts with <code>-----BEGIN PUBLIC KEY-----</code></td>
+</tr>
+<tr>
+<td>&quot;Invalid private key format&quot;</td>
+<td>PEM key is malformed or wrong type</td>
+<td>Verify key starts with <code>-----BEGIN PRIVATE KEY-----</code></td>
+</tr>
+<tr>
+<td>&quot;Decryption failed&quot;</td>
+<td>Wrong private key or corrupted ciphertext</td>
+<td>Ensure the correct private key matches the public key used for encryption</td>
+</tr>
+<tr>
+<td>&quot;Web Crypto API is not available&quot;</td>
+<td>Browser doesn&#39;t support crypto.subtle or not using HTTPS/localhost</td>
+<td>Use Chrome 37+, Firefox 34+, Safari 11+, or Edge 79+; use HTTPS in production</td>
+</tr>
+</tbody>
+</table>
+<h3>Key validation helpers</h3>
+<p>Use the provided validation functions to check keys before encryption:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">import { isValidPEMPublicKey, isValidPEMPrivateKey, isValidPEMKey } from &#39;encrypt-rsa&#39;;
+
+if (!isValidPEMPublicKey(key)) {
+  console.error(&#39;Invalid public key format&#39;);
+}
+
+if (!isValidPEMPrivateKey(key)) {
+  console.error(&#39;Invalid private key format&#39;);
+}
+
+// Check if key is either public or private
+if (!isValidPEMKey(key)) {
+  console.error(&#39;Invalid key format&#39;);
+}</code></pre></div><h3>Debugging tips</h3>
+<ol>
+<li><p><strong>Check key format</strong>: Ensure PEM keys have proper headers/footers</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-none">-----BEGIN PUBLIC KEY-----
+[base64 content]
+-----END PUBLIC KEY-----</code></pre></div></li>
+<li><p><strong>Verify key pair matching</strong>: The private key must match the public key</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const keys = await nodeRSA.createPrivateAndPublicKeys(2048);
+// keys.publicKey and keys.privateKey are a matching pair</code></pre></div></li>
+<li><p><strong>Test with small messages</strong>: Start with short messages to isolate size issues</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const short = &#39;test&#39;; // Start here
+const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, publicKey });</code></pre></div></li>
+<li><p><strong>Use try-catch blocks</strong>: Always wrap crypto operations</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">try {
+  const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });
+} catch (error) {
+  console.error(&#39;Encryption failed:&#39;, error.message);
+}</code></pre></div></li>
+</ol>
+<h2>Testing</h2>
 <p>The project includes tests for both the <strong>Node</strong> and <strong>web</strong> builds:</p>
 <ul>
 <li><strong>Node tests</strong> (<code>tests/functionalty.node.spec.ts</code>): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.</li>

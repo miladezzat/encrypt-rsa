@@ -243,6 +243,115 @@ const decryptedCredentials = await nodeRSA.decryptStringWithRsaPrivateKey({
 console.log('Decrypted Credentials:', decryptedCredentials);
 ```
 
+## Getting started with examples
+
+We provide practical examples for both Node.js and browser environments to help you get started quickly:
+
+- **[Node.js example](./examples/node-basic.js)** – Command-line demo showing key generation, encryption, and decryption
+- **[Browser example](./examples/browser-basic.html)** – Interactive web interface with a UI for testing encryption/decryption
+- **[Examples README](./examples/README.md)** – Detailed guide for running and understanding the examples
+
+To run the Node.js example:
+```bash
+node examples/node-basic.js
+```
+
+To view the browser example, open `examples/browser-basic.html` in your web browser.
+
+## Data size limitations
+
+RSA encryption with OAEP padding has inherent size limitations based on the key size:
+
+### Maximum message sizes
+
+| Key Size | Max Bytes |
+|----------|-----------|
+| 2048-bit | ~190 bytes |
+| 4096-bit | ~446 bytes |
+
+### Why the limitation?
+
+RSA with OAEP padding requires overhead:
+- OAEP padding scheme: 2 * hash_size + 2 bytes
+- With SHA-1 (20 bytes): 2 * 20 + 2 = 42 bytes overhead
+- Formula: `max_bytes = (key_size_bytes - 42 - 2) ≈ key_size_bytes / 8 - 46`
+
+### Solutions for larger data
+
+For encrypting larger messages, use **hybrid encryption**:
+1. Generate a random symmetric key (e.g., 32 bytes for AES-256)
+2. Encrypt the symmetric key with RSA (fits in ~190 bytes)
+3. Encrypt your large data with the symmetric key (no size limit)
+4. Send both encrypted key and encrypted data to the recipient
+
+Example libraries:
+- `crypto-js` – Symmetric encryption with AES
+- `tweetnacl-js` – Modern cryptography with libsodium
+- TweetNaCl.js – XChaCha20-Poly1305
+
+## Error handling & troubleshooting
+
+### Common errors and solutions
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| "data too large for key size" | Message exceeds RSA capacity (~190 bytes for 2048-bit keys) | Use smaller message, larger key, or hybrid encryption |
+| "Invalid public key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PUBLIC KEY-----` |
+| "Invalid private key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PRIVATE KEY-----` |
+| "Decryption failed" | Wrong private key or corrupted ciphertext | Ensure the correct private key matches the public key used for encryption |
+| "Web Crypto API is not available" | Browser doesn't support crypto.subtle or not using HTTPS/localhost | Use Chrome 37+, Firefox 34+, Safari 11+, or Edge 79+; use HTTPS in production |
+
+### Key validation helpers
+
+Use the provided validation functions to check keys before encryption:
+
+```ts
+import { isValidPEMPublicKey, isValidPEMPrivateKey, isValidPEMKey } from 'encrypt-rsa';
+
+if (!isValidPEMPublicKey(key)) {
+  console.error('Invalid public key format');
+}
+
+if (!isValidPEMPrivateKey(key)) {
+  console.error('Invalid private key format');
+}
+
+// Check if key is either public or private
+if (!isValidPEMKey(key)) {
+  console.error('Invalid key format');
+}
+```
+
+### Debugging tips
+
+1. **Check key format**: Ensure PEM keys have proper headers/footers
+   ```
+   -----BEGIN PUBLIC KEY-----
+   [base64 content]
+   -----END PUBLIC KEY-----
+   ```
+
+2. **Verify key pair matching**: The private key must match the public key
+   ```ts
+   const keys = await nodeRSA.createPrivateAndPublicKeys(2048);
+   // keys.publicKey and keys.privateKey are a matching pair
+   ```
+
+3. **Test with small messages**: Start with short messages to isolate size issues
+   ```ts
+   const short = 'test'; // Start here
+   const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, publicKey });
+   ```
+
+4. **Use try-catch blocks**: Always wrap crypto operations
+   ```ts
+   try {
+     const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });
+   } catch (error) {
+     console.error('Encryption failed:', error.message);
+   }
+   ```
+
 ## Testing
 
 The project includes tests for both the **Node** and **web** builds:

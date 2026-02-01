@@ -28,6 +28,14 @@ export type {
   INodeRSA,
 } from '../shared/types';
 
+export {
+  isValidPEMPublicKey,
+  isValidPEMPrivateKey,
+  isValidPEMKey,
+  splitIntoChunks,
+  joinChunks,
+} from '../shared/helpers';
+
 class NodeRSA implements INodeRSA {
   private publicKey: string | undefined;
   private privateKey: string | undefined;

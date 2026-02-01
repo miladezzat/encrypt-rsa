@@ -242,7 +242,7 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/node/index.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/node/index.ts:43</a></div>
                             </td>
                         </tr>
 
@@ -334,7 +334,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="35" class="link-to-prism">src/node/index.ts:35</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="43" class="link-to-prism">src/node/index.ts:43</a></div>
                         </td>
                     </tr>
 
@@ -361,7 +361,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="34" class="link-to-prism">src/node/index.ts:34</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="42" class="link-to-prism">src/node/index.ts:42</a></div>
                         </td>
                     </tr>
 
@@ -388,7 +388,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="33" class="link-to-prism">src/node/index.ts:33</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="41" class="link-to-prism">src/node/index.ts:41</a></div>
                         </td>
                     </tr>
 
@@ -415,7 +415,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="32" class="link-to-prism">src/node/index.ts:32</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="40" class="link-to-prism">src/node/index.ts:40</a></div>
                         </td>
                     </tr>
 
@@ -451,8 +451,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="71"
-                                    class="link-to-prism">src/node/index.ts:71</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="79"
+                                    class="link-to-prism">src/node/index.ts:79</a></div>
                         </td>
                     </tr>
 
@@ -524,8 +524,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="64"
-                                    class="link-to-prism">src/node/index.ts:64</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/node/index.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -593,8 +593,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="84"
-                                    class="link-to-prism">src/node/index.ts:84</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="92"
+                                    class="link-to-prism">src/node/index.ts:92</a></div>
                         </td>
                     </tr>
 
@@ -674,8 +674,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="50"
-                                    class="link-to-prism">src/node/index.ts:50</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="58"
+                                    class="link-to-prism">src/node/index.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -743,8 +743,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="57"
-                                    class="link-to-prism">src/node/index.ts:57</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="65"
+                                    class="link-to-prism">src/node/index.ts:65</a></div>
                         </td>
                     </tr>
 
@@ -812,8 +812,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="75"
-                                    class="link-to-prism">src/node/index.ts:75</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="83"
+                                    class="link-to-prism">src/node/index.ts:83</a></div>
                         </td>
                     </tr>
 
@@ -893,8 +893,8 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="43"
-                                    class="link-to-prism">src/node/index.ts:43</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="51"
+                                    class="link-to-prism">src/node/index.ts:51</a></div>
                         </td>
                     </tr>
 
@@ -975,6 +975,14 @@ export type {
   parametersOfDecryptPublic,
   INodeRSA,
 } from &#x27;../shared/types&#x27;;
+
+export {
+  isValidPEMPublicKey,
+  isValidPEMPrivateKey,
+  isValidPEMKey,
+  splitIntoChunks,
+  joinChunks,
+} from &#x27;../shared/helpers&#x27;;
 
 class NodeRSA implements INodeRSA {
   private publicKey: string | undefined;

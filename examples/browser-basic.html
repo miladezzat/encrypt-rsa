@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>encrypt-rsa Browser Example</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+      padding: 40px;
+      max-width: 600px;
+      width: 100%;
+    }
+
+    h1 {
+      color: #333;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #666;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    label {
+      display: block;
+      color: #333;
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      font-family: monospace;
+      font-size: 13px;
+      resize: vertical;
+      transition: border-color 0.3s;
+    }
+
+    input[type="text"]:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    textarea {
+      min-height: 60px;
+      max-height: 150px;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    button {
+      flex: 1;
+      padding: 12px;
+      background: #667eea;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.3s;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #5568d3;
+    }
+
+    button:active {
+      transform: scale(0.98);
+    }
+
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+    }
+
+    .output {
+      background: #f5f5f5;
+      border: 2px solid #e0e0e0;
+      border-radius: 6px;
+      padding: 12px;
+      word-break: break-all;
+      min-height: 50px;
+      font-family: monospace;
+      font-size: 12px;
+      color: #333;
+    }
+
+    .message {
+      padding: 12px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
+
+    .success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+
+    .loader {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #667eea;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin-right: 8px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .key-info {
+      font-size: 12px;
+      color: #666;
+      margin-top: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🔐 RSA Encryption Demo</h1>
+    <p class="subtitle">Encrypt and decrypt messages in your browser</p>
+
+    <div id="message"></div>
+
+    <div class="section">
+      <label>Step 1: Generate Key Pair</label>
+      <button onclick="generateKeys()">Generate 2048-bit RSA Keys</button>
+      <div class="key-info">Key size: 2048 bits (can encrypt ~190 bytes)</div>
+    </div>
+
+    <div class="section">
+      <label>Public Key:</label>
+      <textarea id="publicKey" readonly></textarea>
+    </div>
+
+    <div class="section">
+      <label>Private Key:</label>
+      <textarea id="privateKey" readonly></textarea>
+    </div>
+
+    <div class="section">
+      <label>Message to Encrypt:</label>
+      <textarea id="message-input" placeholder="Enter a message (max ~190 bytes)"></textarea>
+    </div>
+
+    <div class="section">
+      <div class="button-group">
+        <button onclick="encrypt()" id="encryptBtn">🔒 Encrypt</button>
+        <button onclick="clearEncrypted()" style="background: #999;">Clear</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Encrypted (Base64):</label>
+      <textarea id="encrypted-output" readonly></textarea>
+    </div>
+
+    <div class="section">
+      <div class="button-group">
+        <button onclick="decrypt()" id="decryptBtn">🔓 Decrypt</button>
+        <button onclick="clearDecrypted()" style="background: #999;">Clear</button>
+      </div>
+    </div>
+
+    <div class="section">
+      <label>Decrypted Message:</label>
+      <textarea id="decrypted-output" readonly></textarea>
+    </div>
+  </div>
+
+  <script src="../build/web/index.js"></script>
+  <script>
+    function showMessage(text, type = 'info') {
+      const messageEl = document.getElementById('message');
+      messageEl.className = `message ${type}`;
+      messageEl.innerHTML = (type === 'error' ? '⚠️ ' : type === 'success' ? '✓ ' : 'ℹ️ ') + text;
+      messageEl.classList.remove('hidden');
+    }
+
+    function hideMessage() {
+      const messageEl = document.getElementById('message');
+      messageEl.classList.add('hidden');
+    }
+
+    async function generateKeys() {
+      try {
+        showMessage('<span class="loader"></span>Generating keys...', 'info');
+        const keys = await encryptRSA.createPrivateAndPublicKeys(2048);
+        document.getElementById('publicKey').value = keys.publicKey;
+        document.getElementById('privateKey').value = keys.privateKey;
+        showMessage('✓ Keys generated successfully!', 'success');
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function encrypt() {
+      try {
+        const publicKey = document.getElementById('publicKey').value;
+        const message = document.getElementById('message-input').value;
+
+        if (!publicKey) {
+          showMessage('Please generate keys first', 'error');
+          return;
+        }
+
+        if (!message) {
+          showMessage('Please enter a message', 'error');
+          return;
+        }
+
+        showMessage('<span class="loader"></span>Encrypting...', 'info');
+        const encrypted = await encryptRSA.encryptStringWithRsaPublicKey({
+          text: message,
+          publicKey,
+        });
+
+        document.getElementById('encrypted-output').value = encrypted;
+        showMessage('✓ Message encrypted successfully!', 'success');
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    async function decrypt() {
+      try {
+        const privateKey = document.getElementById('privateKey').value;
+        const encrypted = document.getElementById('encrypted-output').value;
+
+        if (!privateKey) {
+          showMessage('Please generate keys first', 'error');
+          return;
+        }
+
+        if (!encrypted) {
+          showMessage('Please encrypt a message first', 'error');
+          return;
+        }
+
+        showMessage('<span class="loader"></span>Decrypting...', 'info');
+        const decrypted = await encryptRSA.decryptStringWithRsaPrivateKey({
+          text: encrypted,
+          privateKey,
+        });
+
+        document.getElementById('decrypted-output').value = decrypted;
+        showMessage('✓ Message decrypted successfully!', 'success');
+      } catch (error) {
+        showMessage(`Error: ${error.message}`, 'error');
+      }
+    }
+
+    function clearEncrypted() {
+      document.getElementById('encrypted-output').value = '';
+      hideMessage();
+    }
+
+    function clearDecrypted() {
+      document.getElementById('decrypted-output').value = '';
+      hideMessage();
+    }
+
+    // Hide message after 5 seconds
+    setInterval(() => {
+      if (document.getElementById('message').classList.contains('hidden')) return;
+      const message = document.getElementById('message').textContent;
+      if (!message.includes('...')) hideMessage();
+    }, 5000);
+  </script>
+</body>
+</html>

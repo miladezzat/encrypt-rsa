@@ -19,40 +19,78 @@ const OAEP_OPTIONS = {
 
 export function encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string {
   const { text, publicKey } = args;
-  const publicKeyDecoded: string = decode(publicKey as string);
-  const buffer: Buffer = Buffer.from(text);
-  const encrypted: Buffer = crypto.publicEncrypt(
-    { key: publicKeyDecoded, ...OAEP_OPTIONS },
-    buffer
-  );
-  return encrypted.toString('base64');
+  try {
+    const publicKeyDecoded: string = decode(publicKey as string);
+    const buffer: Buffer = Buffer.from(text);
+    const encrypted: Buffer = crypto.publicEncrypt(
+      { key: publicKeyDecoded, ...OAEP_OPTIONS },
+      buffer as unknown as Uint8Array,
+    );
+    return encrypted.toString('base64');
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
+    }
+    if (errorMsg.includes('too long')) {
+      throw new Error('Data too large to encrypt. RSA can only encrypt ~245 bytes with 2048-bit keys. Use chunking for larger data.');
+    }
+    throw error;
+  }
 }
 
 export function decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
   const { text, privateKey } = args;
-  const privateKeyDecoded: string = decode(privateKey as string);
-  const buffer: Buffer = Buffer.from(text, 'base64');
-  const decrypted: Buffer = crypto.privateDecrypt(
-    { key: privateKeyDecoded, ...OAEP_OPTIONS },
-    buffer
-  );
-  return decrypted.toString('utf8');
+  try {
+    const privateKeyDecoded: string = decode(privateKey as string);
+    const buffer: Buffer = Buffer.from(text, 'base64');
+    const decrypted: Buffer = crypto.privateDecrypt(
+      { key: privateKeyDecoded, ...OAEP_OPTIONS },
+      buffer as unknown as Uint8Array,
+    );
+    return decrypted.toString('utf8');
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
+    }
+    if (errorMsg.includes('decrypt') || errorMsg.includes('padding')) {
+      throw new Error('Decryption failed. Ensure you are using the correct private key that matches the public key used for encryption.');
+    }
+    throw error;
+  }
 }
 
 export function encryptPrivate(args: parametersOfEncryptPrivate): string {
   const { text, privateKey } = args;
-  const privateKeyDecoded: string = decode(privateKey as string);
-  const buffer: Buffer = Buffer.from(text);
-  const encrypted: Buffer = crypto.privateEncrypt(privateKeyDecoded, buffer);
-  return encrypted.toString('base64');
+  try {
+    const privateKeyDecoded: string = decode(privateKey as string);
+    const buffer: Buffer = Buffer.from(text);
+    const encrypted: Buffer = crypto.privateEncrypt(privateKeyDecoded, buffer as unknown as Uint8Array);
+    return encrypted.toString('base64');
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
+    }
+    throw error;
+  }
 }
 
 export function decryptPublic(args: parametersOfDecryptPublic): string {
   const { text, publicKey } = args;
-  const publicKeyDecoded: string = decode(publicKey as string);
-  const buffer: Buffer = Buffer.from(text, 'base64');
-  const decrypted: Buffer = crypto.publicDecrypt(publicKeyDecoded, buffer);
-  return decrypted.toString('utf8');
+  try {
+    const publicKeyDecoded: string = decode(publicKey as string);
+    const buffer: Buffer = Buffer.from(text, 'base64');
+    const decrypted: Buffer = crypto.publicDecrypt(publicKeyDecoded, buffer as unknown as Uint8Array);
+    return decrypted.toString('utf8');
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
+    }
+    throw error;
+  }
 }
 
 export function createPrivateAndPublicKeys(modulusLength: number = 2048): returnCreateKeys {

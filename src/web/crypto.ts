@@ -17,68 +17,102 @@ function getCrypto(): Crypto {
   if (typeof globalThis !== 'undefined' && globalThis.crypto && globalThis.crypto.subtle) {
     return globalThis.crypto;
   }
-  throw new Error('Web Crypto API (crypto.subtle) is not available');
+  throw new Error(
+    'Web Crypto API (crypto.subtle) is not available. Please ensure you are using HTTPS or localhost, and using a modern browser (Chrome 37+, Firefox 34+, Safari 11+, Edge 79+).'
+  );
 }
 
 async function importPublicKey(pem: string): Promise<CryptoKey> {
-  const pemDecoded = decode(pem);
-  const binary = pemToBinary(pemDecoded);
-  return getCrypto().subtle.importKey(
-    'spki',
-    binary,
-    { name: 'RSA-OAEP', hash: 'SHA-1' },
-    false,
-    ['encrypt']
-  );
+  try {
+    const pemDecoded = decode(pem);
+    const binary = pemToBinary(pemDecoded);
+    return getCrypto().subtle.importKey(
+      'spki',
+      binary,
+      { name: 'RSA-OAEP', hash: 'SHA-1' },
+      false,
+      ['encrypt']
+    );
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
+    }
+    throw error;
+  }
 }
 
 async function importPrivateKey(pem: string): Promise<CryptoKey> {
-  const pemDecoded = decode(pem);
-  const binary = pemToBinary(pemDecoded);
-  return getCrypto().subtle.importKey(
-    'pkcs8',
-    binary,
-    { name: 'RSA-OAEP', hash: 'SHA-1' },
-    false,
-    ['decrypt']
-  );
+  try {
+    const pemDecoded = decode(pem);
+    const binary = pemToBinary(pemDecoded);
+    return getCrypto().subtle.importKey(
+      'pkcs8',
+      binary,
+      { name: 'RSA-OAEP', hash: 'SHA-1' },
+      false,
+      ['decrypt']
+    );
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
+      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
+    }
+    throw error;
+  }
 }
 
 export async function encryptStringWithRsaPublicKey(
   args: parametersOfEncrypt
 ): Promise<string> {
-  const { text, publicKey } = args;
-  const key = await importPublicKey(publicKey as string);
-  const data = new TextEncoder().encode(text);
-  const encrypted = await getCrypto().subtle.encrypt(
-    { name: 'RSA-OAEP' },
-    key,
-    data
-  );
-  const bytes = new Uint8Array(encrypted);
-  let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  try {
+    const { text, publicKey } = args;
+    const key = await importPublicKey(publicKey as string);
+    const data = new TextEncoder().encode(text);
+    const encrypted = await getCrypto().subtle.encrypt(
+      { name: 'RSA-OAEP' },
+      key,
+      data
+    );
+    const bytes = new Uint8Array(encrypted);
+    let binary = '';
+    for (let i = 0; i < bytes.length; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return btoa(binary);
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('too long')) {
+      throw new Error('Data too large to encrypt. RSA can only encrypt ~245 bytes with 2048-bit keys. Use chunking for larger data.');
+    }
+    throw error;
   }
-  return btoa(binary);
 }
 
 export async function decryptStringWithRsaPrivateKey(
   args: parametersOfDecrypt
 ): Promise<string> {
-  const { text, privateKey } = args;
-  const key = await importPrivateKey(privateKey as string);
-  const binary = atob(text);
-  const bytes = new Uint8Array(binary.length);
-  for (let i = 0; i < binary.length; i++) {
-    bytes[i] = binary.charCodeAt(i);
+  try {
+    const { text, privateKey } = args;
+    const key = await importPrivateKey(privateKey as string);
+    const binary = atob(text);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    const decrypted = await getCrypto().subtle.decrypt(
+      { name: 'RSA-OAEP' },
+      key,
+      bytes
+    );
+    return new TextDecoder().decode(decrypted);
+  } catch (error) {
+    const errorMsg = error instanceof Error ? error.message : String(error);
+    if (errorMsg.includes('decrypt') || errorMsg.includes('padding')) {
+      throw new Error('Decryption failed. Ensure you are using the correct private key that matches the public key used for encryption.');
+    }
+    throw error;
   }
-  const decrypted = await getCrypto().subtle.decrypt(
-    { name: 'RSA-OAEP' },
-    key,
-    bytes
-  );
-  return new TextDecoder().decode(decrypted);
 }
 
 export async function encryptPrivate(

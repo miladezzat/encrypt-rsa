@@ -157,10 +157,25 @@
                             <a href="#encryptStringWithRsaPublicKey" title="src/node/crypto.ts" ><b>encryptStringWithRsaPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
+                            <a href="#isValidPEMKey" title="src/shared/helpers.ts" ><b>isValidPEMKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#isValidPEMPrivateKey" title="src/shared/helpers.ts" ><b>isValidPEMPrivateKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#isValidPEMPublicKey" title="src/shared/helpers.ts" ><b>isValidPEMPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#joinChunks" title="src/shared/helpers.ts" ><b>joinChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
                             <a href="#pemToBase64" title="src/shared/helpers.ts" ><b>pemToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
                             <a href="#pemToBinary" title="src/shared/helpers.ts" ><b>pemToBinary</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#splitIntoChunks" title="src/shared/helpers.ts" ><b>splitIntoChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -376,6 +391,274 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="isValidPEMKey"></a>
+                    <span class="name">
+                        <span ><b>isValidPEMKey</b></span>
+                        <a href="#isValidPEMKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isValidPEMKey(key)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validates if a string is a valid PEM key (either public or private).</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The key string to validate.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the key is a valid PEM key, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isValidPEMPrivateKey"></a>
+                    <span class="name">
+                        <span ><b>isValidPEMPrivateKey</b></span>
+                        <a href="#isValidPEMPrivateKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isValidPEMPrivateKey(key)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validates if a string is a valid PEM-formatted private key.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The key string to validate.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the key is a valid PEM private key, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isValidPEMPublicKey"></a>
+                    <span class="name">
+                        <span ><b>isValidPEMPublicKey</b></span>
+                        <a href="#isValidPEMPublicKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isValidPEMPublicKey(key)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Validates if a string is a valid PEM-formatted public key.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>The key string to validate.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>True if the key is a valid PEM public key, false otherwise.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="joinChunks"></a>
+                    <span class="name">
+                        <span ><b>joinChunks</b></span>
+                        <a href="#joinChunks"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>joinChunks(chunks)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Joins chunks back into a single string.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>chunks</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                            <td>
+                                                    <ul>
+<li>Array of text chunks.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>The combined text.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="pemToBase64"></a>
                     <span class="name">
                         <span ><b>pemToBase64</b></span>
@@ -493,6 +776,103 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
                         </div>
                             <div class="io-description">
                                 
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="splitIntoChunks"></a>
+                    <span class="name">
+                        <span ><b>splitIntoChunks</b></span>
+                        <a href="#splitIntoChunks"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>splitIntoChunks(text: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, chunkSize: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Splits a string into chunks for encryption.
+RSA can only encrypt data smaller than the key modulus minus padding.
+For 2048-bit keys, this is approximately 245 bytes.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                                <td>Description</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>text</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>The text to split into chunks.</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                                <td>chunkSize</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>245</code>
+                                            </td>
+
+                                            <td>
+                                                    <ul>
+<li>The size of each chunk in bytes (default 245 for 2048-bit RSA).</li>
+</ul>
+
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>string[]</code>
+
+                        </div>
+                            <div class="io-description">
+                                <p>Array of text chunks.</p>
+
                             </div>
                 </td>
             </tr>
