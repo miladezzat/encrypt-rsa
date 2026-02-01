@@ -1,11 +1,41 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-**Generating the changelog**
+## [5.0.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v5.0.0) (2026-02-01)
 
-- **From commits (since last tag):** `npm run changelog` — updates CHANGELOG.md from [conventional commits](https://www.conventionalcommits.org/) (e.g. `feat:`, `fix:`, `BREAKING CHANGE:`).
-- **Full release (bump version + changelog + tag):** `npm run release -- --release-as major|minor|patch` — uses [standard-version](https://github.com/conventional-changelog/standard-version); bump and changelog are driven by commit messages.
+
+### ⚠ BREAKING CHANGES
+
+* All crypto methods now return Promises (async API).
+Migrate by adding await or .then() to encryptStringWithRsaPublicKey,
+decryptStringWithRsaPrivateKey, encrypt, decrypt, createPrivateAndPublicKeys,
+encryptBufferWithRsaPublicKey, decryptBufferWithRsaPrivateKey.
+* Entry points are now build/node and build/web (conditional
+exports). The old single build/index.js is no longer published.
+* decryptBufferWithRsaPrivateKey return type is now
+Promise<Uint8Array> (was Buffer). In Node the runtime value is still Buffer.
+
+- Add src/node (Node crypto, RSA-OAEP) and src/web (Web Crypto API)
+- Add src/shared (types, helpers without Node/Buffer) for both builds
+- Same INodeRSA interface; encrypt(private)/decrypt(public) throw in browser
+- Add tests: functionalty.node.spec.ts, functionalty.web.spec.ts
+- Package: exports, main/module/browser/types, files; version 4.0.0
+- Build: tsconfig.node.json, tsconfig.web.json; dual tsc output
+- Docs: tsconfig.doc.json, FEATURE_PARITY.md, README/CHANGELOG updates
+- Changelog: conventional-changelog-cli script, .versionrc.json
+- CI: publish workflow runs on push to master (install, test, build, publish)
+
+Co-authored-by: Cursor <cursoragent@cursor.com>
+
+### Features
+
+* add Node and Web dual build with async API (v4.0.0) ([#43](https://github.com/miladezzat/encrypt-rsa/issues/43)) ([1dc11ef](https://github.com/miladezzat/encrypt-rsa/commit/1dc11ef20752b8c48bde4ba980df268b4ea683b0))
+
+
+### Documentation
+
+* update docs ([8e72889](https://github.com/miladezzat/encrypt-rsa/commit/8e728896ced8c361006defbe6fd5b1bdd34e5951))
 
 ## [4.0.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v4.0.0) - 2025-02-01
 
