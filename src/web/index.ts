@@ -40,8 +40,11 @@ export {
 
 class NodeRSA implements INodeRSA {
   private publicKey: string | undefined;
+
   private privateKey: string | undefined;
+
   private modulusLength: number;
+
   private keyBase64: 'base64' = 'base64';
 
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
@@ -107,14 +110,14 @@ class NodeRSA implements INodeRSA {
   }
 
   public createPrivateAndPublicKeys(
-    modulusLength: number = this.modulusLength
+    modulusLength: number = this.modulusLength,
   ): Promise<returnCreateKeys> {
     return createPrivateAndPublicKeys(modulusLength);
   }
 
   public encryptBufferWithRsaPublicKey(
     buffer: Uint8Array,
-    publicKey?: string
+    publicKey?: string,
   ): Promise<string> {
     if (this.keyBase64 !== 'base64') {
       throw new Error('Only base64 encoding is supported');
@@ -130,7 +133,7 @@ class NodeRSA implements INodeRSA {
 
   public decryptBufferWithRsaPrivateKey(
     encryptedText: string,
-    privateKey?: string
+    privateKey?: string,
   ): Promise<Uint8Array> {
     if (this.keyBase64 !== 'base64') {
       throw new Error('Only base64 encoding is supported');
@@ -143,7 +146,7 @@ class NodeRSA implements INodeRSA {
           bytes[i] = binary.charCodeAt(i);
         }
         return bytes;
-      }
+      },
     );
   }
 }

@@ -7,12 +7,11 @@ import { expect } from 'chai';
 import NodeRSA from '../src/web/index';
 import NodeRSANode from '../src/node/index';
 
-const hasSubtleCrypto =
-  typeof globalThis !== 'undefined' &&
-  typeof (globalThis as unknown as { crypto?: { subtle?: unknown } }).crypto !== 'undefined' &&
-  (globalThis as unknown as { crypto: { subtle?: unknown } }).crypto.subtle != null;
+const hasSubtleCrypto = typeof globalThis !== 'undefined'
+  && typeof (globalThis as unknown as { crypto?: { subtle?: unknown } }).crypto !== 'undefined'
+  && (globalThis as unknown as { crypto: { subtle?: unknown } }).crypto.subtle != null;
 
-describe('Functionality (web build)', function () {
+describe('Functionality (web build)', () => {
   before(function () {
     if (!hasSubtleCrypto) {
       this.skip();
@@ -64,7 +63,7 @@ describe('Functionality (web build)', function () {
 
     const decryptedBuffer = await nodeRSA.decryptBufferWithRsaPrivateKey(
       encryptedBuffer,
-      privateKey
+      privateKey,
     );
     expect(decryptedBuffer).to.be.an.instanceOf(Uint8Array);
     expect(new TextDecoder().decode(decryptedBuffer)).to.equal('This is a buffer test');
@@ -81,7 +80,7 @@ describe('Functionality (web build)', function () {
 
     const decryptedBuffer = await nodeRSA.decryptBufferWithRsaPrivateKey(
       encryptedBuffer,
-      privateKey
+      privateKey,
     );
     expect(decryptedBuffer).to.be.an.instanceOf(Uint8Array);
     expect(decryptedBuffer.length).to.equal(0);

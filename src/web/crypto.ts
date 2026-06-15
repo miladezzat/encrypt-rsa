@@ -3,8 +3,9 @@
  * PEM import/export, encrypt/decrypt with public/private, generateKey.
  * encrypt(private)/decrypt(public) not supported in Web Crypto; throws in browser.
  */
-import { decode } from '../shared/helpers';
-import { pemToBinary, binaryToPem, base64ToBytes, bytesToBase64 } from '../shared/helpers';
+import {
+  decode, pemToBinary, binaryToPem, base64ToBytes, bytesToBase64,
+} from '../shared/helpers';
 import type {
   parametersOfDecrypt,
   parametersOfDecryptPublic,
@@ -18,7 +19,7 @@ function getCrypto(): Crypto {
     return globalThis.crypto;
   }
   throw new Error(
-    'Web Crypto API (crypto.subtle) is not available. Please ensure you are using HTTPS or localhost, and using a modern browser (Chrome 37+, Firefox 34+, Safari 11+, Edge 79+).'
+    'Web Crypto API (crypto.subtle) is not available. Please ensure you are using HTTPS or localhost, and using a modern browser (Chrome 37+, Firefox 34+, Safari 11+, Edge 79+).',
   );
 }
 
@@ -31,7 +32,7 @@ async function importPublicKey(pem: string): Promise<CryptoKey> {
       binary,
       { name: 'RSA-OAEP', hash: 'SHA-1' },
       false,
-      ['encrypt']
+      ['encrypt'],
     );
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
@@ -51,7 +52,7 @@ async function importPrivateKey(pem: string): Promise<CryptoKey> {
       binary,
       { name: 'RSA-OAEP', hash: 'SHA-1' },
       false,
-      ['decrypt']
+      ['decrypt'],
     );
   } catch (error) {
     const errorMsg = error instanceof Error ? error.message : String(error);
@@ -63,7 +64,7 @@ async function importPrivateKey(pem: string): Promise<CryptoKey> {
 }
 
 export async function encryptStringWithRsaPublicKey(
-  args: parametersOfEncrypt
+  args: parametersOfEncrypt,
 ): Promise<string> {
   try {
     const { text, publicKey } = args;
@@ -72,7 +73,7 @@ export async function encryptStringWithRsaPublicKey(
     const encrypted = await getCrypto().subtle.encrypt(
       { name: 'RSA-OAEP' },
       key,
-      data
+      data,
     );
     const bytes = new Uint8Array(encrypted);
     let binary = '';
@@ -90,7 +91,7 @@ export async function encryptStringWithRsaPublicKey(
 }
 
 export async function decryptStringWithRsaPrivateKey(
-  args: parametersOfDecrypt
+  args: parametersOfDecrypt,
 ): Promise<string> {
   try {
     const { text, privateKey } = args;
@@ -103,7 +104,7 @@ export async function decryptStringWithRsaPrivateKey(
     const decrypted = await getCrypto().subtle.decrypt(
       { name: 'RSA-OAEP' },
       key,
-      bytes
+      bytes,
     );
     return new TextDecoder().decode(decrypted);
   } catch (error) {
@@ -125,17 +126,17 @@ export async function encryptLarge(args: parametersOfEncrypt): Promise<string> {
   try {
     const { text, publicKey } = args;
     const rsaKey = await importPublicKey(publicKey as string);
-    const subtle = getCrypto().subtle;
+    const { subtle } = getCrypto();
 
     const aesKey = await subtle.generateKey(
       { name: 'AES-GCM', length: 256 },
       true,
-      ['encrypt']
+      ['encrypt'],
     );
     const iv = getCrypto().getRandomValues(new Uint8Array(12));
     const data = new TextEncoder().encode(text);
     const encrypted = new Uint8Array(
-      await subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, data)
+      await subtle.encrypt({ name: 'AES-GCM', iv }, aesKey, data),
     );
 
     // Web Crypto appends the 16-byte GCM tag to the ciphertext; split it out
@@ -145,7 +146,7 @@ export async function encryptLarge(args: parametersOfEncrypt): Promise<string> {
 
     const rawAesKey = new Uint8Array(await subtle.exportKey('raw', aesKey));
     const encryptedKey = new Uint8Array(
-      await subtle.encrypt({ name: 'RSA-OAEP' }, rsaKey, rawAesKey)
+      await subtle.encrypt({ name: 'RSA-OAEP' }, rsaKey, rawAesKey),
     );
 
     return [encryptedKey, iv, tag, ciphertext]
@@ -168,7 +169,7 @@ export async function decryptLarge(args: parametersOfDecrypt): Promise<string> {
   try {
     const { text, privateKey } = args;
     const rsaKey = await importPrivateKey(privateKey as string);
-    const subtle = getCrypto().subtle;
+    const { subtle } = getCrypto();
 
     const parts = text.split(':');
     if (parts.length !== 4) {
@@ -182,7 +183,7 @@ export async function decryptLarge(args: parametersOfDecrypt): Promise<string> {
       rawAesKey,
       { name: 'AES-GCM', length: 256 },
       false,
-      ['decrypt']
+      ['decrypt'],
     );
 
     // Re-join ciphertext and tag for Web Crypto's combined-format decrypt.
@@ -202,23 +203,23 @@ export async function decryptLarge(args: parametersOfDecrypt): Promise<string> {
 }
 
 export async function encryptPrivate(
-  _args: parametersOfEncryptPrivate
+  _args: parametersOfEncryptPrivate,
 ): Promise<string> {
   throw new Error(
-    'Encrypt with private key is not supported in the browser build. Use encryptStringWithRsaPublicKey for encryption.'
+    'Encrypt with private key is not supported in the browser build. Use encryptStringWithRsaPublicKey for encryption.',
   );
 }
 
 export async function decryptPublic(
-  _args: parametersOfDecryptPublic
+  _args: parametersOfDecryptPublic,
 ): Promise<string> {
   throw new Error(
-    'Decrypt with public key is not supported in the browser build. Use decryptStringWithRsaPrivateKey for decryption.'
+    'Decrypt with public key is not supported in the browser build. Use decryptStringWithRsaPrivateKey for decryption.',
   );
 }
 
 export async function createPrivateAndPublicKeys(
-  modulusLength: number = 2048
+  modulusLength: number = 2048,
 ): Promise<returnCreateKeys> {
   const keyPair = await getCrypto().subtle.generateKey(
     {
@@ -228,7 +229,7 @@ export async function createPrivateAndPublicKeys(
       hash: 'SHA-1',
     },
     true,
-    ['encrypt', 'decrypt']
+    ['encrypt', 'decrypt'],
   );
 
   const [publicDer, privateDer] = await Promise.all([

@@ -40,8 +40,11 @@ export {
 
 class NodeRSA implements INodeRSA {
   private publicKey: string | undefined;
+
   private privateKey: string | undefined;
+
   private modulusLength: number;
+
   private keyBase64: 'base64' = 'base64';
 
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
@@ -53,14 +56,14 @@ class NodeRSA implements INodeRSA {
   public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise<string> {
     const { publicKey = this.publicKey } = args;
     return Promise.resolve(
-      encryptStringWithRsaPublicKey({ ...args, publicKey: convertKetToBase64(publicKey as string) })
+      encryptStringWithRsaPublicKey({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
     );
   }
 
   public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string> {
     const { privateKey = this.privateKey } = args;
     return Promise.resolve(
-      decryptStringWithRsaPrivateKey({ ...args, privateKey: convertKetToBase64(privateKey as string) })
+      decryptStringWithRsaPrivateKey({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
     );
   }
 
@@ -73,7 +76,7 @@ class NodeRSA implements INodeRSA {
   public encryptLarge(args: parametersOfEncrypt): Promise<string> {
     const { publicKey = this.publicKey } = args;
     return Promise.resolve(
-      encryptLarge({ ...args, publicKey: convertKetToBase64(publicKey as string) })
+      encryptLarge({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
     );
   }
 
@@ -83,21 +86,21 @@ class NodeRSA implements INodeRSA {
   public decryptLarge(args: parametersOfDecrypt): Promise<string> {
     const { privateKey = this.privateKey } = args;
     return Promise.resolve(
-      decryptLarge({ ...args, privateKey: convertKetToBase64(privateKey as string) })
+      decryptLarge({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
     );
   }
 
   public encrypt(args: parametersOfEncryptPrivate): Promise<string> {
     const { privateKey = this.privateKey } = args;
     return Promise.resolve(
-      encryptPrivate({ ...args, privateKey: convertKetToBase64(privateKey as string) })
+      encryptPrivate({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
     );
   }
 
   public decrypt(args: parametersOfDecryptPublic): Promise<string> {
     const { publicKey = this.publicKey } = args;
     return Promise.resolve(
-      decryptPublic({ ...args, publicKey: convertKetToBase64(publicKey as string) })
+      decryptPublic({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
     );
   }
 
@@ -107,7 +110,7 @@ class NodeRSA implements INodeRSA {
 
   public encryptBufferWithRsaPublicKey(
     buffer: Uint8Array,
-    publicKey?: string
+    publicKey?: string,
   ): Promise<string> {
     const buf = Buffer.isBuffer(buffer) ? buffer : Buffer.from(buffer);
     const base64String = buf.toString(this.keyBase64);
@@ -116,10 +119,10 @@ class NodeRSA implements INodeRSA {
 
   public decryptBufferWithRsaPrivateKey(
     encryptedText: string,
-    privateKey?: string
+    privateKey?: string,
   ): Promise<Uint8Array> {
     return this.decryptStringWithRsaPrivateKey({ text: encryptedText, privateKey }).then(
-      (decryptedBase64) => Buffer.from(decryptedBase64, this.keyBase64) as Uint8Array
+      (decryptedBase64) => Buffer.from(decryptedBase64, this.keyBase64) as Uint8Array,
     );
   }
 }

@@ -53,7 +53,7 @@ export function pemToBinary(pem: string): Uint8Array {
  */
 export function binaryToPem(
   binary: Uint8Array,
-  type: 'public' | 'private'
+  type: 'public' | 'private',
 ): string {
   let b64 = '';
   for (let i = 0; i < binary.length; i++) {
