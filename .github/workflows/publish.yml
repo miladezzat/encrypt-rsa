@@ -33,9 +33,16 @@ jobs:
       - name: Build
         run: npm run build
 
+      # Fail fast with a clear message if NPM_TOKEN is missing/expired/wrong-scoped.
+      # Without this, npm-publish reports auth failures as a misleading "404 on PUT".
+      - name: Verify npm auth
+        run: npm whoami
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
       - name: Publish to npm
         id: publish
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v3
         with:
           token: ${{ secrets.NPM_TOKEN }}
 
