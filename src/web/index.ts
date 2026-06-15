@@ -9,6 +9,8 @@ import {
   decryptPublic,
   encryptStringWithRsaPublicKey,
   encryptPrivate,
+  encryptLarge,
+  decryptLarge,
 } from './crypto';
 import type {
   parametersOfDecrypt,
@@ -59,6 +61,30 @@ class NodeRSA implements INodeRSA {
   public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string> {
     const { privateKey = this.privateKey } = args;
     return decryptStringWithRsaPrivateKey({
+      ...args,
+      privateKey: convertKetToBase64(privateKey as string),
+    });
+  }
+
+  /**
+   * Encrypts arbitrary-length text using hybrid encryption (AES-256-GCM + RSA-OAEP).
+   * Use this instead of encryptStringWithRsaPublicKey when the data is larger than
+   * the RSA key can hold. Output is interoperable with the Node build's encryptLarge.
+   */
+  public encryptLarge(args: parametersOfEncrypt): Promise<string> {
+    const { publicKey = this.publicKey } = args;
+    return encryptLarge({
+      ...args,
+      publicKey: convertKetToBase64(publicKey as string),
+    });
+  }
+
+  /**
+   * Decrypts a value produced by encryptLarge using the RSA private key.
+   */
+  public decryptLarge(args: parametersOfDecrypt): Promise<string> {
+    const { privateKey = this.privateKey } = args;
+    return decryptLarge({
       ...args,
       privateKey: convertKetToBase64(privateKey as string),
     });

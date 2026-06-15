@@ -65,6 +65,8 @@ export type parametersOfDecryptPublic = {
 export interface INodeRSA {
   encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise<string>;
   decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string>;
+  encryptLarge(args: parametersOfEncrypt): Promise<string>;
+  decryptLarge(args: parametersOfDecrypt): Promise<string>;
   encrypt(args: parametersOfEncryptPrivate): Promise<string>;
   decrypt(args: parametersOfDecryptPublic): Promise<string>;
   createPrivateAndPublicKeys(modulusLength?: number): Promise<returnCreateKeys>;

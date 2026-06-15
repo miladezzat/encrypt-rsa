@@ -126,4 +126,100 @@ describe('Functionality (node build)', () => {
     expect(decryptedBuffer).to.be.an.instanceOf(Buffer);
     expect((decryptedBuffer as Buffer).toString()).to.equal(buffer.toString());
   });
+
+  describe('encryptLarge / decryptLarge (hybrid)', () => {
+    // A 376-byte value that overflows a 2048-bit RSA key (the reported bug).
+    const longText = 'A'.repeat(376);
+
+    it('plain encryptStringWithRsaPublicKey rejects data too large for the key', async () => {
+      const nodeRSA = new NodeRSA();
+      const { publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      let threw = false;
+      try {
+        await nodeRSA.encryptStringWithRsaPublicKey({ text: longText, publicKey });
+      } catch (err) {
+        threw = true;
+        expect((err as Error).message).to.match(/too large|too long/i);
+      }
+      expect(threw, 'expected plain RSA to reject 376-byte input').to.equal(true);
+    });
+
+    it('encryptLarge then decryptLarge round-trips a 376-byte string', async () => {
+      const nodeRSA = new NodeRSA();
+      const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      const encrypted = await nodeRSA.encryptLarge({ text: longText, publicKey });
+      expect(encrypted).to.be.a('string').and.not.equal(longText);
+      expect(encrypted.split(':')).to.have.lengthOf(4);
+
+      const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+      expect(decrypted).to.equal(longText);
+    });
+
+    it('produces a different ciphertext each call (random AES key + IV)', async () => {
+      const nodeRSA = new NodeRSA();
+      const { publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      const a = await nodeRSA.encryptLarge({ text: longText, publicKey });
+      const b = await nodeRSA.encryptLarge({ text: longText, publicKey });
+      expect(a).to.not.equal(b);
+    });
+
+    it('round-trips a multi-kilobyte string', async () => {
+      const nodeRSA = new NodeRSA();
+      const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      const huge = 'x'.repeat(10000);
+      const encrypted = await nodeRSA.encryptLarge({ text: huge, publicKey });
+      const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+      expect(decrypted).to.equal(huge);
+    });
+
+    it('uses keys from the constructor when not passed in args', async () => {
+      const base = new NodeRSA();
+      const { privateKey, publicKey } = await base.createPrivateAndPublicKeys(2048);
+
+      const nodeRSA = new NodeRSA(publicKey, privateKey);
+      const encrypted = await nodeRSA.encryptLarge({ text: longText });
+      const decrypted = await nodeRSA.decryptLarge({ text: encrypted });
+      expect(decrypted).to.equal(longText);
+    });
+
+    it('fails to decrypt if the ciphertext is tampered with (GCM auth)', async () => {
+      const nodeRSA = new NodeRSA();
+      const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      const encrypted = await nodeRSA.encryptLarge({ text: longText, publicKey });
+      const parts = encrypted.split(':');
+      // Flip a byte in the ciphertext segment.
+      const data = Buffer.from(parts[3], 'base64');
+      data[0] ^= 0xff;
+      parts[3] = data.toString('base64');
+      const tampered = parts.join(':');
+
+      let threw = false;
+      try {
+        await nodeRSA.decryptLarge({ text: tampered, privateKey });
+      } catch (err) {
+        threw = true;
+        expect((err as Error).message).to.match(/Decryption failed/i);
+      }
+      expect(threw, 'expected tampered ciphertext to fail auth').to.equal(true);
+    });
+
+    it('rejects a malformed payload', async () => {
+      const nodeRSA = new NodeRSA();
+      const { privateKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      let threw = false;
+      try {
+        await nodeRSA.decryptLarge({ text: 'not-a-valid-payload', privateKey });
+      } catch (err) {
+        threw = true;
+        expect((err as Error).message).to.match(/Invalid payload format|Decryption failed/i);
+      }
+      expect(threw).to.equal(true);
+    });
+  });
 });

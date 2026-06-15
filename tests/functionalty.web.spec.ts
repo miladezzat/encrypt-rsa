@@ -5,6 +5,7 @@
 /* eslint-disable max-len */
 import { expect } from 'chai';
 import NodeRSA from '../src/web/index';
+import NodeRSANode from '../src/node/index';
 
 const hasSubtleCrypto =
   typeof globalThis !== 'undefined' &&
@@ -84,6 +85,44 @@ describe('Functionality (web build)', function () {
     );
     expect(decryptedBuffer).to.be.an.instanceOf(Uint8Array);
     expect(decryptedBuffer.length).to.equal(0);
+  });
+
+  it('encryptLarge then decryptLarge round-trips a 376-byte string', async () => {
+    const nodeRSA = new NodeRSA();
+    const { privateKey, publicKey } = await nodeRSA.createPrivateAndPublicKeys();
+
+    const longText = 'A'.repeat(376);
+    const encrypted = await nodeRSA.encryptLarge({ text: longText, publicKey });
+    expect(encrypted).to.be.a('string').and.not.equal(longText);
+    expect(encrypted.split(':')).to.have.lengthOf(4);
+
+    const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+    expect(decrypted).to.equal(longText);
+  });
+
+  it('interop: Node encryptLarge -> Web decryptLarge', async () => {
+    // Same keypair used across both builds (SHA-1 RSA-OAEP).
+    const node = new NodeRSANode();
+    const { privateKey, publicKey } = await node.createPrivateAndPublicKeys(2048);
+
+    const longText = 'interop test '.repeat(40); // > 500 bytes
+    const encrypted = await node.encryptLarge({ text: longText, publicKey });
+
+    const web = new NodeRSA();
+    const decrypted = await web.decryptLarge({ text: encrypted, privateKey });
+    expect(decrypted).to.equal(longText);
+  });
+
+  it('interop: Web encryptLarge -> Node decryptLarge', async () => {
+    const node = new NodeRSANode();
+    const { privateKey, publicKey } = await node.createPrivateAndPublicKeys(2048);
+
+    const web = new NodeRSA();
+    const longText = 'interop test '.repeat(40);
+    const encrypted = await web.encryptLarge({ text: longText, publicKey });
+
+    const decrypted = await node.decryptLarge({ text: encrypted, privateKey });
+    expect(decrypted).to.equal(longText);
   });
 
   it('should throw when encrypt with private key (not supported in browser)', async () => {

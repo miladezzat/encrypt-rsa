@@ -6,7 +6,7 @@
 /**
  * Encodes a UTF-8 string to base64 (environment-agnostic).
  */
-function bytesToBase64(bytes: Uint8Array): string {
+export function bytesToBase64(bytes: Uint8Array): string {
   let binary = '';
   for (let i = 0; i < bytes.length; i++) {
     binary += String.fromCharCode(bytes[i]);

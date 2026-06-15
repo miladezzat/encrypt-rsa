@@ -131,6 +131,19 @@ const decryptedString = await nodeRSA.decryptStringWithRsaPrivateKey({
 console.log('Decrypted:', decryptedString);
 ```
 
+#### Encrypt any-length data (hybrid) — `encryptLarge` / `decryptLarge`
+
+Plain RSA can only encrypt a small amount of data (~190 bytes for a 2048-bit key). For anything larger — long tokens, JSON, files — use `encryptLarge`, which has **no size limit**:
+
+```ts
+const longText = 'EAA...a long Facebook token or any large string...';
+
+const encrypted = await nodeRSA.encryptLarge({ text: longText, publicKey });
+const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+
+console.log(decrypted === longText); // true
+```
+
 #### Encrypt with private key, decrypt with public key (Node only)
 
 In the **browser build**, these methods throw. In **Node**, they work:
@@ -190,6 +203,8 @@ constructor(publicKey?: string, privateKey?: string, modulusLength?: number)
 | `createPrivateAndPublicKeys(modulusLength?)` | `Promise<{ publicKey, privateKey }>` | Generate RSA key pair (PEM). |
 | `encryptStringWithRsaPublicKey(args)` | `Promise<string>` | Encrypt with public key. |
 | `decryptStringWithRsaPrivateKey(args)` | `Promise<string>` | Decrypt with private key. |
+| `encryptLarge(args)` | `Promise<string>` | Encrypt **any-length** text (hybrid AES-256-GCM + RSA-OAEP). No RSA size limit. |
+| `decryptLarge(args)` | `Promise<string>` | Decrypt a value produced by `encryptLarge`. |
 | `encrypt(args)` | `Promise<string>` | Encrypt with private key. **Node only.** |
 | `decrypt(args)` | `Promise<string>` | Decrypt with public key. **Node only.** |
 | `encryptBufferWithRsaPublicKey(buffer, publicKey?)` | `Promise<string>` | Encrypt buffer; returns base64 string. |
@@ -278,16 +293,24 @@ RSA with OAEP padding requires overhead:
 
 ### Solutions for larger data
 
-For encrypting larger messages, use **hybrid encryption**:
-1. Generate a random symmetric key (e.g., 32 bytes for AES-256)
-2. Encrypt the symmetric key with RSA (fits in ~190 bytes)
-3. Encrypt your large data with the symmetric key (no size limit)
-4. Send both encrypted key and encrypted data to the recipient
+For data larger than the RSA limit, use the built-in **`encryptLarge` / `decryptLarge`** methods. They use hybrid encryption — the data is encrypted with a one-time **AES-256-GCM** key, and only that small key is wrapped with RSA-OAEP — so there is **no size limit**:
 
-Example libraries:
-- `crypto-js` – Symmetric encryption with AES
-- `tweetnacl-js` – Modern cryptography with libsodium
-- TweetNaCl.js – XChaCha20-Poly1305
+```ts
+const text = '...a Facebook token or any long string...';
+
+// Encrypt with the public key, decrypt with the private key.
+const encrypted = await nodeRSA.encryptLarge({ text, publicKey });
+const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+console.log(decrypted === text); // true
+```
+
+The output is a single base64 string (`encKey:iv:tag:ciphertext`) you can store in one field. It is interoperable between the **Node** and **Web** builds (same keypair). AES-GCM is authenticated, so tampering with the payload causes decryption to fail.
+
+Under the hood this is the standard hybrid scheme:
+1. Generate a random AES-256 key and IV
+2. Encrypt the data with AES-256-GCM (no size limit)
+3. Wrap the AES key with RSA-OAEP (fits well within the RSA limit)
+4. Package `encKey:iv:tag:ciphertext` into one string
 
 ## Error handling & troubleshooting
 
@@ -295,7 +318,7 @@ Example libraries:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| "data too large for key size" | Message exceeds RSA capacity (~190 bytes for 2048-bit keys) | Use smaller message, larger key, or hybrid encryption |
+| "data too large for key size" (`ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE`) | Message exceeds RSA capacity (~190 bytes for 2048-bit keys) | Use **`encryptLarge` / `decryptLarge`** (built-in hybrid encryption — no size limit), or a larger key |
 | "Invalid public key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PUBLIC KEY-----` |
 | "Invalid private key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PRIVATE KEY-----` |
 | "Decryption failed" | Wrong private key or corrupted ciphertext | Ensure the correct private key matches the public key used for encryption |
