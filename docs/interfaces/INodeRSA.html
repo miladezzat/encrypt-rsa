@@ -61,20 +61,6 @@
                }
                toggleDarkMode(darkModeState);
           </script>
-          <script>
-              // --- Iframe navigation tracking for Template Playground ---
-              function sendCurrentUrlToParent() {
-                  if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({
-                          type: 'compodoc-iframe-navigate',
-                          url: window.location.pathname + window.location.hash
-                      }, '*');
-                  }
-              }
-              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
-              window.addEventListener('popstate', sendCurrentUrlToParent, false);
-              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
-          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -95,10 +81,6 @@
                <!-- START CONTENT -->
                <div class="content interface">
                    <div class="content-data">
-
-
-
-
 
 
 
@@ -185,6 +167,12 @@ Both implementations use the same method names, parameter types, and return type
                                     </a>
                                 </li>
                                 <li>
+                                    <a href="#decryptLarge" 
+>
+                                        decryptLarge
+                                    </a>
+                                </li>
+                                <li>
                                     <a href="#decryptStringWithRsaPrivateKey" 
 >
                                         decryptStringWithRsaPrivateKey
@@ -200,6 +188,12 @@ Both implementations use the same method names, parameter types, and return type
                                     <a href="#encryptBufferWithRsaPublicKey" 
 >
                                         encryptBufferWithRsaPublicKey
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#encryptLarge" 
+>
+                                        encryptLarge
                                     </a>
                                 </li>
                                 <li>
@@ -240,8 +234,8 @@ Both implementations use the same method names, parameter types, and return type
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="70"
-                                    class="link-to-prism">src/shared/types.ts:70</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="72"
+                                    class="link-to-prism">src/shared/types.ts:72</a></div>
                         </td>
                     </tr>
 
@@ -300,15 +294,15 @@ Both implementations use the same method names, parameter types, and return type
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
+<code>decrypt(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="69"
-                                    class="link-to-prism">src/shared/types.ts:69</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="71"
+                                    class="link-to-prism">src/shared/types.ts:71</a></div>
                         </td>
                     </tr>
 
@@ -374,8 +368,8 @@ Both implementations use the same method names, parameter types, and return type
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="75"
-                                    class="link-to-prism">src/shared/types.ts:75</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="77"
+                                    class="link-to-prism">src/shared/types.ts:77</a></div>
                         </td>
                     </tr>
 
@@ -437,6 +431,73 @@ Both implementations use the same method names, parameter types, and return type
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="decryptLarge"></a>
+                    <span class="name">
+                        <span ><b>decryptLarge</b></span>
+                        <a href="#decryptLarge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>decryptLarge(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="69"
+                                    class="link-to-prism">src/shared/types.ts:69</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self" >parametersOfDecrypt</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="decryptStringWithRsaPrivateKey"></a>
                     <span class="name">
                         <span ><b>decryptStringWithRsaPrivateKey</b></span>
@@ -446,7 +507,7 @@ Both implementations use the same method names, parameter types, and return type
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptStringWithRsaPrivateKey(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
+<code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
@@ -513,15 +574,15 @@ Both implementations use the same method names, parameter types, and return type
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
+<code>encrypt(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="68"
-                                    class="link-to-prism">src/shared/types.ts:68</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="70"
+                                    class="link-to-prism">src/shared/types.ts:70</a></div>
                         </td>
                     </tr>
 
@@ -587,8 +648,8 @@ Both implementations use the same method names, parameter types, and return type
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="71"
-                                    class="link-to-prism">src/shared/types.ts:71</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="73"
+                                    class="link-to-prism">src/shared/types.ts:73</a></div>
                         </td>
                     </tr>
 
@@ -650,6 +711,73 @@ Both implementations use the same method names, parameter types, and return type
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="encryptLarge"></a>
+                    <span class="name">
+                        <span ><b>encryptLarge</b></span>
+                        <a href="#encryptLarge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>encryptLarge(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="68"
+                                    class="link-to-prism">src/shared/types.ts:68</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self" >parametersOfEncrypt</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="encryptStringWithRsaPublicKey"></a>
                     <span class="name">
                         <span ><b>encryptStringWithRsaPublicKey</b></span>
@@ -659,7 +787,7 @@ Both implementations use the same method names, parameter types, and return type
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptStringWithRsaPublicKey(args: <a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
+<code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
@@ -779,6 +907,8 @@ export type parametersOfDecryptPublic &#x3D; {
 export interface INodeRSA {
   encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise&lt;string&gt;;
   decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise&lt;string&gt;;
+  encryptLarge(args: parametersOfEncrypt): Promise&lt;string&gt;;
+  decryptLarge(args: parametersOfDecrypt): Promise&lt;string&gt;;
   encrypt(args: parametersOfEncryptPrivate): Promise&lt;string&gt;;
   decrypt(args: parametersOfDecryptPublic): Promise&lt;string&gt;;
   createPrivateAndPublicKeys(modulusLength?: number): Promise&lt;returnCreateKeys&gt;;

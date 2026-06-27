@@ -1,9 +1,16 @@
 /* eslint-disable max-len */
 import { expect } from 'chai';
 import NodeRSA from '../src/node/index';
+import {
+  createPrivateAndPublicKeys as legacyCreatePrivateAndPublicKeys,
+  decrypt as legacyDecrypt,
+  decryptStringWithRsaPrivateKey as legacyDecryptStringWithRsaPrivateKey,
+  encrypt as legacyEncrypt,
+  encryptStringWithRsaPublicKey as legacyEncryptStringWithRsaPublicKey,
+} from '../src/functions';
 
 describe('Functionality (node build)', () => {
-  const text: string = 'hell world';
+  const text: string = 'hello world';
   let encryptedString: string = '';
 
   it('should create instance from NodeRSa', () => {
@@ -75,7 +82,7 @@ describe('Functionality (node build)', () => {
       privateKey,
     });
 
-    expect(decryptText).be.a.string('hello world');
+    expect(decryptText).to.equal('hello world');
   });
 
   it('should encrypt and decrypt `hello world 2`', async () => {
@@ -96,7 +103,48 @@ describe('Functionality (node build)', () => {
       publicKey,
     });
 
-    expect(decryptText).be.a.string('hello world');
+    expect(decryptText).to.equal('hello world');
+  });
+
+  it('should return a rejected Promise instead of throwing synchronously when a key is missing', async () => {
+    const nodeRSA = new NodeRSA();
+    const result = nodeRSA.encryptStringWithRsaPublicKey({ text: 'hello world' });
+
+    expect(result).to.be.an.instanceOf(Promise);
+
+    let err: Error | null = null;
+    try {
+      await result;
+    } catch (error) {
+      err = error as Error;
+    }
+
+    expect(err).to.not.equal(null);
+    expect((err as Error).message).to.match(/public key is required/i);
+  });
+
+  it('should keep the legacy function barrel mapped to the correct functions', () => {
+    const { privateKey, publicKey } = legacyCreatePrivateAndPublicKeys(1024);
+    const encodedPublicKey = Buffer.from(publicKey, 'utf8').toString('base64');
+    const encodedPrivateKey = Buffer.from(privateKey, 'utf8').toString('base64');
+    const encryptedWithPublic = legacyEncryptStringWithRsaPublicKey({
+      text,
+      publicKey: encodedPublicKey,
+    });
+    const decryptedWithPrivate = legacyDecryptStringWithRsaPrivateKey({
+      text: encryptedWithPublic,
+      privateKey: encodedPrivateKey,
+    });
+
+    expect(decryptedWithPrivate).to.equal(text);
+
+    const encryptedWithPrivate = legacyEncrypt({ text, privateKey: encodedPrivateKey });
+    const decryptedWithPublic = legacyDecrypt({
+      text: encryptedWithPrivate,
+      publicKey: encodedPublicKey,
+    });
+
+    expect(decryptedWithPublic).to.equal(text);
   });
 
   it('should encrypt and decrypt a buffer', async () => {
@@ -143,6 +191,33 @@ describe('Functionality (node build)', () => {
         expect((err as Error).message).to.match(/too large|too long/i);
       }
       expect(threw, 'expected plain RSA to reject 376-byte input').to.equal(true);
+    });
+
+    it('documents and enforces the 2048-bit SHA-1 OAEP payload boundary', async () => {
+      const nodeRSA = new NodeRSA();
+      const { publicKey } = await nodeRSA.createPrivateAndPublicKeys(2048);
+
+      const maxPayload = 'A'.repeat(214);
+      const tooLargePayload = 'A'.repeat(215);
+
+      const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({
+        text: maxPayload,
+        publicKey,
+      });
+      expect(encrypted).to.be.a('string').and.not.equal(maxPayload);
+
+      let threw = false;
+      try {
+        await nodeRSA.encryptStringWithRsaPublicKey({
+          text: tooLargePayload,
+          publicKey,
+        });
+      } catch (err) {
+        threw = true;
+        expect((err as Error).message).to.match(/too large|too long/i);
+      }
+
+      expect(threw, 'expected 215-byte input to exceed 2048-bit SHA-1 OAEP payload limit').to.equal(true);
     });
 
     it('encryptLarge then decryptLarge round-trips a 376-byte string', async () => {

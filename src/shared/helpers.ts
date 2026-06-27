@@ -140,23 +140,39 @@ export function isValidPEMKey(key: unknown): boolean {
 /**
  * Splits a string into chunks for encryption.
  * RSA can only encrypt data smaller than the key modulus minus padding.
- * For 2048-bit keys, this is approximately 245 bytes.
+ * For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.
  *
  * @param {string} text - The text to split into chunks.
  * @param {number} chunkSize - The size of each chunk in bytes (default 245 for 2048-bit RSA).
  * @returns {string[]} Array of text chunks.
  */
-export function splitIntoChunks(text: string, chunkSize: number = 245): string[] {
+export function splitIntoChunks(text: string, chunkSize: number = 214): string[] {
   if (!text) {
     return [''];
   }
 
   const chunks: string[] = [];
-  const bytes = new TextEncoder().encode(text);
+  let current = '';
+  let currentLength = 0;
 
-  for (let i = 0; i < bytes.length; i += chunkSize) {
-    const chunk = bytes.slice(i, i + chunkSize);
-    chunks.push(new TextDecoder().decode(chunk));
+  const chars = Array.from(text);
+  const encoder = new TextEncoder();
+
+  for (let i = 0; i < chars.length; i++) {
+    const char = chars[i];
+    const charLength = encoder.encode(char).length;
+    if (current && currentLength + charLength > chunkSize) {
+      chunks.push(current);
+      current = '';
+      currentLength = 0;
+    }
+
+    current += char;
+    currentLength += charLength;
+  }
+
+  if (current) {
+    chunks.push(current);
   }
 
   return chunks;
