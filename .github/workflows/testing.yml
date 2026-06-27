@@ -23,5 +23,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-    - run: npm install    
+    - run: npm ci
+      env:
+        HUSKY: 0
+    - run: npm run lint
+    - run: npm run build
     - run: npm test
+    - run: npm run smoke
+    - run: npm run smoke:install

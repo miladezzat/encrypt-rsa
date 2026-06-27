@@ -61,20 +61,6 @@
                }
                toggleDarkMode(darkModeState);
           </script>
-          <script>
-              // --- Iframe navigation tracking for Template Playground ---
-              function sendCurrentUrlToParent() {
-                  if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({
-                          type: 'compodoc-iframe-navigate',
-                          url: window.location.pathname + window.location.hash
-                      }, '*');
-                  }
-              }
-              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
-              window.addEventListener('popstate', sendCurrentUrlToParent, false);
-              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
-          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -93,9 +79,8 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content readme">
+               <div class="content getting-started">
                    <div class="content-data">
-
 
 <h1>NodeRSA</h1>
 <p><strong>NodeRSA</strong> is a library that provides easy-to-use methods for RSA encryption and decryption. It supports <strong>Node.js</strong> and <strong>browser</strong> (web) with the same API. Generate RSA key pairs, encrypt and decrypt strings with public and private keys. Ideal for secure data transmission, authentication systems, and any application requiring cryptographic security.</p>
@@ -103,7 +88,7 @@
 <b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm install encrypt-rsa
 # OR
 yarn add encrypt-rsa</code></pre></div><h2>Breaking changes (vs 3.x)</h2>
-<p>If you are upgrading from <strong>3.x</strong>, this release includes breaking changes. You should bump to <strong>4.0.0</strong> when publishing:</p>
+<p>If you are upgrading from <strong>3.x</strong>, the 4.x line introduced breaking changes that remain in 5.x:</p>
 <ol>
 <li><strong>Async API</strong> – All crypto methods now return <strong>Promises</strong> (sync → async). You must use <code>await</code> or <code>.then()</code>.<ul>
 <li><strong>Before (3.x):</strong> <code>const encrypted = nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });</code></li>
@@ -113,7 +98,7 @@ yarn add encrypt-rsa</code></pre></div><h2>Breaking changes (vs 3.x)</h2>
 <li><strong>Entry points</strong> – The package now has separate Node and Web builds. <code>main</code>/<code>module</code>/<code>types</code> point to the Node build; the <code>browser</code> field and conditional <code>exports</code> point to the Web build. If you required a specific path (e.g. <code>encrypt-rsa/build/index.js</code>), update to the new entry points or use the package root <code>encrypt-rsa</code>.</li>
 <li><strong>Buffer methods</strong> – <code>decryptBufferWithRsaPrivateKey</code> now returns <code>Promise&lt;Uint8Array&gt;</code> (type). In Node the runtime value is still a <code>Buffer</code> (extends <code>Uint8Array</code>). Prefer <code>Uint8Array</code> in types; avoid relying on <code>instanceof Buffer</code> in shared code.</li>
 </ol>
-<p>See <a href="./CHANGELOG.md">CHANGELOG.md</a> for the full list of changes.</p>
+<p>See the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/CHANGELOG.md">changelog</a> for the full list of changes.</p>
 <h2>Node and Web (browser)</h2>
 <p>One package, two environments:</p>
 <ul>
@@ -131,10 +116,10 @@ yarn add encrypt-rsa</code></pre></div><h2>Breaking changes (vs 3.x)</h2>
 <ul>
 <li><strong>Same class:</strong> <code>NodeRSA</code></li>
 <li><strong>Same constructor:</strong> <code>(publicKey?: string, privateKey?: string, modulusLength?: number)</code></li>
-<li><strong>Same methods:</strong> <code>encryptStringWithRsaPublicKey</code>, <code>decryptStringWithRsaPrivateKey</code>, <code>encrypt</code>, <code>decrypt</code>, <code>createPrivateAndPublicKeys</code>, <code>encryptBufferWithRsaPublicKey</code>, <code>decryptBufferWithRsaPrivateKey</code></li>
+<li><strong>Same methods:</strong> <code>encryptStringWithRsaPublicKey</code>, <code>decryptStringWithRsaPrivateKey</code>, <code>encryptLarge</code>, <code>decryptLarge</code>, <code>encrypt</code>, <code>decrypt</code>, <code>createPrivateAndPublicKeys</code>, <code>encryptBufferWithRsaPublicKey</code>, <code>decryptBufferWithRsaPrivateKey</code></li>
 <li><strong>Same parameter and return types:</strong> All crypto methods return <code>Promise&lt;...&gt;</code>; buffer methods use <code>Uint8Array</code> (in Node, <code>Buffer</code> extends <code>Uint8Array</code> so it works as well).</li>
 </ul>
-<p>See <a href="docs/FEATURE_PARITY.md">docs/FEATURE_PARITY.md</a> for a feature-by-feature comparison of Node vs Web (including the browser limitation for <code>encrypt</code>/<code>decrypt</code> with private/public key).</p>
+<p>See the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/docs/FEATURE_PARITY.md">feature parity guide</a> for a feature-by-feature comparison of Node vs Web (including the browser limitation for <code>encrypt</code>/<code>decrypt</code> with private/public key).</p>
 <h2>Usage</h2>
 <h3>Example: Node.js</h3>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-ts">// Node (CommonJS or ESM)
@@ -186,7 +171,14 @@ const decryptedString = await nodeRSA.decryptStringWithRsaPrivateKey({
   text: encryptedString,
   privateKey,
 });
-console.log(&#39;Decrypted:&#39;, decryptedString);</code></pre></div><h4>Encrypt with private key, decrypt with public key (Node only)</h4>
+console.log(&#39;Decrypted:&#39;, decryptedString);</code></pre></div><h4>Encrypt any-length data (hybrid) — <code>encryptLarge</code> / <code>decryptLarge</code></h4>
+<p>Plain RSA can only encrypt a small amount of data (214 bytes for a 2048-bit RSA-OAEP/SHA-1 key). For anything larger — long tokens, JSON, files — use <code>encryptLarge</code>, which has <strong>no size limit</strong>:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const longText = &#39;EAA...a long Facebook token or any large string...&#39;;
+
+const encrypted = await nodeRSA.encryptLarge({ text: longText, publicKey });
+const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+
+console.log(decrypted === longText); // true</code></pre></div><h4>Encrypt with private key, decrypt with public key (Node only)</h4>
 <p>In the <strong>browser build</strong>, these methods throw. In <strong>Node</strong>, they work:</p>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const encryptedString = await nodeRSA.encrypt({ text, privateKey });
 console.log(&#39;Encrypted with Private Key:&#39;, encryptedString);
@@ -244,6 +236,16 @@ console.log(
 <td><code>decryptStringWithRsaPrivateKey(args)</code></td>
 <td><code>Promise&lt;string&gt;</code></td>
 <td>Decrypt with private key.</td>
+</tr>
+<tr>
+<td><code>encryptLarge(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Encrypt <strong>any-length</strong> text (hybrid AES-256-GCM + RSA-OAEP). No RSA size limit.</td>
+</tr>
+<tr>
+<td><code>decryptLarge(args)</code></td>
+<td><code>Promise&lt;string&gt;</code></td>
+<td>Decrypt a value produced by <code>encryptLarge</code>.</td>
 </tr>
 <tr>
 <td><code>encrypt(args)</code></td>
@@ -307,12 +309,14 @@ const decryptedCredentials = await nodeRSA.decryptStringWithRsaPrivateKey({
 console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre></div><h2>Getting started with examples</h2>
 <p>We provide practical examples for both Node.js and browser environments to help you get started quickly:</p>
 <ul>
-<li><strong><a href="./examples/node-basic.js">Node.js example</a></strong> – Command-line demo showing key generation, encryption, and decryption</li>
-<li><strong><a href="./examples/browser-basic.html">Browser example</a></strong> – Interactive web interface with a UI for testing encryption/decryption</li>
-<li><strong><a href="./examples/README.md">Examples README</a></strong> – Detailed guide for running and understanding the examples</li>
+<li><strong><a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/node-basic.js">Node.js example</a></strong> – Command-line demo showing key generation, encryption, and decryption</li>
+<li><strong><a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/browser-basic.html">Browser example</a></strong> – Interactive web interface with a UI for testing encryption/decryption</li>
+<li><strong><a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/README.md">Examples README</a></strong> – Detailed guide for running and understanding the examples</li>
 </ul>
-<p>To run the Node.js example:</p>
-<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">node examples/node-basic.js</code></pre></div><p>To view the browser example, open <code>examples/browser-basic.html</code> in your web browser.</p>
+<p>Build the package before running local examples:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm run build</code></pre></div><p>To run the Node.js example:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">node examples/node-basic.js</code></pre></div><p>To view the browser example, serve the repository over localhost and open <code>examples/browser-basic.html</code>:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-bash">python3 -m http.server 8080</code></pre></div><p>Then open <code>http://localhost:8080/examples/browser-basic.html</code>. Web Crypto requires a secure context such as HTTPS or localhost.</p>
 <h2>Data size limitations</h2>
 <p>RSA encryption with OAEP padding has inherent size limitations based on the key size:</p>
 <h3>Maximum message sizes</h3>
@@ -326,35 +330,36 @@ console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre
 <tbody>
 <tr>
 <td>2048-bit</td>
-<td>~190 bytes</td>
+<td>214 bytes</td>
 </tr>
 <tr>
 <td>4096-bit</td>
-<td>~446 bytes</td>
+<td>470 bytes</td>
 </tr>
 </tbody>
 </table>
 <h3>Why the limitation?</h3>
 <p>RSA with OAEP padding requires overhead:</p>
 <ul>
-<li>OAEP padding scheme: 2 * hash_size + 2 bytes</li>
-<li>With SHA-1 (20 bytes): 2 * 20 + 2 = 42 bytes overhead</li>
-<li>Formula: <code>max_bytes = (key_size_bytes - 42 - 2) ≈ key_size_bytes / 8 - 46</code></li>
+<li>OAEP padding scheme: <code>2 * hash_size + 2</code> bytes</li>
+<li>With SHA-1 (20 bytes): <code>2 * 20 + 2 = 42</code> bytes overhead</li>
+<li>Formula: <code>max_bytes = key_size_bytes - 42</code></li>
 </ul>
 <h3>Solutions for larger data</h3>
-<p>For encrypting larger messages, use <strong>hybrid encryption</strong>:</p>
+<p>For data larger than the RSA limit, use the built-in <strong><code>encryptLarge</code> / <code>decryptLarge</code></strong> methods. They use hybrid encryption — the data is encrypted with a one-time <strong>AES-256-GCM</strong> key, and only that small key is wrapped with RSA-OAEP — so there is <strong>no size limit</strong>:</p>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const text = &#39;...a Facebook token or any long string...&#39;;
+
+// Encrypt with the public key, decrypt with the private key.
+const encrypted = await nodeRSA.encryptLarge({ text, publicKey });
+const decrypted = await nodeRSA.decryptLarge({ text: encrypted, privateKey });
+console.log(decrypted === text); // true</code></pre></div><p>The output is a single base64 string (<code>encKey:iv:tag:ciphertext</code>) you can store in one field. It is interoperable between the <strong>Node</strong> and <strong>Web</strong> builds (same keypair). AES-GCM is authenticated, so tampering with the payload causes decryption to fail.</p>
+<p>Under the hood this is the standard hybrid scheme:</p>
 <ol>
-<li>Generate a random symmetric key (e.g., 32 bytes for AES-256)</li>
-<li>Encrypt the symmetric key with RSA (fits in ~190 bytes)</li>
-<li>Encrypt your large data with the symmetric key (no size limit)</li>
-<li>Send both encrypted key and encrypted data to the recipient</li>
+<li>Generate a random AES-256 key and IV</li>
+<li>Encrypt the data with AES-256-GCM (no size limit)</li>
+<li>Wrap the AES key with RSA-OAEP (fits well within the RSA limit)</li>
+<li>Package <code>encKey:iv:tag:ciphertext</code> into one string</li>
 </ol>
-<p>Example libraries:</p>
-<ul>
-<li><code>crypto-js</code> – Symmetric encryption with AES</li>
-<li><code>tweetnacl-js</code> – Modern cryptography with libsodium</li>
-<li>TweetNaCl.js – XChaCha20-Poly1305</li>
-</ul>
 <h2>Error handling &amp; troubleshooting</h2>
 <h3>Common errors and solutions</h3>
 <table class="table table-bordered compodoc-table">
@@ -367,9 +372,9 @@ console.log(&#39;Decrypted Credentials:&#39;, decryptedCredentials);</code></pre
 </thead>
 <tbody>
 <tr>
-<td>&quot;data too large for key size&quot;</td>
-<td>Message exceeds RSA capacity (~190 bytes for 2048-bit keys)</td>
-<td>Use smaller message, larger key, or hybrid encryption</td>
+<td>&quot;data too large for key size&quot; (<code>ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE</code>)</td>
+<td>Message exceeds RSA capacity (214 bytes for 2048-bit RSA-OAEP/SHA-1 keys)</td>
+<td>Use <strong><code>encryptLarge</code> / <code>decryptLarge</code></strong> (built-in hybrid encryption — no size limit), or a larger key</td>
 </tr>
 <tr>
 <td>&quot;Invalid public key format&quot;</td>
@@ -430,8 +435,8 @@ const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, pub
 <h2>Testing</h2>
 <p>The project includes tests for both the <strong>Node</strong> and <strong>web</strong> builds:</p>
 <ul>
-<li><strong>Node tests</strong> (<code>tests/functionalty.node.spec.ts</code>): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.</li>
-<li><strong>Web tests</strong> (<code>tests/functionalty.web.spec.ts</code>): Run against the web build; require <code>crypto.subtle</code> (Node 19+ or a browser). Skipped automatically when Web Crypto is not available.</li>
+<li><strong>Node tests</strong> (<code>tests/functionality.node.spec.ts</code>): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.</li>
+<li><strong>Web tests</strong> (<code>tests/functionality.web.spec.ts</code>): Run against the web build; require <code>crypto.subtle</code> (Node 19+ or a browser). Skipped automatically when Web Crypto is not available.</li>
 </ul>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm test</code></pre></div><p>Both suites run with <code>npm test</code>. Web tests are skipped when <code>crypto.subtle</code> is not available (e.g. Node below 19).</p>
 <h2>Documentation</h2>
@@ -440,8 +445,8 @@ const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, pub
 <b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm run docs:serve</code></pre></div><p>The docs reflect the <strong>NodeRSA</strong> class and its async API (Node and web share the same interface).</p>
 <h2>Releasing</h2>
 <ul>
-<li><strong>Changelog from commits:</strong> Run <code>npm run changelog</code> to update <a href="./CHANGELOG.md">CHANGELOG.md</a> from conventional commits since the last tag (<code>feat:</code>, <code>fix:</code>, <code>BREAKING CHANGE:</code>, etc.).</li>
-<li><strong>Full release:</strong> Run <code>npm run release -- --release-as major|minor|patch</code> to bump version, update the changelog, commit, and tag. Push to <code>master</code> to trigger the publish workflow (see <a href="./.github/workflows/publish.yml">.github/workflows/publish.yml</a>).</li>
+<li><strong>Changelog from commits:</strong> Run <code>npm run changelog</code> to update the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/CHANGELOG.md">changelog</a> from conventional commits since the last tag (<code>feat:</code>, <code>fix:</code>, <code>BREAKING CHANGE:</code>, etc.).</li>
+<li><strong>Full release:</strong> Run <code>npm run release -- --release-as major|minor|patch</code> to bump version, update the changelog, commit, and tag. Push to <code>master</code> to trigger the publish workflow (see the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/.github/workflows/publish.yml">publish workflow</a>).</li>
 </ul>
 <p><strong>Publish via GitHub Actions (on merge to <code>master</code>):</strong></p>
 <ol>
@@ -458,12 +463,9 @@ const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, pub
 <li>Push to your fork and open a pull request with a description of your changes.</li>
 </ol>
 <h2>Code of conduct</h2>
-<p>This project is released with a <a href="./CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating you agree to abide by its terms.</p>
+<p>This project is released with a <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/CODE_OF_CONDUCT.md">Contributor Code of Conduct</a>. By participating you agree to abide by its terms.</p>
 <h2>Reporting issues</h2>
 <p>Please report issues via the <a href="https://github.com/miladezzat/encrypt-rsa/issues">GitHub issue tracker</a>. Include details about the problem and your environment (OS, Node.js version, bundler, etc.).</p>
-
-
-
 
 
 
@@ -510,7 +512,7 @@ const encrypted = await nodeRSA.encryptStringWithRsaPublicKey({ text: short, pub
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'readme';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
             var COMPODOC_CURRENT_PAGE_URL = 'index.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>

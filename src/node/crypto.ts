@@ -33,7 +33,7 @@ export function encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string
       throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
     }
     if (errorMsg.includes('too long')) {
-      throw new Error('Data too large to encrypt. RSA can only encrypt ~245 bytes with 2048-bit keys. Use chunking for larger data.');
+      throw new Error('Data too large to encrypt. RSA-OAEP/SHA-1 can encrypt up to 214 bytes with 2048-bit keys. Use encryptLarge for larger data.');
     }
     throw error;
   }
@@ -179,5 +179,5 @@ export function createPrivateAndPublicKeys(modulusLength: number = 2048): return
     });
     return { publicKey, privateKey };
   }
-  return { privateKey: '', publicKey: '' };
+  throw new Error('RSA key generation is not available in this runtime');
 }

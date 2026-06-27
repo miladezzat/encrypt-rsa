@@ -13,6 +13,7 @@ A Node.js example demonstrating:
 
 **Run it:**
 ```bash
+npm run build
 node examples/node-basic.js
 ```
 
@@ -24,11 +25,13 @@ A browser example with an interactive UI that demonstrates:
 - Error handling with user-friendly messages
 
 **How to use:**
-1. Open `examples/browser-basic.html` in a web browser
-2. Click "Generate 2048-bit RSA Keys"
-3. Enter a message in the text area (up to ~190 bytes for 2048-bit keys)
-4. Click "🔒 Encrypt" to encrypt the message
-5. Click "🔓 Decrypt" to decrypt the message
+1. Run `npm run build`
+2. Serve the repository over localhost, for example `python3 -m http.server 8080`
+3. Open `http://localhost:8080/examples/browser-basic.html` in a web browser
+4. Click "Generate 2048-bit RSA Keys"
+5. Enter a message in the text area (up to 214 bytes for direct RSA with 2048-bit keys)
+6. Click "Encrypt" to encrypt the message
+7. Click "Decrypt" to decrypt the message
 
 ## Key Limitations
 
@@ -36,13 +39,13 @@ A browser example with an interactive UI that demonstrates:
 
 RSA encryption with OAEP padding has size limitations based on the key size:
 
-- **2048-bit key**: Maximum ~190 bytes
-- **4096-bit key**: Maximum ~446 bytes
+- **2048-bit key**: Maximum 214 bytes
+- **4096-bit key**: Maximum 470 bytes
 
 This is because:
 - OAEP padding requires overhead for security
 - The formula is: max_bytes = key_size_bytes - 2*hash_size_bytes - 2
-- With SHA-1: max_bytes = 256 - 42 - 2 = 212 bytes (accounting for encoding)
+- With SHA-1: max_bytes = 256 - 42 = 214 bytes
 
 ### When to Use This Library
 

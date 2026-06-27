@@ -2,10 +2,12 @@
   "name": "encrypt-rsa",
   "version": "5.0.1",
   "description": "This is a little module use to encrypt and decrypt strings with RSA keys (public and private keys)",
+  "type": "commonjs",
   "main": "./build/node/node/index.js",
-  "module": "./build/node/node/index.js",
   "browser": "./build/web/web/index.js",
   "types": "./build/node/node/index.d.ts",
+  "unpkg": "./build/web/encrypt-rsa.global.js",
+  "jsdelivr": "./build/web/encrypt-rsa.global.js",
   "exports": {
     ".": {
       "import": {
@@ -24,45 +26,63 @@
   ],
   "source": "./src/node/index.ts",
   "scripts": {
-    "test": "mocha -r ts-node/register tests/**/*.spec.ts",
-    "depcheck": "npm-check -u",
+    "test": "npm run build:test && mocha \"build/test/tests/**/*.spec.js\"",
+    "smoke": "node tests/package-smoke.js && node examples/node-basic.js",
+    "smoke:install": "node tests/package-install-smoke.js",
     "prepare": "husky install",
-    "build": "tsc -p tsconfig.node.json && tsc -p tsconfig.web.json",
-    "commit": "git-cz",
-    "docs:serve": "docsify serve docs",
-    "postinstall": "husky install",
-    "prepublishOnly": "pinst --disable",
-    "postpublish": "pinst --enable",
-    "prepublish": "npm run build",
+    "clean": "node scripts/clean-build.js",
+    "build": "npm run clean && npm run build:node && npm run build:web && npm run build:browser",
+    "build:node": "tsc -p tsconfig.node.json",
+    "build:web": "tsc -p tsconfig.web.json",
+    "build:browser": "node scripts/build-browser.js",
+    "build:test": "tsc -p tsconfig.test.json",
+    "docs:serve": "python3 -m http.server 3000 --directory docs",
+    "prepublishOnly": "npm run build",
     "husky": "husky",
     "lint": "eslint src tests --ext .ts",
-    "docs": "npx @compodoc/compodoc -p tsconfig.doc.json -d docs",
+    "docs": "compodoc -p tsconfig.doc.json -d docs && node scripts/clean-docs.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release": "standard-version"
   },
   "devDependencies": {
-    "@types/chai": "^4.2.21",
-    "@types/mocha": "^10.0.7",
-    "@types/node": "^20.14.11",
-    "@typescript-eslint/eslint-plugin": "^5.27.0",
-    "@typescript-eslint/parser": "^5.27.0",
+    "@compodoc/compodoc": "1.1.26",
+    "@types/chai": "^4.3.20",
+    "@types/mocha": "^10.0.10",
+    "@types/node": "^20.19.0",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "chai": "^4.3.4",
-    "commitizen": "^4.2.4",
     "conventional-changelog-cli": "^4.1.0",
-    "cz-conventional-changelog": "^3.3.0",
-    "docsify-cli": "^4.4.3",
-    "eslint": "^8.16.0",
+    "esbuild": "^0.25.5",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb-base": "^15.0.0",
-    "eslint-plugin-import": "^2.23.4",
-    "generate-changelog": "^1.8.0",
-    "git-cz": "^4.7.6",
+    "eslint-plugin-import": "^2.31.0",
     "husky": "^8.0.1",
     "mocha": "^10.0.0",
-    "npm-check": "^6.0.1",
-    "pinst": "^3.0.0",
     "standard-version": "^9.5.0",
-    "ts-node": "^10.1.0",
-    "typescript": "^4.3.5"
+    "typescript": "^4.9.5"
+  },
+  "overrides": {
+    "@angular-devkit/core": {
+      "ajv": "^8.20.0",
+      "picomatch": "^4.0.4"
+    },
+    "@compodoc/compodoc": {
+      "@babel/core": "^7.29.7",
+      "uuid": "11.1.1"
+    },
+    "@compodoc/live-server": {
+      "http-auth": "4.2.1"
+    },
+    "http-auth": {
+      "uuid": "11.1.1"
+    },
+    "minimatch@3": {
+      "brace-expansion": "^1.1.15"
+    },
+    "mocha": {
+      "serialize-javascript": "^7.0.6"
+    }
   },
   "keywords": [
     "algorithm",
@@ -82,11 +102,6 @@
     "Javascript RSA encryption"
   ],
   "author": "Milad E. Fahmy <miladezzat.f@gmail.com> (https://milad-ezzat.vercel.app)",
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  },
   "directories": {
     "test": "tests"
   },
@@ -94,7 +109,7 @@
     "type": "git",
     "url": "git+https://github.com/miladezzat/encrypt-rsa.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/miladezzat/encrypt-rsa/issues"
   },

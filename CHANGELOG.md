@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [5.0.1](https://github.com/miladezzat/encrypt-rsa/compare/v5.0.0...v5.0.1) (2026-06-28)
+
+### Fixes
+
+- Remove consumer-facing Husky install lifecycle from package installs.
+- Fix Node and browser examples to use current build outputs and async API.
+- Add package smoke tests for built output and packed-package installation.
+- Fix legacy function barrel exports.
+- Make missing-key errors reject through the Promise API with clear messages.
+- Correct RSA-OAEP/SHA-1 payload limits in docs and tests.
+- Align package license metadata with the MIT license file.
+
 ## [5.0.0](https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v5.0.0) (2026-02-01)
 
 
@@ -19,8 +31,8 @@ Promise<Uint8Array> (was Buffer). In Node the runtime value is still Buffer.
 - Add src/node (Node crypto, RSA-OAEP) and src/web (Web Crypto API)
 - Add src/shared (types, helpers without Node/Buffer) for both builds
 - Same INodeRSA interface; encrypt(private)/decrypt(public) throw in browser
-- Add tests: functionalty.node.spec.ts, functionalty.web.spec.ts
-- Package: exports, main/module/browser/types, files; version 4.0.0
+- Add tests: functionality.node.spec.ts, functionality.web.spec.ts
+- Package: exports, main/browser/types, files; version 5.0.0
 - Build: tsconfig.node.json, tsconfig.web.json; dual tsc output
 - Docs: tsconfig.doc.json, FEATURE_PARITY.md, README/CHANGELOG updates
 - Changelog: conventional-changelog-cli script, .versionrc.json
