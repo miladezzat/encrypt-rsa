@@ -61,20 +61,6 @@
                }
                toggleDarkMode(darkModeState);
           </script>
-          <script>
-              // --- Iframe navigation tracking for Template Playground ---
-              function sendCurrentUrlToParent() {
-                  if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({
-                          type: 'compodoc-iframe-navigate',
-                          url: window.location.pathname + window.location.hash
-                      }, '*');
-                  }
-              }
-              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
-              window.addEventListener('popstate', sendCurrentUrlToParent, false);
-              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
-          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -93,17 +79,67 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content changelog">
+               <div class="content getting-started">
                    <div class="content-data">
 
-
-
 <h1>Changelog</h1>
-<p>All notable changes to this project will be documented in this file.</p>
-<p><strong>Generating the changelog</strong></p>
+<p>All notable changes to this project will be documented in this file. See <a href="https://github.com/conventional-changelog/standard-version">standard-version</a> for commit guidelines.</p>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v5.0.1...v6.0.0">6.0.0</a> (2026-06-28)</h2>
+<h3>⚠ BREAKING CHANGES</h3>
 <ul>
-<li><strong>From commits (since last tag):</strong> <code>npm run changelog</code> — updates CHANGELOG.md from <a href="https://www.conventionalcommits.org/">conventional commits</a> (e.g. <code>feat:</code>, <code>fix:</code>, <code>BREAKING CHANGE:</code>).</li>
-<li><strong>Full release (bump version + changelog + tag):</strong> <code>npm run release -- --release-as major|minor|patch</code> — uses <a href="https://github.com/conventional-changelog/standard-version">standard-version</a>; bump and changelog are driven by commit messages.</li>
+<li>Removed the misspelled deep-import files named <code>convertKetToBase64</code> from the published package. Consumers using internal paths such as <code>encrypt-rsa/build/node/node/convertKetToBase64</code> or <code>encrypt-rsa/build/web/web/convertKetToBase64</code> must switch to <code>convertKeyToBase64</code>.</li>
+<li>The published package is now cleaned before every build, so stale files from older builds are no longer included in the npm tarball. Treat any import from non-documented build internals as unsupported.</li>
+<li>Package metadata now exposes the CommonJS package root and browser global bundle explicitly. Consumers should import from <code>encrypt-rsa</code> or the documented browser/CDN entry instead of relying on removed internal artifacts.</li>
+</ul>
+<h3>Migration</h3>
+<ul>
+<li>Use <code>import NodeRSA from &#39;encrypt-rsa&#39;</code> or <code>const NodeRSA = require(&#39;encrypt-rsa&#39;).default</code>.</li>
+<li>Replace any <code>convertKetToBase64</code> deep import with <code>convertKeyToBase64</code>.</li>
+<li>Run <code>npm run build</code> before local examples; the browser example should be served from localhost.</li>
+</ul>
+<h3>Fixes</h3>
+<ul>
+<li>Remove consumer-facing Husky install lifecycle from package installs.</li>
+<li>Fix Node and browser examples to use current build outputs and async API.</li>
+<li>Add package smoke tests for built output and packed-package installation.</li>
+<li>Fix legacy function barrel exports.</li>
+<li>Make missing-key errors reject through the Promise API with clear messages.</li>
+<li>Correct RSA-OAEP/SHA-1 payload limits in docs and tests.</li>
+<li>Align package license metadata with the MIT license file.</li>
+<li>Remove generated Compodoc template playground files from tracked docs.</li>
+<li>Add audit overrides for vulnerable dev-tool transitive dependencies.</li>
+</ul>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v5.0.0">5.0.0</a> (2026-02-01)</h2>
+<h3>⚠ BREAKING CHANGES</h3>
+<ul>
+<li>All crypto methods now return Promises (async API).
+Migrate by adding await or .then() to encryptStringWithRsaPublicKey,
+decryptStringWithRsaPrivateKey, encrypt, decrypt, createPrivateAndPublicKeys,
+encryptBufferWithRsaPublicKey, decryptBufferWithRsaPrivateKey.</li>
+<li>Entry points are now build/node and build/web (conditional
+exports). The old single build/index.js is no longer published.</li>
+<li>decryptBufferWithRsaPrivateKey return type is now
+Promise<Uint8Array> (was Buffer). In Node the runtime value is still Buffer.</li>
+</ul>
+<ul>
+<li>Add src/node (Node crypto, RSA-OAEP) and src/web (Web Crypto API)</li>
+<li>Add src/shared (types, helpers without Node/Buffer) for both builds</li>
+<li>Same INodeRSA interface; encrypt(private)/decrypt(public) throw in browser</li>
+<li>Add tests: functionality.node.spec.ts, functionality.web.spec.ts</li>
+<li>Package: exports, main/browser/types, files; version 5.0.0</li>
+<li>Build: tsconfig.node.json, tsconfig.web.json; dual tsc output</li>
+<li>Docs: tsconfig.doc.json, FEATURE_PARITY.md, README/CHANGELOG updates</li>
+<li>Changelog: conventional-changelog-cli script, .versionrc.json</li>
+<li>CI: publish workflow runs on push to master (install, test, build, publish)</li>
+</ul>
+<p>Co-authored-by: Cursor <a href="mailto:cursoragent@cursor.com">cursoragent@cursor.com</a></p>
+<h3>Features</h3>
+<ul>
+<li>add Node and Web dual build with async API (v4.0.0) (<a href="https://github.com/miladezzat/encrypt-rsa/issues/43">#43</a>) (<a href="https://github.com/miladezzat/encrypt-rsa/commit/1dc11ef20752b8c48bde4ba980df268b4ea683b0">1dc11ef</a>)</li>
+</ul>
+<h3>Documentation</h3>
+<ul>
+<li>update docs (<a href="https://github.com/miladezzat/encrypt-rsa/commit/8e728896ced8c361006defbe6fd5b1bdd34e5951">8e72889</a>)</li>
 </ul>
 <h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v3.3.0...v4.0.0">4.0.0</a> - 2025-02-01</h2>
 <h3>BREAKING CHANGES</h3>
@@ -294,8 +330,6 @@
 
 
 
-
-
                    </div><div class="search-results">
     <div class="has-results">
         <h1 class="search-results-title"><span class='search-results-count'></span> results matching "<span class='search-query'></span>"</h1>
@@ -321,7 +355,7 @@
 
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'changelog';
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'getting-started';
             var COMPODOC_CURRENT_PAGE_URL = 'changelog.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>

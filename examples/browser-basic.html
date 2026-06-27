@@ -183,7 +183,7 @@
     <div class="section">
       <label>Step 1: Generate Key Pair</label>
       <button onclick="generateKeys()">Generate 2048-bit RSA Keys</button>
-      <div class="key-info">Key size: 2048 bits (can encrypt ~190 bytes)</div>
+      <div class="key-info">Key size: 2048 bits (RSA-OAEP/SHA-1 can encrypt up to 214 bytes)</div>
     </div>
 
     <div class="section">
@@ -198,7 +198,7 @@
 
     <div class="section">
       <label>Message to Encrypt:</label>
-      <textarea id="message-input" placeholder="Enter a message (max ~190 bytes)"></textarea>
+      <textarea id="message-input" placeholder="Enter a message (max 214 bytes for direct RSA)"></textarea>
     </div>
 
     <div class="section">
@@ -226,12 +226,12 @@
     </div>
   </div>
 
-  <script src="../build/web/index.js"></script>
+  <script src="../build/web/encrypt-rsa.global.js"></script>
   <script>
     function showMessage(text, type = 'info') {
       const messageEl = document.getElementById('message');
       messageEl.className = `message ${type}`;
-      messageEl.innerHTML = (type === 'error' ? '⚠️ ' : type === 'success' ? '✓ ' : 'ℹ️ ') + text;
+      messageEl.textContent = (type === 'error' ? 'Warning: ' : type === 'success' ? 'Success: ' : 'Info: ') + text;
       messageEl.classList.remove('hidden');
     }
 
@@ -242,11 +242,11 @@
 
     async function generateKeys() {
       try {
-        showMessage('<span class="loader"></span>Generating keys...', 'info');
+        showMessage('Generating keys...', 'info');
         const keys = await encryptRSA.createPrivateAndPublicKeys(2048);
         document.getElementById('publicKey').value = keys.publicKey;
         document.getElementById('privateKey').value = keys.privateKey;
-        showMessage('✓ Keys generated successfully!', 'success');
+        showMessage('Keys generated successfully!', 'success');
       } catch (error) {
         showMessage(`Error: ${error.message}`, 'error');
       }
@@ -267,14 +267,14 @@
           return;
         }
 
-        showMessage('<span class="loader"></span>Encrypting...', 'info');
+        showMessage('Encrypting...', 'info');
         const encrypted = await encryptRSA.encryptStringWithRsaPublicKey({
           text: message,
           publicKey,
         });
 
         document.getElementById('encrypted-output').value = encrypted;
-        showMessage('✓ Message encrypted successfully!', 'success');
+        showMessage('Message encrypted successfully!', 'success');
       } catch (error) {
         showMessage(`Error: ${error.message}`, 'error');
       }
@@ -295,14 +295,14 @@
           return;
         }
 
-        showMessage('<span class="loader"></span>Decrypting...', 'info');
+        showMessage('Decrypting...', 'info');
         const decrypted = await encryptRSA.decryptStringWithRsaPrivateKey({
           text: encrypted,
           privateKey,
         });
 
         document.getElementById('decrypted-output').value = decrypted;
-        showMessage('✓ Message decrypted successfully!', 'success');
+        showMessage('Message decrypted successfully!', 'success');
       } catch (error) {
         showMessage(`Error: ${error.message}`, 'error');
       }

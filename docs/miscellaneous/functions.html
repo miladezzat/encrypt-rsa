@@ -61,20 +61,6 @@
                }
                toggleDarkMode(darkModeState);
           </script>
-          <script>
-              // --- Iframe navigation tracking for Template Playground ---
-              function sendCurrentUrlToParent() {
-                  if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({
-                          type: 'compodoc-iframe-navigate',
-                          url: window.location.pathname + window.location.hash
-                      }, '*');
-                  }
-              }
-              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
-              window.addEventListener('popstate', sendCurrentUrlToParent, false);
-              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
-          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -95,10 +81,6 @@
                <!-- START CONTENT -->
                <div class="content miscellaneous-functions">
                    <div class="content-data">
-
-
-
-
 
 
 
@@ -139,16 +121,22 @@
                             <a href="#bytesToBase64" title="src/shared/helpers.ts" ><b>bytesToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
-                            <a href="#convertKetToBase64" title="src/node/convertKetToBase64.ts" ><b>convertKetToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../convertKetToBase64.ts)</a>
+                            <a href="#convertKeyToBase64" title="src/node/convertKeyToBase64.ts" ><b>convertKeyToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../convertKeyToBase64.ts)</a>
                         </li>
                         <li>
                             <a href="#createPrivateAndPublicKeys" title="src/node/crypto.ts" ><b>createPrivateAndPublicKeys</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#decryptLarge" title="src/node/crypto.ts" ><b>decryptLarge</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
                             <a href="#decryptPublic" title="src/node/crypto.ts" ><b>decryptPublic</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
                             <a href="#decryptStringWithRsaPrivateKey" title="src/node/crypto.ts" ><b>decryptStringWithRsaPrivateKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#encryptLarge" title="src/node/crypto.ts" ><b>encryptLarge</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
                             <a href="#encryptPrivate" title="src/node/crypto.ts" ><b>encryptPrivate</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
@@ -173,6 +161,9 @@
                         </li>
                         <li>
                             <a href="#pemToBinary" title="src/shared/helpers.ts" ><b>pemToBinary</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#requireKey" title="src/node/index.ts" ><b>requireKey</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
                         </li>
                         <li>
                             <a href="#splitIntoChunks" title="src/shared/helpers.ts" ><b>splitIntoChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
@@ -805,7 +796,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
                 <td class="col-md-4">
                         <div class="io-description"><p>Splits a string into chunks for encryption.
 RSA can only encrypt data smaller than the key modulus minus padding.
-For 2048-bit keys, this is approximately 245 bytes.</p>
+For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.</p>
 </div>
 
                             <div class="io-description">
@@ -853,7 +844,7 @@ For 2048-bit keys, this is approximately 245 bytes.</p>
                                             </td>
 
                                             <td>
-                                                    <code>245</code>
+                                                    <code>214</code>
                                             </td>
 
                                             <td>
@@ -878,22 +869,22 @@ For 2048-bit keys, this is approximately 245 bytes.</p>
             </tr>
         </tbody>
     </table>
-</section>    <h3>src/node/convertKetToBase64.ts</h3>
+</section>    <h3>src/node/convertKeyToBase64.ts</h3>
     <section data-compodoc="block-methods">
     <h3></h3>    <table class="table table-sm table-bordered">
         <tbody>
             <tr>
                 <td class="col-md-4">
-                    <a name="convertKetToBase64"></a>
+                    <a name="convertKeyToBase64"></a>
                     <span class="name">
-                        <span ><b>convertKetToBase64</b></span>
-                        <a href="#convertKetToBase64"><span class="icon ion-ios-link"></span></a>
+                        <span ><b>convertKeyToBase64</b></span>
+                        <a href="#convertKeyToBase64"><span class="icon ion-ios-link"></span></a>
                     </span>
                 </td>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>convertKetToBase64(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+<code>convertKeyToBase64(key: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
                 </td>
             </tr>
 
@@ -1015,6 +1006,70 @@ Removes leading spaces from each line, then base64-encodes.</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="decryptLarge"></a>
+                    <span class="name">
+                        <span ><b>decryptLarge</b></span>
+                        <a href="#decryptLarge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>decryptLarge(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Decrypts a value produced by encryptLarge: unwraps the AES key with the RSA
+private key, then decrypts the ciphertext with AES-256-GCM.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self" >parametersOfDecrypt</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="decryptPublic"></a>
                     <span class="name">
                         <span ><b>decryptPublic</b></span>
@@ -1024,7 +1079,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptPublic(args: <a href="../miscellaneous/typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
+<code>decryptPublic(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
@@ -1085,7 +1140,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptStringWithRsaPrivateKey(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
+<code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
@@ -1137,6 +1192,72 @@ Removes leading spaces from each line, then base64-encodes.</p>
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="encryptLarge"></a>
+                    <span class="name">
+                        <span ><b>encryptLarge</b></span>
+                        <a href="#encryptLarge"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>encryptLarge(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Hybrid encryption: encrypts arbitrary-length text by encrypting it with a
+one-time AES-256-GCM key, then wrapping that AES key with RSA-OAEP (SHA-1).
+This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE.</p>
+<p>Output is a single base64 string: <code>encKey:iv:tag:ciphertext</code>.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self" >parametersOfEncrypt</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="encryptPrivate"></a>
                     <span class="name">
                         <span ><b>encryptPrivate</b></span>
@@ -1146,7 +1267,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptPrivate(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
+<code>encryptPrivate(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
@@ -1207,7 +1328,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptStringWithRsaPublicKey(args: <a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
+<code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
@@ -1234,6 +1355,74 @@ Removes leading spaces from each line, then base64-encodes.</p>
                                             <td>
                                                             <code><a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self" >parametersOfEncrypt</a></code>
                                             </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+                                
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/node/index.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requireKey"></a>
+                    <span class="name">
+                        <span ><b>requireKey</b></span>
+                        <a href="#requireKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>requireKey(key, keyName)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+                                
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>keyName</td>
 
                                             <td>
                                                     No

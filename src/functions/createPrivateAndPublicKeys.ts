@@ -32,7 +32,7 @@ export function createPrivateAndPublicKeys(modulusLength: number = 2048): return
     return { publicKey, privateKey };
   }
 
-  return { privateKey: '', publicKey: '' };
+  throw new Error('RSA key generation is not available in this runtime');
 }
 
 export default createPrivateAndPublicKeys;

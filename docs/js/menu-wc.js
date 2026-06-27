@@ -23,18 +23,16 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                 <li class="chapter">
                     <a data-type="chapter-link" href="index.html"><span class="icon ion-ios-home"></span>Getting started</a>
                     <ul class="links">
-                                <li class="link">
-                                    <a href="overview.html" data-type="chapter-link">
-                                        <span class="icon ion-ios-keypad"></span>Overview
-                                    </a>
-                                </li>
-
-                            <li class="link">
-                                <a href="index.html" data-type="chapter-link">
-                                    <span class="icon ion-ios-paper"></span>
-                                        README
-                                </a>
-                            </li>
+                        <li class="link">
+                            <a href="overview.html" data-type="chapter-link">
+                                <span class="icon ion-ios-keypad"></span>Overview
+                            </a>
+                        </li>
+                        <li class="link">
+                            <a href="index.html" data-type="chapter-link">
+                                <span class="icon ion-ios-paper"></span>README
+                            </a>
+                        </li>
                         <li class="link">
                             <a href="changelog.html"  data-type="chapter-link">
                                 <span class="icon ion-ios-paper"></span>CHANGELOG
@@ -50,7 +48,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                                         <span class="icon ion-ios-apps"></span>Properties
                                     </a>
                                 </li>
-
                     </ul>
                 </li>
                     <li class="chapter">
@@ -98,9 +95,6 @@ customElements.define('compodoc-menu', class extends HTMLElement {
                             </li>
                         </ul>
                     </li>
-                        <li class="chapter">
-                            <a data-type="chapter-link" href="routes.html"><span class="icon ion-ios-git-branch"></span>Routes</a>
-                        </li>
                     <li class="chapter">
                         <a data-type="chapter-link" href="coverage.html"><span class="icon ion-ios-stats"></span>Documentation coverage</a>
                     </li>

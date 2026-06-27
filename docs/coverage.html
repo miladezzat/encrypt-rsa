@@ -61,20 +61,6 @@
                }
                toggleDarkMode(darkModeState);
           </script>
-          <script>
-              // --- Iframe navigation tracking for Template Playground ---
-              function sendCurrentUrlToParent() {
-                  if (window.parent && window.parent !== window) {
-                      window.parent.postMessage({
-                          type: 'compodoc-iframe-navigate',
-                          url: window.location.pathname + window.location.hash
-                      }, '*');
-                  }
-              }
-              window.addEventListener('hashchange', sendCurrentUrlToParent, false);
-              window.addEventListener('popstate', sendCurrentUrlToParent, false);
-              window.addEventListener('DOMContentLoaded', sendCurrentUrlToParent, false);
-          </script>
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
@@ -95,10 +81,6 @@
                <!-- START CONTENT -->
                <div class="content coverage">
                    <div class="content-data">
-
-
-
-
 
 
 
@@ -139,10 +121,10 @@
         <tr class="very-good">
             <td>
                 <!-- miscellaneous -->
-                        <a href="./miscellaneous/functions.html#convertKetToBase64">src/node/convertKetToBase64.ts</a>
+                        <a href="./miscellaneous/functions.html#convertKeyToBase64">src/node/convertKeyToBase64.ts</a>
             </td>
             <td>function</td>
-            <td>convertKetToBase64</td>
+            <td>convertKeyToBase64</td>
             <td align="right" data-sort="100">
                 <span class="coverage-percent">100 %</span>
                 <span class="coverage-count">(1/1)</span>
@@ -158,6 +140,18 @@
             <td align="right" data-sort="0">
                 <span class="coverage-percent">0 %</span>
                 <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#decryptLarge">src/node/crypto.ts</a>
+            </td>
+            <td>function</td>
+            <td>decryptLarge</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
             </td>
         </tr>
         <tr class="low">
@@ -182,6 +176,18 @@
             <td align="right" data-sort="0">
                 <span class="coverage-percent">0 %</span>
                 <span class="coverage-count">(0/1)</span>
+            </td>
+        </tr>
+        <tr class="very-good">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#encryptLarge">src/node/crypto.ts</a>
+            </td>
+            <td>function</td>
+            <td>encryptLarge</td>
+            <td align="right" data-sort="100">
+                <span class="coverage-percent">100 %</span>
+                <span class="coverage-count">(1/1)</span>
             </td>
         </tr>
         <tr class="low">
@@ -223,13 +229,25 @@
         <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                        <a href="./classes/NodeRSA.html">src/node/index.ts</a>
+                <a href="./classes/NodeRSA.html">src/node/index.ts</a>
             </td>
             <td>class</td>
             <td>NodeRSA</td>
+            <td align="right" data-sort="13">
+                <span class="coverage-percent">13 %</span>
+                <span class="coverage-count">(2/15)</span>
+            </td>
+        </tr>
+        <tr class="low">
+            <td>
+                <!-- miscellaneous -->
+                        <a href="./miscellaneous/functions.html#requireKey">src/node/index.ts</a>
+            </td>
+            <td>function</td>
+            <td>requireKey</td>
             <td align="right" data-sort="0">
                 <span class="coverage-percent">0 %</span>
-                <span class="coverage-count">(0/13)</span>
+                <span class="coverage-count">(0/1)</span>
             </td>
         </tr>
         <tr class="very-good">
@@ -427,13 +445,13 @@
         <tr class="low">
             <td>
                 <!-- miscellaneous -->
-                        <a href="./interfaces/INodeRSA.html">src/shared/types.ts</a>
+                <a href="./interfaces/INodeRSA.html">src/shared/types.ts</a>
             </td>
             <td>interface</td>
             <td>INodeRSA</td>
-            <td align="right" data-sort="12">
-                <span class="coverage-percent">12 %</span>
-                <span class="coverage-count">(1/8)</span>
+            <td align="right" data-sort="10">
+                <span class="coverage-percent">10 %</span>
+                <span class="coverage-count">(1/10)</span>
             </td>
         </tr>
         <tr class="very-good">
