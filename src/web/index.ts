@@ -2,7 +2,7 @@
  * Web build: NodeRSA using Web Crypto API (async).
  * Same interface as Node build; uses crypto.subtle for RSA-OAEP.
  */
-import convertKetToBase64 from './convertKetToBase64';
+import convertKeyToBase64 from './convertKeyToBase64';
 import {
   createPrivateAndPublicKeys,
   decryptStringWithRsaPrivateKey,
@@ -20,6 +20,14 @@ import type {
   returnCreateKeys,
   INodeRSA,
 } from '../shared/types';
+
+function requireKey(key: string | undefined, keyName: 'public' | 'private'): string {
+  if (!key) {
+    throw new Error(`${keyName === 'public' ? 'Public' : 'Private'} key is required`);
+  }
+
+  return key;
+}
 
 export type {
   returnCreateKeys,
@@ -57,7 +65,7 @@ class NodeRSA implements INodeRSA {
     const { publicKey = this.publicKey } = args;
     return encryptStringWithRsaPublicKey({
       ...args,
-      publicKey: convertKetToBase64(publicKey as string),
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
     });
   }
 
@@ -65,7 +73,7 @@ class NodeRSA implements INodeRSA {
     const { privateKey = this.privateKey } = args;
     return decryptStringWithRsaPrivateKey({
       ...args,
-      privateKey: convertKetToBase64(privateKey as string),
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
     });
   }
 
@@ -78,7 +86,7 @@ class NodeRSA implements INodeRSA {
     const { publicKey = this.publicKey } = args;
     return encryptLarge({
       ...args,
-      publicKey: convertKetToBase64(publicKey as string),
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
     });
   }
 
@@ -89,7 +97,7 @@ class NodeRSA implements INodeRSA {
     const { privateKey = this.privateKey } = args;
     return decryptLarge({
       ...args,
-      privateKey: convertKetToBase64(privateKey as string),
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
     });
   }
 
@@ -97,7 +105,7 @@ class NodeRSA implements INodeRSA {
     const { privateKey = this.privateKey } = args;
     return encryptPrivate({
       ...args,
-      privateKey: convertKetToBase64(privateKey as string),
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
     });
   }
 
@@ -105,7 +113,7 @@ class NodeRSA implements INodeRSA {
     const { publicKey = this.publicKey } = args;
     return decryptPublic({
       ...args,
-      publicKey: convertKetToBase64(publicKey as string),
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
     });
   }
 

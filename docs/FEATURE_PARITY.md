@@ -17,7 +17,7 @@ Both builds implement the same **INodeRSA** interface. This table shows what is 
 
 - **Key format:** PEM (SPKI public, PKCS#8 private). Keys generated on one build work with the other for **encryptStringWithRsaPublicKey** / **decryptStringWithRsaPrivateKey** and **createPrivateAndPublicKeys**.
 - **Algorithm:** RSA-OAEP with SHA-1 for public encrypt / private decrypt so ciphertext is compatible between Node and Web.
-- **Key normalization:** Both use `convertKetToBase64` (from `shared` helpers) so keys can be passed with optional leading spaces.
+- **Key normalization:** Both builds normalize PEM key indentation before base64 encoding so keys can be passed with optional leading spaces.
 
 ## Intended differences
 
@@ -28,7 +28,7 @@ Both builds implement the same **INodeRSA** interface. This table shows what is 
 
 ## Verification
 
-- **Node:** `tests/functionalty.node.spec.ts` (all 8 features covered, including encrypt/decrypt with private/public and buffers).
-- **Web:** `tests/functionalty.web.spec.ts` (all supported features; encrypt/decrypt with private/public assert that they throw).
+- **Node:** `tests/functionality.node.spec.ts` (all 8 features covered, including encrypt/decrypt with private/public and buffers).
+- **Web:** `tests/functionality.web.spec.ts` (all supported features; encrypt/decrypt with private/public assert that they throw).
 
 Run both: `npm test`.

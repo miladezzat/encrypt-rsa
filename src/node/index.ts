@@ -2,7 +2,7 @@
  * Node build: NodeRSA with async API (Option A).
  * Same interface as web build; wraps sync Node crypto in Promise.resolve.
  */
-import convertKetToBase64 from './convertKetToBase64';
+import convertKeyToBase64 from './convertKeyToBase64';
 import {
   createPrivateAndPublicKeys,
   decryptStringWithRsaPrivateKey,
@@ -20,6 +20,14 @@ import type {
   returnCreateKeys,
   INodeRSA,
 } from '../shared/types';
+
+function requireKey(key: string | undefined, keyName: 'public' | 'private'): string {
+  if (!key) {
+    throw new Error(`${keyName === 'public' ? 'Public' : 'Private'} key is required`);
+  }
+
+  return key;
+}
 
 export type {
   returnCreateKeys,
@@ -53,18 +61,20 @@ class NodeRSA implements INodeRSA {
     this.modulusLength = modulusLength ?? 2048;
   }
 
-  public encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise<string> {
+  public async encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise<string> {
     const { publicKey = this.publicKey } = args;
-    return Promise.resolve(
-      encryptStringWithRsaPublicKey({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
-    );
+    return encryptStringWithRsaPublicKey({
+      ...args,
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
+    });
   }
 
-  public decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string> {
+  public async decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string> {
     const { privateKey = this.privateKey } = args;
-    return Promise.resolve(
-      decryptStringWithRsaPrivateKey({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
-    );
+    return decryptStringWithRsaPrivateKey({
+      ...args,
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
+    });
   }
 
   /**
@@ -73,39 +83,43 @@ class NodeRSA implements INodeRSA {
    * the RSA key can hold (avoids ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE).
    * Decrypt with decryptLarge using the matching private key.
    */
-  public encryptLarge(args: parametersOfEncrypt): Promise<string> {
+  public async encryptLarge(args: parametersOfEncrypt): Promise<string> {
     const { publicKey = this.publicKey } = args;
-    return Promise.resolve(
-      encryptLarge({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
-    );
+    return encryptLarge({
+      ...args,
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
+    });
   }
 
   /**
    * Decrypts a value produced by encryptLarge using the RSA private key.
    */
-  public decryptLarge(args: parametersOfDecrypt): Promise<string> {
+  public async decryptLarge(args: parametersOfDecrypt): Promise<string> {
     const { privateKey = this.privateKey } = args;
-    return Promise.resolve(
-      decryptLarge({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
-    );
+    return decryptLarge({
+      ...args,
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
+    });
   }
 
-  public encrypt(args: parametersOfEncryptPrivate): Promise<string> {
+  public async encrypt(args: parametersOfEncryptPrivate): Promise<string> {
     const { privateKey = this.privateKey } = args;
-    return Promise.resolve(
-      encryptPrivate({ ...args, privateKey: convertKetToBase64(privateKey as string) }),
-    );
+    return encryptPrivate({
+      ...args,
+      privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
+    });
   }
 
-  public decrypt(args: parametersOfDecryptPublic): Promise<string> {
+  public async decrypt(args: parametersOfDecryptPublic): Promise<string> {
     const { publicKey = this.publicKey } = args;
-    return Promise.resolve(
-      decryptPublic({ ...args, publicKey: convertKetToBase64(publicKey as string) }),
-    );
+    return decryptPublic({
+      ...args,
+      publicKey: convertKeyToBase64(requireKey(publicKey, 'public')),
+    });
   }
 
-  public createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): Promise<returnCreateKeys> {
-    return Promise.resolve(createPrivateAndPublicKeys(modulusLength));
+  public async createPrivateAndPublicKeys(modulusLength: number = this.modulusLength): Promise<returnCreateKeys> {
+    return createPrivateAndPublicKeys(modulusLength);
   }
 
   public encryptBufferWithRsaPublicKey(

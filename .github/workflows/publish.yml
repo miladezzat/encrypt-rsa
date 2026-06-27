@@ -24,15 +24,24 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
+        run: npm ci
         env:
           HUSKY: 0
 
+      - name: Lint
+        run: npm run lint
+
       - name: Build
         run: npm run build
+
+      - name: Run tests
+        run: npm test
+
+      - name: Run package smoke tests
+        run: npm run smoke
+
+      - name: Run packed install smoke test
+        run: npm run smoke:install
 
       # Fail fast with a clear message if NPM_TOKEN is missing/expired/wrong-scoped.
       # Without this, npm-publish reports auth failures as a misleading "404 on PUT".

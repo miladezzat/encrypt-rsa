@@ -9,8 +9,8 @@ import { encode } from '../utils/helpers';
  * @param {string} key - The RSA key to be converted to base64. It may contain leading spaces in each line.
  * @returns {string} The base64-encoded version of the RSA key.
  */
-export function convertKetToBase64(key: string): string {
+export function convertKeyToBase64(key: string): string {
   return encode(key.replace(/^ +/gm, ''));
 }
 
-export default convertKetToBase64;
+export default convertKeyToBase64;

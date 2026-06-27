@@ -12,7 +12,7 @@ yarn add encrypt-rsa
 
 ## Breaking changes (vs 3.x)
 
-If you are upgrading from **3.x**, this release includes breaking changes. You should bump to **4.0.0** when publishing:
+If you are upgrading from **3.x**, the 4.x line introduced breaking changes that remain in 5.x:
 
 1. **Async API** – All crypto methods now return **Promises** (sync → async). You must use `await` or `.then()`.
    - **Before (3.x):** `const encrypted = nodeRSA.encryptStringWithRsaPublicKey({ text, publicKey });`
@@ -20,7 +20,7 @@ If you are upgrading from **3.x**, this release includes breaking changes. You s
 2. **Entry points** – The package now has separate Node and Web builds. `main`/`module`/`types` point to the Node build; the `browser` field and conditional `exports` point to the Web build. If you required a specific path (e.g. `encrypt-rsa/build/index.js`), update to the new entry points or use the package root `encrypt-rsa`.
 3. **Buffer methods** – `decryptBufferWithRsaPrivateKey` now returns `Promise<Uint8Array>` (type). In Node the runtime value is still a `Buffer` (extends `Uint8Array`). Prefer `Uint8Array` in types; avoid relying on `instanceof Buffer` in shared code.
 
-See [CHANGELOG.md](./CHANGELOG.md) for the full list of changes.
+See the [changelog](https://github.com/miladezzat/encrypt-rsa/blob/master/CHANGELOG.md) for the full list of changes.
 
 ## Node and Web (browser)
 
@@ -46,10 +46,10 @@ Both the Node and Web builds expose the **same class and method signatures** (th
 
 - **Same class:** `NodeRSA`
 - **Same constructor:** `(publicKey?: string, privateKey?: string, modulusLength?: number)`
-- **Same methods:** `encryptStringWithRsaPublicKey`, `decryptStringWithRsaPrivateKey`, `encrypt`, `decrypt`, `createPrivateAndPublicKeys`, `encryptBufferWithRsaPublicKey`, `decryptBufferWithRsaPrivateKey`
+- **Same methods:** `encryptStringWithRsaPublicKey`, `decryptStringWithRsaPrivateKey`, `encryptLarge`, `decryptLarge`, `encrypt`, `decrypt`, `createPrivateAndPublicKeys`, `encryptBufferWithRsaPublicKey`, `decryptBufferWithRsaPrivateKey`
 - **Same parameter and return types:** All crypto methods return `Promise<...>`; buffer methods use `Uint8Array` (in Node, `Buffer` extends `Uint8Array` so it works as well).
 
-See [docs/FEATURE_PARITY.md](docs/FEATURE_PARITY.md) for a feature-by-feature comparison of Node vs Web (including the browser limitation for `encrypt`/`decrypt` with private/public key).
+See the [feature parity guide](https://github.com/miladezzat/encrypt-rsa/blob/master/docs/FEATURE_PARITY.md) for a feature-by-feature comparison of Node vs Web (including the browser limitation for `encrypt`/`decrypt` with private/public key).
 
 ## Usage
 
@@ -133,7 +133,7 @@ console.log('Decrypted:', decryptedString);
 
 #### Encrypt any-length data (hybrid) — `encryptLarge` / `decryptLarge`
 
-Plain RSA can only encrypt a small amount of data (~190 bytes for a 2048-bit key). For anything larger — long tokens, JSON, files — use `encryptLarge`, which has **no size limit**:
+Plain RSA can only encrypt a small amount of data (214 bytes for a 2048-bit RSA-OAEP/SHA-1 key). For anything larger — long tokens, JSON, files — use `encryptLarge`, which has **no size limit**:
 
 ```ts
 const longText = 'EAA...a long Facebook token or any large string...';
@@ -262,16 +262,26 @@ console.log('Decrypted Credentials:', decryptedCredentials);
 
 We provide practical examples for both Node.js and browser environments to help you get started quickly:
 
-- **[Node.js example](./examples/node-basic.js)** – Command-line demo showing key generation, encryption, and decryption
-- **[Browser example](./examples/browser-basic.html)** – Interactive web interface with a UI for testing encryption/decryption
-- **[Examples README](./examples/README.md)** – Detailed guide for running and understanding the examples
+- **[Node.js example](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/node-basic.js)** – Command-line demo showing key generation, encryption, and decryption
+- **[Browser example](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/browser-basic.html)** – Interactive web interface with a UI for testing encryption/decryption
+- **[Examples README](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/README.md)** – Detailed guide for running and understanding the examples
+
+Build the package before running local examples:
+```bash
+npm run build
+```
 
 To run the Node.js example:
 ```bash
 node examples/node-basic.js
 ```
 
-To view the browser example, open `examples/browser-basic.html` in your web browser.
+To view the browser example, serve the repository over localhost and open `examples/browser-basic.html`:
+```bash
+python3 -m http.server 8080
+```
+
+Then open `http://localhost:8080/examples/browser-basic.html`. Web Crypto requires a secure context such as HTTPS or localhost.
 
 ## Data size limitations
 
@@ -281,15 +291,15 @@ RSA encryption with OAEP padding has inherent size limitations based on the key 
 
 | Key Size | Max Bytes |
 |----------|-----------|
-| 2048-bit | ~190 bytes |
-| 4096-bit | ~446 bytes |
+| 2048-bit | 214 bytes |
+| 4096-bit | 470 bytes |
 
 ### Why the limitation?
 
 RSA with OAEP padding requires overhead:
-- OAEP padding scheme: 2 * hash_size + 2 bytes
-- With SHA-1 (20 bytes): 2 * 20 + 2 = 42 bytes overhead
-- Formula: `max_bytes = (key_size_bytes - 42 - 2) ≈ key_size_bytes / 8 - 46`
+- OAEP padding scheme: `2 * hash_size + 2` bytes
+- With SHA-1 (20 bytes): `2 * 20 + 2 = 42` bytes overhead
+- Formula: `max_bytes = key_size_bytes - 42`
 
 ### Solutions for larger data
 
@@ -318,7 +328,7 @@ Under the hood this is the standard hybrid scheme:
 
 | Error | Cause | Solution |
 |-------|-------|----------|
-| "data too large for key size" (`ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE`) | Message exceeds RSA capacity (~190 bytes for 2048-bit keys) | Use **`encryptLarge` / `decryptLarge`** (built-in hybrid encryption — no size limit), or a larger key |
+| "data too large for key size" (`ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE`) | Message exceeds RSA capacity (214 bytes for 2048-bit RSA-OAEP/SHA-1 keys) | Use **`encryptLarge` / `decryptLarge`** (built-in hybrid encryption — no size limit), or a larger key |
 | "Invalid public key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PUBLIC KEY-----` |
 | "Invalid private key format" | PEM key is malformed or wrong type | Verify key starts with `-----BEGIN PRIVATE KEY-----` |
 | "Decryption failed" | Wrong private key or corrupted ciphertext | Ensure the correct private key matches the public key used for encryption |
@@ -379,8 +389,8 @@ if (!isValidPEMKey(key)) {
 
 The project includes tests for both the **Node** and **web** builds:
 
-- **Node tests** (`tests/functionalty.node.spec.ts`): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.
-- **Web tests** (`tests/functionalty.web.spec.ts`): Run against the web build; require `crypto.subtle` (Node 19+ or a browser). Skipped automatically when Web Crypto is not available.
+- **Node tests** (`tests/functionality.node.spec.ts`): Run against the Node build; cover all methods including encrypt/decrypt with private/public key and buffer operations.
+- **Web tests** (`tests/functionality.web.spec.ts`): Run against the web build; require `crypto.subtle` (Node 19+ or a browser). Skipped automatically when Web Crypto is not available.
 
 ```bash
 npm test
@@ -406,8 +416,8 @@ The docs reflect the **NodeRSA** class and its async API (Node and web share the
 
 ## Releasing
 
-- **Changelog from commits:** Run `npm run changelog` to update [CHANGELOG.md](./CHANGELOG.md) from conventional commits since the last tag (`feat:`, `fix:`, `BREAKING CHANGE:`, etc.).
-- **Full release:** Run `npm run release -- --release-as major|minor|patch` to bump version, update the changelog, commit, and tag. Push to `master` to trigger the publish workflow (see [.github/workflows/publish.yml](./.github/workflows/publish.yml)).
+- **Changelog from commits:** Run `npm run changelog` to update the [changelog](https://github.com/miladezzat/encrypt-rsa/blob/master/CHANGELOG.md) from conventional commits since the last tag (`feat:`, `fix:`, `BREAKING CHANGE:`, etc.).
+- **Full release:** Run `npm run release -- --release-as major|minor|patch` to bump version, update the changelog, commit, and tag. Push to `master` to trigger the publish workflow (see the [publish workflow](https://github.com/miladezzat/encrypt-rsa/blob/master/.github/workflows/publish.yml)).
 
 **Publish via GitHub Actions (on merge to `master`):**
 
@@ -425,7 +435,7 @@ The docs reflect the **NodeRSA** class and its async API (Node and web share the
 
 ## Code of conduct
 
-This project is released with a [Contributor Code of Conduct](./CODE_OF_CONDUCT.md). By participating you agree to abide by its terms.
+This project is released with a [Contributor Code of Conduct](https://github.com/miladezzat/encrypt-rsa/blob/master/CODE_OF_CONDUCT.md). By participating you agree to abide by its terms.
 
 ## Reporting issues
 
