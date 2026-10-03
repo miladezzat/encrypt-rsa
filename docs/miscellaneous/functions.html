@@ -145,6 +145,15 @@
                             <a href="#encryptStringWithRsaPublicKey" title="src/node/crypto.ts" ><b>encryptStringWithRsaPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
+                            <a href="#hasPEMEnvelope" title="src/shared/helpers.ts" ><b>hasPEMEnvelope</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#headerFor" title="src/shared/hybrid.ts" ><b>headerFor</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#hybridOptions" title="src/shared/hybrid.ts" ><b>hybridOptions</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
                             <a href="#isValidPEMKey" title="src/shared/helpers.ts" ><b>isValidPEMKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
@@ -154,7 +163,19 @@
                             <a href="#isValidPEMPublicKey" title="src/shared/helpers.ts" ><b>isValidPEMPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
+                            <a href="#isValidRSAPrivateKey" title="src/node/crypto.ts" ><b>isValidRSAPrivateKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#isValidRSAPublicKey" title="src/node/crypto.ts" ><b>isValidRSAPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
                             <a href="#joinChunks" title="src/shared/helpers.ts" ><b>joinChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#oaepOptions" title="src/node/crypto.ts" ><b>oaepOptions</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#parseHybrid" title="src/shared/hybrid.ts" ><b>parseHybrid</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
                         </li>
                         <li>
                             <a href="#pemToBase64" title="src/shared/helpers.ts" ><b>pemToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
@@ -163,10 +184,34 @@
                             <a href="#pemToBinary" title="src/shared/helpers.ts" ><b>pemToBinary</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
+                            <a href="#privateKeyFrom" title="src/node/crypto.ts" ><b>privateKeyFrom</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#publicKeyFrom" title="src/node/crypto.ts" ><b>publicKeyFrom</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#requireAes256Key" title="src/shared/hybrid.ts" ><b>requireAes256Key</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
                             <a href="#requireKey" title="src/node/index.ts" ><b>requireKey</b>&nbsp;&nbsp;&nbsp;(src/.../index.ts)</a>
                         </li>
                         <li>
+                            <a href="#resolveOaepHash" title="src/shared/hybrid.ts" ><b>resolveOaepHash</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#serializeHybrid" title="src/shared/hybrid.ts" ><b>serializeHybrid</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#sign" title="src/node/crypto.ts" ><b>sign</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
                             <a href="#splitIntoChunks" title="src/shared/helpers.ts" ><b>splitIntoChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#strictBase64" title="src/shared/hybrid.ts" ><b>strictBase64</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#verify" title="src/node/crypto.ts" ><b>verify</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -204,7 +249,7 @@
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -234,7 +279,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -267,7 +312,7 @@
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -308,7 +353,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -342,7 +387,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -372,7 +417,75 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hasPEMEnvelope"></a>
+                    <span class="name">
+                        <span ><b>hasPEMEnvelope</b></span>
+                        <a href="#hasPEMEnvelope"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hasPEMEnvelope(key, type)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Checks a complete SPKI/PKCS#8 PEM envelope before native key parsing.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>type</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
                             </div>
                 </td>
             </tr>
@@ -405,7 +518,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -438,7 +551,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>True if the key is a valid PEM key, false otherwise.</p>
+                                <p>True if the key has PEM key, false otherwise.</p>
 
                             </div>
                 </td>
@@ -467,12 +580,12 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Validates if a string is a valid PEM-formatted private key.</p>
+                        <div class="io-description"><p>Checks headers/footers only; does not parse or validate key material. Checks a PEM-formatted private key.</p>
 </div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -505,7 +618,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>True if the key is a valid PEM private key, false otherwise.</p>
+                                <p>True if the key has PEM private key, false otherwise.</p>
 
                             </div>
                 </td>
@@ -534,12 +647,12 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Validates if a string is a valid PEM-formatted public key.</p>
+                        <div class="io-description"><p>Checks headers/footers only; does not parse or validate key material. Checks a PEM-formatted public key.</p>
 </div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -572,7 +685,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                <p>True if the key is a valid PEM public key, false otherwise.</p>
+                                <p>True if the key has PEM public key, false otherwise.</p>
 
                             </div>
                 </td>
@@ -606,7 +719,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -673,7 +786,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -703,7 +816,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -736,7 +849,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -766,7 +879,7 @@ Uses atob/btoa (Node 16+ and browser) and TextEncoder/TextDecoder.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -801,7 +914,7 @@ For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -849,7 +962,7 @@ For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.</p>
 
                                             <td>
                                                     <ul>
-<li>The size of each chunk in bytes (default 245 for 2048-bit RSA).</li>
+<li>The size of each chunk in bytes (default 214 for 2048-bit RSA-OAEP/SHA-1).</li>
 </ul>
 
                                             </td>
@@ -899,7 +1012,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -929,7 +1042,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -962,7 +1075,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -992,11 +1105,11 @@ Removes leading spaces from each line, then base64-encodes.</p>
                                 </table>
                             </div>
                         <div class="io-description">
-                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#returnCreateKeys" target="_self" >returnCreateKeys</a></code>
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#returnCreateKeys" target="_self" >Promise&lt;returnCreateKeys&gt;</a></code>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1015,7 +1128,7 @@ Removes leading spaces from each line, then base64-encodes.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptLarge(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+<code>decryptLarge(args: <a href="typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
@@ -1024,13 +1137,10 @@ Removes leading spaces from each line, then base64-encodes.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a value produced by encryptLarge: unwraps the AES key with the RSA
-private key, then decrypts the ciphertext with AES-256-GCM.</p>
-</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1060,7 +1170,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1079,7 +1189,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptPublic(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
+<code>decryptPublic(args: <a href="typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
@@ -1091,7 +1201,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1121,7 +1231,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1140,7 +1250,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+<code>decryptStringWithRsaPrivateKey(args: <a href="typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
@@ -1152,7 +1262,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1182,7 +1292,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1201,7 +1311,7 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptLarge(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+<code>encryptLarge(args: <a href="typealiases.html#parametersOfEncryptLarge" target="_self">parametersOfEncryptLarge</a>)</code>
                 </td>
             </tr>
 
@@ -1210,15 +1320,12 @@ private key, then decrypts the ciphertext with AES-256-GCM.</p>
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Hybrid encryption: encrypts arbitrary-length text by encrypting it with a
-one-time AES-256-GCM key, then wrapping that AES key with RSA-OAEP (SHA-1).
-This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE.</p>
-<p>Output is a single base64 string: <code>encKey:iv:tag:ciphertext</code>.</p>
+                        <div class="io-description"><p>Legacy by default; opt into v1 for an authenticated algorithm header.</p>
 </div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1231,7 +1338,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
                                         <tr>
                                                 <td>args</td>
                                             <td>
-                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self" >parametersOfEncrypt</a></code>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncryptLarge" target="_self" >parametersOfEncryptLarge</a></code>
                                             </td>
 
                                             <td>
@@ -1248,7 +1355,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1267,7 +1374,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptPrivate(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
+<code>encryptPrivate(args: <a href="typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
@@ -1276,10 +1383,12 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Legacy private-key operation; use sign/verify for authentication.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1309,7 +1418,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1328,7 +1437,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
             </tr>
             <tr>
                 <td class="col-md-4">
-<code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+<code>encryptStringWithRsaPublicKey(args: <a href="typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
@@ -1340,7 +1449,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1370,7 +1479,879 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                         </div>
                             <div class="io-description">
-                                
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isValidRSAPrivateKey"></a>
+                    <span class="name">
+                        <span ><b>isValidRSAPrivateKey</b></span>
+                        <a href="#isValidRSAPrivateKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isValidRSAPrivateKey(key)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parses PKCS#8 RSA private key material, matching keys generated by this package.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="isValidRSAPublicKey"></a>
+                    <span class="name">
+                        <span ><b>isValidRSAPublicKey</b></span>
+                        <a href="#isValidRSAPublicKey"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>isValidRSAPublicKey(key)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parses SPKI RSA public key material; formatting alone is insufficient.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="oaepOptions"></a>
+                    <span class="name">
+                        <span ><b>oaepOptions</b></span>
+                        <a href="#oaepOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>oaepOptions(hash?: <a href="typealiases.html#OaepHash" target="_self">OaepHash</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>hash</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#OaepHash" target="_self" >OaepHash</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="privateKeyFrom"></a>
+                    <span class="name">
+                        <span ><b>privateKeyFrom</b></span>
+                        <a href="#privateKeyFrom"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>privateKeyFrom(encoded: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>encoded</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>crypto.KeyObject</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="publicKeyFrom"></a>
+                    <span class="name">
+                        <span ><b>publicKeyFrom</b></span>
+                        <a href="#publicKeyFrom"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>publicKeyFrom(encoded: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>encoded</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>crypto.KeyObject</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sign"></a>
+                    <span class="name">
+                        <span ><b>sign</b></span>
+                        <a href="#sign"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>sign(args: <a href="typealiases.html#parametersOfSign" target="_self">parametersOfSign</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfSign" target="_self" >parametersOfSign</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verify"></a>
+                    <span class="name">
+                        <span ><b>verify</b></span>
+                        <a href="#verify"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>verify(args: <a href="typealiases.html#parametersOfVerify" target="_self">parametersOfVerify</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfVerify" target="_self" >parametersOfVerify</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/boolean" target="_blank" >boolean</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/shared/hybrid.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="headerFor"></a>
+                    <span class="name">
+                        <span ><b>headerFor</b></span>
+                        <a href="#headerFor"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>headerFor(hash: <a href="typealiases.html#OaepHash" target="_self">OaepHash</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>hash</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#OaepHash" target="_self" >OaepHash</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="hybridOptions"></a>
+                    <span class="name">
+                        <span ><b>hybridOptions</b></span>
+                        <a href="#hybridOptions"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>hybridOptions(args: <a href="typealiases.html#parametersOfEncryptLarge" target="_self">parametersOfEncryptLarge</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncryptLarge" target="_self" >parametersOfEncryptLarge</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>literal type</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseHybrid"></a>
+                    <span class="name">
+                        <span ><b>parseHybrid</b></span>
+                        <a href="#parseHybrid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parseHybrid(text: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, requestedHash?: <a href="typealiases.html#OaepHash" target="_self">OaepHash</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>text</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>requestedHash</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#OaepHash" target="_self" >OaepHash</a></code>
+                                            </td>
+
+                                            <td>
+                                                    Yes
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>literal type</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="requireAes256Key"></a>
+                    <span class="name">
+                        <span ><b>requireAes256Key</b></span>
+                        <a href="#requireAes256Key"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>requireAes256Key(key: Uint8Array)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>key</td>
+                                            <td>
+                                                        <code>Uint8Array</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="resolveOaepHash"></a>
+                    <span class="name">
+                        <span ><b>resolveOaepHash</b></span>
+                        <a href="#resolveOaepHash"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>resolveOaepHash(hash: <a href="typealiases.html#OaepHash" target="_self">OaepHash</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>hash</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#OaepHash" target="_self" >OaepHash</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>&#x27;sha1&#x27;</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#OaepHash" target="_self" >OaepHash</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="serializeHybrid"></a>
+                    <span class="name">
+                        <span ><b>serializeHybrid</b></span>
+                        <a href="#serializeHybrid"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>serializeHybrid(header: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, fields)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>header</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>fields</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="strictBase64"></a>
+                    <span class="name">
+                        <span ><b>strictBase64</b></span>
+                        <a href="#strictBase64"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>strictBase64(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Uint8Array</code>
+
+                        </div>
+                            <div class="io-description">
+
                             </div>
                 </td>
             </tr>
@@ -1403,7 +2384,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1438,7 +2419,7 @@ This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>

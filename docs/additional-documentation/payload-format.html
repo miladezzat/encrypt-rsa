@@ -7,9 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
           <script>
@@ -64,7 +64,7 @@
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
-                    <a href="./" class="navbar-brand">encrypt-rsa documentation</a>
+                    <a href="../" class="navbar-brand">encrypt-rsa documentation</a>
                     <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
                </div>
         </div>
@@ -79,36 +79,10 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content overview">
+               <div class="content additional-page">
                    <div class="content-data">
 
 
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">Overview</li>
-</ol>
-
-<div class="tab-content overview">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-ios-paper"></span></h4>
-                    <p class="card-text">1 Class</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-md-information-circle-outline"></span></h4>
-                    <p class="card-text">1 Interface</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="js/libs/svg-pan-zoom.min.js"></script>
-<script src="js/svg-pan-zoom.controls.js"></script>
 
 
 
@@ -126,6 +100,20 @@
 
 
 
+
+
+<h1>Hybrid payload specification</h1>
+<p><code>encryptLarge</code> uses a random 32-byte AES key, a random 12-byte IV, and AES-256-GCM with a 16-byte authentication tag. Only the AES key is encrypted using RSA-OAEP. Fields are base64 strings separated by colons, not one base64 encoding of the complete payload.</p>
+<h2>Legacy</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-text">encryptedKey:iv:tag:ciphertext</code></pre></div><p>Legacy payloads always use RSA-OAEP/SHA-1 and have no additional authenticated data. They remain the default output when neither <code>oaepHash</code> nor <code>payloadVersion</code> is supplied. Empty plaintext has an empty final field. Readers accept whitespace and omitted padding in standard legacy base64, while rejecting invalid punctuation and base64url encodings.</p>
+<h2>Version 1</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-text">encrypt-rsa:v1:RSA-OAEP-SHA1+A256GCM:encryptedKey:iv:tag:ciphertext
+encrypt-rsa:v1:RSA-OAEP-SHA256+A256GCM:encryptedKey:iv:tag:ciphertext</code></pre></div><p>The exact UTF-8 header preceding the four encoded fields is AES-GCM additional authenticated data. This binds the format version and algorithm identifier to the ciphertext. Stripping the header, changing the suite, or changing encrypted data causes decryption to fail. v1 requires canonical padded standard base64, with an empty ciphertext field allowed.</p>
+<p><code>{ payloadVersion: &#39;v1&#39; }</code> selects the first suite. <code>{ oaepHash: &#39;sha256&#39; }</code> selects the second and implies v1. Explicit legacy/SHA-256 encryption is rejected. Decryption determines the hash from the recognized suite; an explicit <code>oaepHash</code> argument must match. Unsupported versions or suites are rejected, with no fallback to another algorithm.</p>
+<p>Both readers check decoded IV12/tag16 before RSA decryption and AES key32 after RSA unwrapping. The encrypted AES-key field length follows the RSA modulus, so it is not fixed at 256 bytes. The parser requires exactly four legacy fields or seven v1 fields. Wrong keys and GCM authentication failures reject without releasing plaintext.</p>
+<h2>Rollout</h2>
+<p>Upgrade all readers before enabling v1 writers. Older versions of the library can read only the legacy four-field format. Existing valid legacy payloads remain decryptable. Shortened tags, nonstandard IV lengths, and AES-128/192 payloads are rejected because they do not conform to this package&#39;s generated AES-256-GCM format.</p>
+<p>A signature is separate from a hybrid payload. GCM authenticates the encrypted data under its AES key; anyone possessing the recipient&#39;s public key can create a new valid encrypted message. Use trusted RSA-PSS signatures when sender authentication is required.</p>
 
                    </div><div class="search-results">
     <div class="has-results">
@@ -151,9 +139,9 @@
           </label>
 
        <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'overview';
-            var COMPODOC_CURRENT_PAGE_URL = 'overview.html';
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'additional-page';
+            var COMPODOC_CURRENT_PAGE_URL = 'payload-format.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
@@ -170,30 +158,30 @@
                }
           </script>
 
-       <script src="./js/libs/custom-elements.min.js"></script>
-       <script src="./js/libs/lit-html.js"></script>
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
 
-       <script src="./js/menu-wc.js" defer></script>
-       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
-       <script src="./js/libs/bootstrap-native.js"></script>
+       <script src="../js/libs/bootstrap-native.js"></script>
 
-       <script src="./js/libs/es6-shim.min.js"></script>
-       <script src="./js/libs/EventDispatcher.js"></script>
-       <script src="./js/libs/promise.min.js"></script>
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
 
-       <script src="./js/compodoc.js"></script>
+       <script src="../js/compodoc.js"></script>
 
-       <script src="./js/tabs.js"></script>
-       <script src="./js/menu.js"></script>
-       <script src="./js/libs/clipboard.min.js"></script>
-       <script src="./js/libs/prism.js"></script>
-       <script src="./js/sourceCode.js"></script>
-          <script src="./js/search/search.js"></script>
-          <script src="./js/search/lunr.min.js"></script>
-          <script src="./js/search/search-lunr.js"></script>
-          <script src="./js/search/search_index.js"></script>
-       <script src="./js/lazy-load-graphs.js"></script>
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
 
 
     </body>

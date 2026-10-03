@@ -7,11 +7,12 @@
  * Encodes a UTF-8 string to base64 (environment-agnostic).
  */
 export function bytesToBase64(bytes: Uint8Array): string {
-  let binary = '';
-  for (let i = 0; i < bytes.length; i++) {
-    binary += String.fromCharCode(bytes[i]);
+  const chunks: string[] = [];
+  // Bound each call's argument count and avoid one string allocation per byte.
+  for (let i = 0; i < bytes.length; i += 8192) {
+    chunks.push(String.fromCharCode(...Array.from(bytes.subarray(i, i + 8192))));
   }
-  return btoa(binary);
+  return btoa(chunks.join(''));
 }
 
 /**
@@ -55,11 +56,7 @@ export function binaryToPem(
   binary: Uint8Array,
   type: 'public' | 'private',
 ): string {
-  let b64 = '';
-  for (let i = 0; i < binary.length; i++) {
-    b64 += String.fromCharCode(binary[i]);
-  }
-  const base64 = btoa(b64);
+  const base64 = bytesToBase64(binary);
   const header = type === 'public' ? PEM_PUBLIC_HEADER : PEM_PRIVATE_HEADER;
   const footer = type === 'public' ? PEM_PUBLIC_FOOTER : PEM_PRIVATE_FOOTER;
   const lines: string[] = [];
@@ -79,7 +76,7 @@ export function binaryToPem(
 export const decode = (str: string): string => {
   try {
     const bytes = base64ToBytes(str);
-    return new TextDecoder().decode(bytes);
+    return new TextDecoder('utf-8', { ignoreBOM: true }).decode(bytes);
   } catch (error) {
     throw new Error('Failed to decode base64 string');
   }
@@ -102,10 +99,10 @@ export const encode = (str: string): string => {
 };
 
 /**
- * Validates if a string is a valid PEM-formatted public key.
+ * Checks headers/footers only; does not parse or validate key material. Checks a PEM-formatted public key.
  *
  * @param {string} key - The key string to validate.
- * @returns {boolean} True if the key is a valid PEM public key, false otherwise.
+ * @returns {boolean} True if the key has PEM public key, false otherwise.
  */
 export function isValidPEMPublicKey(key: unknown): boolean {
   if (typeof key !== 'string') {
@@ -115,10 +112,10 @@ export function isValidPEMPublicKey(key: unknown): boolean {
 }
 
 /**
- * Validates if a string is a valid PEM-formatted private key.
+ * Checks headers/footers only; does not parse or validate key material. Checks a PEM-formatted private key.
  *
  * @param {string} key - The key string to validate.
- * @returns {boolean} True if the key is a valid PEM private key, false otherwise.
+ * @returns {boolean} True if the key has PEM private key, false otherwise.
  */
 export function isValidPEMPrivateKey(key: unknown): boolean {
   if (typeof key !== 'string') {
@@ -127,11 +124,19 @@ export function isValidPEMPrivateKey(key: unknown): boolean {
   return key.includes(PEM_PRIVATE_HEADER) && key.includes(PEM_PRIVATE_FOOTER);
 }
 
+/** Checks a complete SPKI/PKCS#8 PEM envelope before native key parsing. */
+export function hasPEMEnvelope(key: unknown, type: 'public' | 'private'): key is string {
+  if (typeof key !== 'string') return false;
+  const header = type === 'public' ? PEM_PUBLIC_HEADER : PEM_PRIVATE_HEADER;
+  const footer = type === 'public' ? PEM_PUBLIC_FOOTER : PEM_PRIVATE_FOOTER;
+  return new RegExp(`^\\s*${header}\\s*([A-Za-z0-9+/=\\s]+)${footer}\\s*$`).test(key);
+}
+
 /**
  * Validates if a string is a valid PEM key (either public or private).
  *
  * @param {string} key - The key string to validate.
- * @returns {boolean} True if the key is a valid PEM key, false otherwise.
+ * @returns {boolean} True if the key has PEM key, false otherwise.
  */
 export function isValidPEMKey(key: unknown): boolean {
   return isValidPEMPublicKey(key) || isValidPEMPrivateKey(key);
@@ -143,7 +148,7 @@ export function isValidPEMKey(key: unknown): boolean {
  * For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.
  *
  * @param {string} text - The text to split into chunks.
- * @param {number} chunkSize - The size of each chunk in bytes (default 245 for 2048-bit RSA).
+ * @param {number} chunkSize - The size of each chunk in bytes (default 214 for 2048-bit RSA-OAEP/SHA-1).
  * @returns {string[]} Array of text chunks.
  */
 export function splitIntoChunks(text: string, chunkSize: number = 214): string[] {

@@ -43,6 +43,15 @@ jobs:
       - name: Run packed install smoke test
         run: npm run smoke:install
 
+      - name: Install browser
+        run: npx playwright install --with-deps chromium
+
+      - name: Run browser smoke test
+        run: npm run smoke:browser
+
+      - name: Generate and validate docs
+        run: npm run docs && npm run smoke:docs
+
       # Fail fast with a clear message if NPM_TOKEN is missing/expired/wrong-scoped.
       # Without this, npm-publish reports auth failures as a misleading "404 on PUT".
       - name: Verify npm auth

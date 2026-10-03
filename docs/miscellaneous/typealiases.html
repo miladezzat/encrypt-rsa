@@ -112,6 +112,9 @@
                 <td class="col-md-4">
                     <ul class="index-list">
                         <li>
+                            <a href="#OaepHash" title="src/shared/types.ts" ><b>OaepHash</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                        </li>
+                        <li>
                             <a href="#parametersOfDecrypt" title="src/shared/types.ts" ><b>parametersOfDecrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
@@ -121,7 +124,16 @@
                             <a href="#parametersOfEncrypt" title="src/shared/types.ts" ><b>parametersOfEncrypt</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
+                            <a href="#parametersOfEncryptLarge" title="src/shared/types.ts" ><b>parametersOfEncryptLarge</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                        </li>
+                        <li>
                             <a href="#parametersOfEncryptPrivate" title="src/shared/types.ts" ><b>parametersOfEncryptPrivate</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#parametersOfSign" title="src/shared/types.ts" ><b>parametersOfSign</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#parametersOfVerify" title="src/shared/types.ts" ><b>parametersOfVerify</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
                         </li>
                         <li>
                             <a href="#returnCreateKeys" title="src/shared/types.ts" ><b>returnCreateKeys</b>&nbsp;&nbsp;&nbsp;(src/.../types.ts)</a>
@@ -135,6 +147,28 @@
 
     <h3>src/shared/types.ts</h3>
     <section data-compodoc="block-typealias">
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="OaepHash"></a>
+                    <span class="name "><b>OaepHash</b><a href="#OaepHash"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>OAEP hash shared by Node and Web; SHA-1 remains the compatibility default.</p>
+</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>&quot;sha1&quot; | &quot;sha256&quot;</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
     <table class="table table-sm table-bordered">
         <tbody>
             <tr>
@@ -205,6 +239,28 @@
         <tbody>
             <tr>
                 <td class="col-md-4">
+                    <a name="parametersOfEncryptLarge"></a>
+                    <span class="name "><b>parametersOfEncryptLarge</b><a href="#parametersOfEncryptLarge"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Hybrid output is legacy by default; SHA-256 implies authenticated v1 output.</p>
+</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code></code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
                     <a name="parametersOfEncryptPrivate"></a>
                     <span class="name "><b>parametersOfEncryptPrivate</b><a href="#parametersOfEncryptPrivate"><span class="icon ion-ios-link"></span></a></span>
                 </td>
@@ -212,6 +268,50 @@
             <tr>
                 <td class="col-md-4">
                     <div class="io-description"><p>Type representing the parameters required to encrypt text using a private key.</p>
+</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parametersOfSign"></a>
+                    <span class="name "><b>parametersOfSign</b><a href="#parametersOfSign"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Sign exact UTF-8 text using RSA-PSS/SHA-256, with an optional constructor private key.</p>
+</div>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <code>    <code>literal type</code>
+</code>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parametersOfVerify"></a>
+                    <span class="name "><b>parametersOfVerify</b><a href="#parametersOfVerify"><span class="icon ion-ios-link"></span></a></span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                    <div class="io-description"><p>Verify a base64 RSA-PSS signature; invalid signatures resolve false, invalid keys reject.</p>
 </div>
                 </td>
             </tr>

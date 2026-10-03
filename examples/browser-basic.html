@@ -176,29 +176,39 @@
 <body>
   <div class="container">
     <h1>🔐 RSA Encryption Demo</h1>
-    <p class="subtitle">Encrypt and decrypt messages in your browser</p>
+    <p class="subtitle">Encrypt, decrypt, sign, and verify locally. Demo keys stay in this browser; never share private keys.</p>
 
     <div id="message"></div>
 
     <div class="section">
-      <label>Step 1: Generate Key Pair</label>
+      <label for="publicKey">Step 1: Generate Key Pair</label>
       <button onclick="generateKeys()">Generate 2048-bit RSA Keys</button>
       <div class="key-info">Key size: 2048 bits (RSA-OAEP/SHA-1 can encrypt up to 214 bytes)</div>
     </div>
 
     <div class="section">
-      <label>Public Key:</label>
+      <label for="publicKey">Public Key:</label>
       <textarea id="publicKey" readonly></textarea>
     </div>
 
     <div class="section">
-      <label>Private Key:</label>
+      <label for="privateKey">Private Key:</label>
       <textarea id="privateKey" readonly></textarea>
     </div>
 
     <div class="section">
-      <label>Message to Encrypt:</label>
-      <textarea id="message-input" placeholder="Enter a message (max 214 bytes for direct RSA)"></textarea>
+      <label for="message-input">Message to Encrypt or Sign:</label>
+      <textarea id="message-input" placeholder="Enter text; hybrid encryption supports large messages"></textarea>
+    </div>
+
+    <div class="section">
+      <label for="mode">Encryption mode:</label>
+      <select id="mode">
+        <option value="hybrid-sha256">Hybrid SHA-256 (versioned payload)</option>
+        <option value="hybrid-legacy">Hybrid SHA-1 (legacy payload)</option>
+        <option value="direct-sha1">Direct RSA SHA-1 (214 bytes)</option>
+        <option value="direct-sha256">Direct RSA SHA-256 (190 bytes)</option>
+      </select>
     </div>
 
     <div class="section">
@@ -209,7 +219,7 @@
     </div>
 
     <div class="section">
-      <label>Encrypted (Base64):</label>
+      <label>Encrypted Payload:</label>
       <textarea id="encrypted-output" readonly></textarea>
     </div>
 
@@ -223,6 +233,16 @@
     <div class="section">
       <label>Decrypted Message:</label>
       <textarea id="decrypted-output" readonly></textarea>
+    </div>
+
+    <div class="section">
+      <label for="signature-output">RSA-PSS/SHA-256 Signature:</label>
+      <textarea id="signature-output" placeholder="Sign the message, then verify it or edit it to test rejection"></textarea>
+      <div class="button-group">
+        <button onclick="signMessage()" id="signBtn">Sign Message</button>
+        <button onclick="verifyMessage()" id="verifyBtn">Verify Signature</button>
+      </div>
+      <p class="key-info">Signing authenticates the exact message; it does not hide the message.</p>
     </div>
   </div>
 
@@ -246,6 +266,9 @@
         const keys = await encryptRSA.createPrivateAndPublicKeys(2048);
         document.getElementById('publicKey').value = keys.publicKey;
         document.getElementById('privateKey').value = keys.privateKey;
+        clearEncrypted();
+        clearDecrypted();
+        document.getElementById('signature-output').value = '';
         showMessage('Keys generated successfully!', 'success');
       } catch (error) {
         showMessage(`Error: ${error.message}`, 'error');
@@ -268,10 +291,13 @@
         }
 
         showMessage('Encrypting...', 'info');
-        const encrypted = await encryptRSA.encryptStringWithRsaPublicKey({
-          text: message,
-          publicKey,
-        });
+        const mode = document.getElementById('mode').value;
+        const oaepHash = mode.endsWith('sha256') ? 'sha256' : 'sha1';
+        const args = { text: message, publicKey, oaepHash };
+        const encrypted = mode.startsWith('hybrid')
+          ? await encryptRSA.encryptLarge(args)
+          : await encryptRSA.encryptStringWithRsaPublicKey(args);
+        document.getElementById('encrypted-output').dataset.mode = mode;
 
         document.getElementById('encrypted-output').value = encrypted;
         showMessage('Message encrypted successfully!', 'success');
@@ -296,10 +322,12 @@
         }
 
         showMessage('Decrypting...', 'info');
-        const decrypted = await encryptRSA.decryptStringWithRsaPrivateKey({
-          text: encrypted,
-          privateKey,
-        });
+        const mode = document.getElementById('encrypted-output').dataset.mode;
+        const decrypted = mode.startsWith('hybrid')
+          ? await encryptRSA.decryptLarge({ text: encrypted, privateKey })
+          : await encryptRSA.decryptStringWithRsaPrivateKey({
+              text: encrypted, privateKey, oaepHash: mode.endsWith('sha256') ? 'sha256' : 'sha1',
+            });
 
         document.getElementById('decrypted-output').value = decrypted;
         showMessage('Message decrypted successfully!', 'success');
@@ -318,12 +346,28 @@
       hideMessage();
     }
 
-    // Hide message after 5 seconds
-    setInterval(() => {
-      if (document.getElementById('message').classList.contains('hidden')) return;
-      const message = document.getElementById('message').textContent;
-      if (!message.includes('...')) hideMessage();
-    }, 5000);
+    async function signMessage() {
+      try {
+        const privateKey = document.getElementById('privateKey').value;
+        const text = document.getElementById('message-input').value;
+        document.getElementById('signature-output').value = await encryptRSA.sign({ text, privateKey });
+        showMessage('Message signed successfully!', 'success');
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    }
+
+    async function verifyMessage() {
+      try {
+        const publicKey = document.getElementById('publicKey').value;
+        const text = document.getElementById('message-input').value;
+        const signature = document.getElementById('signature-output').value;
+        const valid = await encryptRSA.verify({ text, signature, publicKey });
+        showMessage(valid ? 'Signature is valid' : 'Signature is invalid', valid ? 'success' : 'error');
+      } catch (error) {
+        showMessage(error.message, 'error');
+      }
+    }
   </script>
 </body>
 </html>

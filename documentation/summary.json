@@ -1,0 +1,5 @@
+[
+  { "title": "Compatibility", "file": "compatibility.md" },
+  { "title": "Payload format", "file": "payload-format.md" },
+  { "title": "Migration", "file": "migration.md" }
+]
