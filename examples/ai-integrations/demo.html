@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>encrypt-rsa integration assistant</title>
+<style>body{font:17px system-ui;margin:60px auto;padding:0 24px;max-width:850px;color:#172437;background:#f4f7fb}h1{font-size:36px}label{display:inline-block;margin:12px 20px 12px 0}select,button{font:inherit;padding:10px}button{background:#174e91;color:white;border:0;border-radius:5px}pre{white-space:pre-wrap;background:#172437;color:#eef4ff;padding:24px;border-radius:8px}small{display:block;margin:15px 0}</style>
+<h1>Choose a safe starting point</h1>
+<p>Get an approved encrypt-rsa template for your integration. This local demo uses an AI SDK fixture model and sends nothing to an external provider.</p>
+<form id="form"><label>Runtime <select id="runtime"><option value="node">Node.js</option><option value="browser">Browser</option></select></label><label>Operation <select id="operation"><option value="encrypt-json">Encrypt JSON</option><option value="sign-message">Signed messages</option></select></label><button>Show template</button></form>
+<small>No keys, secrets, chat history, or free-form prompts are accepted.</small><p id="status" role="status"></p><pre id="code" hidden></pre><a id="guide" hidden>Read the integration guide</a><p id="notice"></p>
+<script type="module">
+document.querySelector('#form').addEventListener('submit', async event => {
+  event.preventDefault();
+  const status = document.querySelector('#status'); status.textContent = 'Selecting template…';
+  try {
+    const query = new URLSearchParams({runtime: document.querySelector('#runtime').value, operation: document.querySelector('#operation').value});
+    const response = await fetch('/recommendation?' + query);
+    if (!response.ok) throw new Error('Could not select a template');
+    const result = await response.json();
+    document.querySelector('#code').textContent = result.code; document.querySelector('#code').hidden = false;
+    document.querySelector('#guide').href = result.guide; document.querySelector('#guide').hidden = false;
+    document.querySelector('#notice').textContent = result.notice; status.textContent = result.templateId;
+  } catch (error) { status.textContent = error.message; }
+});
+</script></html>

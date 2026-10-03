@@ -102,87 +102,33 @@
 
 
 
-<h1>Node and browser compatibility</h1>
-<p>The package exposes the same Promise-based class and shared TypeScript interface in Node and browsers. Native ESM, CommonJS, browser bundlers, and the browser global build are covered by consumer smoke checks.</p>
-<table class="table table-bordered compodoc-table">
-<thead>
-<tr>
-<th>Feature</th>
-<th>Node</th>
-<th>Browser</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Generate RSA/SPKI + PKCS#8 keys</td>
-<td>Nonblocking <code>crypto.generateKeyPair</code></td>
-<td><code>crypto.subtle.generateKey</code></td>
-</tr>
-<tr>
-<td>Direct RSA-OAEP encryption</td>
-<td>SHA-1 default; SHA-256 opt-in</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>AES-256-GCM hybrid encryption</td>
-<td>Legacy default; v1 opt-in</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>RSA-PSS signatures</td>
-<td>SHA-256, 32-byte salt</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>JSON encryption</td>
-<td>Bounded v1 SHA-256 hybrid + schema parser</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>Signed messages</td>
-<td>Canonical claims, expiry, atomic replay callback</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>Strict RSA key helpers</td>
-<td>Async parsing; SPKI/PKCS#8</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>PEM formatting helpers</td>
-<td>Synchronous header/footer checks</td>
-<td>Same</td>
-</tr>
-<tr>
-<td>Buffer methods</td>
-<td>Accept <code>Uint8Array</code>/<code>Buffer</code>; return <code>Buffer</code></td>
-<td>Accept/return <code>Uint8Array</code></td>
-</tr>
-<tr>
-<td>Legacy private-key <code>encrypt</code> / public-key <code>decrypt</code></td>
-<td>Supported</td>
-<td>Rejected Promise</td>
-</tr>
-<tr>
-<td>Cryptographic operation keys</td>
-<td>Also accepts legacy PKCS#1</td>
-<td>SPKI/PKCS#8 only</td>
-</tr>
-<tr>
-<td>Missing-key failure</td>
-<td>Rejected Promise</td>
-<td>Rejected Promise</td>
-</tr>
-<tr>
-<td>Unicode including leading BOM</td>
-<td>Preserved</td>
-<td>Preserved</td>
-</tr>
-</tbody>
-</table>
-<p>Node 22 and 24 are the CI targets. Browser operations require a secure context and Web Crypto. Browser code has no Node crypto or Buffer dependency. Browser tests execute in Chromium; compatibility with every browser release is not implied.</p>
-<p>Both sides may use keys generated on either side. Direct encryption requires an agreed OAEP hash; hybrid v1 payloads identify their hash. Signatures use the same fixed RSA-PSS parameters in both builds. Constructor keys are defaults for operations; key generation returns keys without changing the instance.</p>
-<p>For Node CommonJS, use <code>require(&#39;encrypt-rsa&#39;).default</code>. For Node ESM and browser bundlers, use <code>import NodeRSA from &#39;encrypt-rsa&#39;</code>. The standalone browser script exposes <code>encryptRSA.NodeRSA</code> and convenience functions for key generation, direct/hybrid strings, signatures, and strict RSA validation.</p>
+<h1>Signed messages and replay prevention</h1>
+<p><code>signMessage</code> and <code>verifyMessage</code> wrap the existing RSA-PSS/SHA-256 signature API in a versioned envelope. They authenticate all claims and payload, enforce expected identity/time policy, and require an atomic nonce claim. They do not encrypt the payload or replace application authorization.</p>
+<h2>Contract</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const issuedAt = Date.now();
+const text = await rsa.signMessage({ privateKey: signingPrivateKey, message: {
+  purpose: &#39;agent-result&#39;, issuer: &#39;agent-a&#39;, audience: &#39;service-b&#39;, keyId: &#39;signing-2026&#39;,
+  issuedAt, expiresAt: issuedAt + 60000,
+  nonce: randomBytes(24).toString(&#39;base64url&#39;), payload: { answer: &#39;Hello&#39; }
+} });
+const result = await rsa.verifyMessage({ text,
+  expected: { issuer: &#39;agent-a&#39;, audience: &#39;service-b&#39;, purpose: &#39;agent-result&#39; },
+  resolvePublicKey: trustedKeyResolver,
+  consumeNonce: atomicReplayStore,
+  parse: validateAgentResult
+});</code></pre></div><p><code>randomBytes</code> above is from Node&#39;s <code>node:crypto</code>. In a browser use <code>crypto.getRandomValues</code> and encode the bytes as base64url. Generate at least 16 random bytes; do not use a model, timestamp, counter, or <code>Math.random</code> for nonces. Nonces must match <code>[A-Za-z0-9_-]{16,128}</code>. Format validation does not prove randomness.</p>
+<p>The exact eight claims are required; extra claims reject. Identity fields (<code>purpose</code>, <code>issuer</code>, <code>audience</code>, <code>keyId</code>) are nonempty, trimmed strings up to 256 UTF-16 units without control characters. Times are nonnegative safe integer UTC milliseconds, bounded to leave room for clock skew. <code>expiresAt</code> must be later than <code>issuedAt</code>, with a maximum 24-hour signing lifetime.</p>
+<p>The verifier defaults to a five-minute maximum lifetime and zero clock skew. <code>maxLifetimeMs</code> can range from 1 to 86,400,000; <code>clockSkewMs</code> from 0 to 60,000. Future issuance outside skew and expiry at or after <code>expiresAt + skew</code> reject. <code>now</code> defaults to <code>Date.now</code>; only supply an alternative trusted clock for tests or explicit clock policy. Time is checked again after asynchronous key resolution/schema validation and nonce storage. Errors never return a verified payload.</p>
+<p>Use separate signing and encryption key pairs. Resolve <code>(issuer, keyId)</code> against a trusted local configuration/KMS record; reject unknown/revoked IDs. Never fetch an arbitrary URL or accept a public key embedded by the sender. An application must authorize the expected issuer, audience, and purpose before verification. Per-call/constructor signing keys are supported; verification always requires the trusted resolver.</p>
+<h2>Atomic replay store</h2>
+<p><code>consumeNonce({ issuer, audience, purpose, nonce, validUntil })</code> must atomically reserve the tuple <code>(issuer, audience, purpose, nonce)</code> exactly once and return literal <code>true</code> for the winner. Retain it until the provided <code>validUntil</code> UTC timestamp (which includes clock skew). A false result, thrown error, or unavailable store fails closed. Namespace keys by application/environment as well. Excluding key ID preserves replay protection across signing-key rotation.</p>
+<p>Use a unique database insertion or Redis <code>SET ... NX PX</code> with a TTL computed from <code>validUntil</code>, an unambiguous tuple encoding, and trusted server time. Do not use a read-then-write sequence. Share the store between all verifiers and retain claims over restarts for the full validity window. TTL rounding must never delete early. The example&#39;s Map is atomic only inside one JavaScript process and is not production replay storage. A nonce may be consumed even if the final time check subsequently rejects; this deliberately fails closed.</p>
+<p>Schema parsers should be pure: they run after signature verification but before replay consumption, so concurrent/replayed requests can invoke them more than once. Execute tools or other side effects only after <code>verifyMessage</code> succeeds. For exactly-once business effects, use application transaction/idempotency rules; a nonce reservation alone does not guarantee delivery or transactional effects.</p>
+<h2>Wire format and trust boundaries</h2>
+<p>The returned string is canonical JSON with claims plus <code>version: 1</code>, <code>algorithm: &#39;RSA-PSS-SHA256&#39;</code>, and a base64 <code>signature</code>. The signature covers the UTF-8 string <code>encrypt-rsa:signed-message:v1\n</code> followed by the canonical body without the signature. RSA-PSS uses a 32-byte salt. Canonical property sorting uses UTF-16 order and JSON number/string encoding; the supported JSON subset follows RFC 8785 encoding but rejects negative zero. Unicode normalization is not performed.</p>
+<p>Receivers require the exact canonical string and reject reordered/whitespace-modified envelopes, duplicate/unknown keys, unsupported algorithms, malformed signatures, changed claims, and invalid payloads. Transport the string unchanged. Node/browser/global builds interoperate. See the JSON guide for byte/depth limits.</p>
+<p>A valid signature authenticates the key holder and signed content. It does not establish that an agent&#39;s claims are true, remove prompt injection, authorize a tool, hide data, or provide forward secrecy. Treat payloads as untrusted data and enforce schema, permissions, and operation-specific rules. Use HTTPS and application size/rate limits. Review this new protocol before adopting it for high-assurance interoperability.</p>
+<p>Run <code>npm --prefix examples/ai-integrations run messages</code> after building for a complete local signing, schema, trusted-key, and replay example.</p>
 
                    </div><div class="search-results">
     <div class="has-results">
@@ -210,7 +156,7 @@
        <script>
             var COMPODOC_CURRENT_PAGE_DEPTH = 1;
             var COMPODOC_CURRENT_PAGE_CONTEXT = 'additional-page';
-            var COMPODOC_CURRENT_PAGE_URL = 'compatibility.html';
+            var COMPODOC_CURRENT_PAGE_URL = 'signed-messages.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 

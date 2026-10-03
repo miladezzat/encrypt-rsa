@@ -3,6 +3,7 @@ const fs = require('fs');
 const http = require('http');
 const path = require('path');
 const esbuild = require('esbuild');
+const { randomBytes } = require('node:crypto');
 const { chromium } = require('playwright');
 const NodeRSA = require('../build/node/node/index.js').default;
 const withPackedConsumer = require('./packed-consumer');
@@ -50,7 +51,12 @@ withPackedConsumer(async (consumer) => {
     const node = new NodeRSA();
     const keys = await node.createPrivateAndPublicKeys();
     const text = '\uFEFFالعربية 😀\u0000';
+    const issuedAt = Date.now();
+    const claims = { issuer: 'agent-a', audience: 'web-app', purpose: 'result', keyId: 'key-1', issuedAt,
+      expiresAt: issuedAt + 300000, nonce: randomBytes(24).toString('base64url'), payload: { text } };
     const fixtures = {
+      claims, json: await node.encryptJSON({ value: { text }, publicKey: keys.publicKey }),
+      envelope: await node.signMessage({ message: claims, privateKey: keys.privateKey }),
       ...keys, text,
       legacy: await node.encryptLarge({ text, publicKey: keys.publicKey }),
       modern: await node.encryptLarge({ text, publicKey: keys.publicKey, oaepHash: 'sha256' }),
@@ -82,6 +88,20 @@ withPackedConsumer(async (consumer) => {
         }
         check(await rsa.decryptLarge({ text: f.legacy }) === f.text, 'Node legacy -> browser failed');
         check(await rsa.decryptLarge({ text: f.modern }) === f.text, 'Node SHA256 -> browser failed');
+        const jsonValue = await rsa.decryptJSON({ text: f.json });
+        check(jsonValue.text === f.text, 'Node JSON -> browser failed');
+        const json = await rsa.encryptJSON({ value: { text: f.text } });
+        check(await rsa.decryptJSON({ text: json, parse: value => value.text }) === f.text, 'browser JSON parser failed');
+        await reject(() => rsa.encryptJSON({ value: { loss: undefined } }));
+        await reject(() => rsa.decryptJSON({ text: json, limits: { maxPayloadBytes: 5 } }));
+        let used = false;
+        const verification = { text: f.envelope, expected: { issuer: 'agent-a', audience: 'web-app', purpose: 'result' },
+          resolvePublicKey: () => f.publicKey, consumeNonce: () => { if (used) return false; used = true; return true; },
+          parse: value => { if (value.text !== f.text) throw new Error('schema'); return { text: value.text }; } };
+        check((await rsa.verifyMessage(verification)).payload.text === f.text, 'Node message -> browser failed');
+        await reject(() => rsa.verifyMessage(verification));
+        await reject(() => rsa.verifyMessage({ ...verification, text: ' ' + f.envelope, consumeNonce: () => true }));
+        await reject(() => rsa.signMessage({ message: { ...f.claims, nonce: 'bad' } }));
         const empty = await rsa.encryptLarge({ text: '' });
         check(await rsa.decryptLarge({ text: empty }) === '', 'empty hybrid mismatch');
         const bytes = new Uint8Array([0, 127, 128, 255]);
@@ -96,7 +116,7 @@ withPackedConsumer(async (consumer) => {
         const malformed = f.legacy.split(':');
         malformed[2] = '';
         await reject(() => rsa.decryptLarge({ text: malformed.join(':') }));
-        for (const method of ['encryptStringWithRsaPublicKey', 'decryptStringWithRsaPrivateKey', 'encryptLarge', 'decryptLarge', 'sign', 'verify', 'encrypt', 'decrypt']) {
+        for (const method of ['encryptStringWithRsaPublicKey', 'decryptStringWithRsaPrivateKey', 'encryptLarge', 'decryptLarge', 'encryptJSON', 'decryptJSON', 'signMessage', 'verifyMessage', 'sign', 'verify', 'encrypt', 'decrypt']) {
           await reject(() => new RSA()[method]({ text: 'x', signature: 'x' }));
         }
         await reject(() => new RSA().encryptBufferWithRsaPublicKey(new Uint8Array()));
@@ -112,10 +132,16 @@ withPackedConsumer(async (consumer) => {
         const generatedRsa = new RSA(generated.publicKey, generated.privateKey);
         outputs.push({
           ...generated,
+          json: await generatedRsa.encryptJSON({ value: { text: f.text } }),
+          envelope: await generatedRsa.signMessage({ message: f.claims }),
           payload: await generatedRsa.encryptLarge({ text: f.text, oaepHash: 'sha256' }),
           signature: await generatedRsa.sign({ text: f.text }),
         });
         if (source === 'global') {
+          const globalJson = await mod.encryptJSON({ value: { text: f.text }, publicKey: f.publicKey });
+          check((await mod.decryptJSON({ text: globalJson, privateKey: f.privateKey })).text === f.text, 'global JSON failed');
+          const globalEnvelope = await mod.signMessage({ message: f.claims, privateKey: f.privateKey });
+          check((await mod.verifyMessage({ ...verification, text: globalEnvelope, consumeNonce: () => true })).payload.text === f.text, 'global signed messages failed');
           const signed = await mod.sign({ text: f.text, privateKey: f.privateKey });
           check(await mod.verify({ text: f.text, signature: signed, publicKey: f.publicKey }), 'global functions failed');
           const globalKeys = await mod.createPrivateAndPublicKeys();
@@ -131,6 +157,10 @@ withPackedConsumer(async (consumer) => {
       return outputs;
     }, fixtures);
     for (const output of outputs) {
+      assert.deepEqual(await node.decryptJSON({ text: output.json, privateKey: output.privateKey }), { text });
+      assert.deepEqual((await node.verifyMessage({ text: output.envelope,
+        expected: { issuer: 'agent-a', audience: 'web-app', purpose: 'result' },
+        resolvePublicKey: () => output.publicKey, consumeNonce: () => true })).payload, { text });
       assert.equal(await node.decryptLarge({ text: output.payload, privateKey: output.privateKey }), text);
       assert.equal(await node.verify({ text, signature: output.signature, publicKey: output.publicKey }), true);
     }

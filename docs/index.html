@@ -131,6 +131,18 @@ const decrypted = await rsa.decryptLarge({ text: encrypted, privateKey });</code
 <td>Yes</td>
 </tr>
 <tr>
+<td>Encrypt validated JSON</td>
+<td><code>encryptJSON</code> / <code>decryptJSON</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Sign scoped messages with replay protection</td>
+<td><code>signMessage</code> / <code>verifyMessage</code></td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
 <td>Sign and verify text</td>
 <td><code>sign</code> / <code>verify</code></td>
 <td>Yes</td>
@@ -200,6 +212,13 @@ const modern = await rsa.encryptLarge({ text: &#39;Long text&#39;, oaepHash: &#3
 // Algorithm is read from the payload; legacy payloads imply SHA-1.
 const plaintext = await rsa.decryptLarge({ text: modern });</code></pre></div><p>The default still emits <code>encryptedKey:iv:tag:ciphertext</code>. The v1 form adds a version and algorithm header, which is authenticated as AES-GCM additional data. Decryptors accept legacy and v1 payloads, enforce a 32-byte AES key, a 12-byte IV, and a 16-byte tag, and reject malformed or tampered values. Empty plaintext is supported.</p>
 <p>An explicitly supplied decryption <code>oaepHash</code> must match the payload&#39;s algorithm. <code>{ oaepHash: &#39;sha256&#39;, payloadVersion: &#39;legacy&#39; }</code> is rejected: legacy payloads cannot describe that algorithm. Older releases cannot read v1 payloads; upgrade readers before enabling v1 writers. See the <a href="additional-documentation/payload-format.html">payload specification</a> for encoding and rollout details.</p>
+<h2>JSON and AI integrations</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const text = await rsa.encryptJSON({ value: { note: &#39;Hello&#39; }, publicKey });
+const value = await rsa.decryptJSON({ text, privateKey }); // JsonValue, not an assumed schema</code></pre></div><p>JSON helpers use v1 hybrid SHA-256, reject lossy/non-JSON values, and bound UTF-8 bytes and nesting. Supply a synchronous or asynchronous <code>parse</code> callback to validate an application schema and infer its result type. Defaults are 1 MiB JSON, 2 MiB encoded input, and depth 128. See the <a href="additional-documentation/ai-integrations.html">JSON and AI guide</a> for supported values, limits, tenant-bound encrypted memory, key rotation, and full AI SDK conversation persistence.</p>
+<p>AI SDK is installed only in the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/README.md">private example app</a>. The core library stays dependency-free. The app includes offline fixture tests and a local docs assistant that selects validated templates without accepting secrets or executing generated code. Real provider calls are an explicit CLI opt-in. At-rest encryption does not hide plaintext sent to an AI provider.</p>
+<h2>Signed messages</h2>
+<p><code>signMessage</code> signs a canonical envelope containing <code>purpose</code>, <code>issuer</code>, <code>audience</code>, <code>keyId</code>, <code>issuedAt</code>, <code>expiresAt</code>, <code>nonce</code>, and a JSON <code>payload</code>. <code>verifyMessage</code> requires expected identities, a trusted key resolver, and an atomic nonce store; it checks signature, expiry, maximum lifetime, and replay before returning the payload. An optional schema parser validates the payload. Defaults allow a five-minute lifetime with zero clock skew. See the <a href="additional-documentation/signed-messages.html">complete contract and replay-store requirements</a> and <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/message-demo.mjs">runnable example</a>.</p>
+<p>Use separate signing/encryption keys. Signatures authenticate the signer and data; they do not establish truth, authorize tools, or prevent prompt injection.</p>
 <h2>Binary values</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const bytes = new Uint8Array([0, 127, 128, 255]);
 const encrypted = await rsa.encryptBufferWithRsaPublicKey(bytes);
@@ -258,6 +277,22 @@ const privateKeyIsValid = await isValidRSAPrivateKey(privateKey);</code></pre></
 <td><code>Uint8Array</code></td>
 </tr>
 <tr>
+<td><code>encryptJSON({ value, publicKey?, limits? })</code></td>
+<td>v1 SHA-256 hybrid payload</td>
+</tr>
+<tr>
+<td><code>decryptJSON({ text, privateKey?, limits?, parse? })</code></td>
+<td><code>JsonValue</code> or validated parser result</td>
+</tr>
+<tr>
+<td><code>signMessage({ message, privateKey?, limits? })</code></td>
+<td>Canonical signed JSON envelope</td>
+</tr>
+<tr>
+<td><code>verifyMessage({ text, expected, resolvePublicKey, consumeNonce, limits?, parse?, now?, clockSkewMs?, maxLifetimeMs? })</code></td>
+<td>Verified message claims with validated payload</td>
+</tr>
+<tr>
 <td><code>sign({ text, privateKey? })</code></td>
 <td>Base64 RSA-PSS signature</td>
 </tr>
@@ -275,8 +310,8 @@ const privateKeyIsValid = await isValidRSAPrivateKey(privateKey);</code></pre></
 </tr>
 </tbody>
 </table>
-<p>Named exports: <code>isValidRSAPublicKey</code>, <code>isValidRSAPrivateKey</code>, <code>isValidPEMPublicKey</code>, <code>isValidPEMPrivateKey</code>, <code>isValidPEMKey</code>, <code>splitIntoChunks</code>, <code>joinChunks</code>. Exported types include <code>INodeRSA</code>, <code>OaepHash</code>, <code>parametersOfEncrypt</code>, <code>parametersOfEncryptLarge</code>, <code>parametersOfDecrypt</code>, <code>parametersOfEncryptPrivate</code>, <code>parametersOfDecryptPublic</code>, <code>parametersOfSign</code>, <code>parametersOfVerify</code>, and <code>returnCreateKeys</code>.</p>
-<p>The standalone browser global exports <code>NodeRSA</code> (also <code>default</code>), <code>createPrivateAndPublicKeys</code>, direct string encryption/decryption, <code>encryptLarge</code>, <code>decryptLarge</code>, <code>sign</code>, <code>verify</code>, and the two strict RSA validation helpers. Use its class for buffer methods and constructor-key defaults.</p>
+<p>Named exports: <code>isValidRSAPublicKey</code>, <code>isValidRSAPrivateKey</code>, <code>isValidPEMPublicKey</code>, <code>isValidPEMPrivateKey</code>, <code>isValidPEMKey</code>, <code>splitIntoChunks</code>, <code>joinChunks</code>. Exported types include <code>INodeRSA</code>, <code>OaepHash</code>, <code>parametersOfEncrypt</code>, <code>parametersOfEncryptLarge</code>, <code>parametersOfDecrypt</code>, <code>parametersOfEncryptPrivate</code>, <code>parametersOfDecryptPublic</code>, <code>parametersOfSign</code>, <code>parametersOfVerify</code>, <code>returnCreateKeys</code>, <code>JsonValue</code>, <code>JsonLimits</code>, <code>JsonParser</code>, <code>MessageClaims</code>, <code>NonceClaim</code>, and the JSON/message parameter types.</p>
+<p>The standalone browser global exports <code>NodeRSA</code> (also <code>default</code>), <code>createPrivateAndPublicKeys</code>, direct string encryption/decryption, <code>encryptLarge</code>, <code>decryptLarge</code>, <code>encryptJSON</code>, <code>decryptJSON</code>, <code>signMessage</code>, <code>verifyMessage</code>, <code>sign</code>, <code>verify</code>, and the two strict RSA validation helpers. Use its class for buffer methods and constructor-key defaults.</p>
 <h2>Errors and operational boundaries</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-ts">await rsa.encryptLarge({ text: &#39;message&#39; }).catch((error) =&gt; {
   console.error(error.message);
@@ -318,22 +353,25 @@ const privateKeyIsValid = await isValidRSAPrivateKey(privateKey);</code></pre></
 </tr>
 </tbody>
 </table>
-<p>Protect private keys, authenticate public keys, and use HTTPS for network transport. Encryption alone does not authenticate the sender. This package does not manage keys, rotate them, provide forward secrecy, or prevent replay. Avoid logging private keys or decrypted secrets.</p>
+<p>Protect private keys, authenticate public keys, and use HTTPS for network transport. Encryption alone does not authenticate the sender. This package does not manage keys, rotate them, provide forward secrecy, or supply replay storage. <code>verifyMessage</code> enforces replay protection through the atomic store you provide. Avoid logging private keys or decrypted secrets.</p>
 <h2>Examples and development</h2>
 <b>Example :</b><div><pre class="line-numbers"><code class="language-bash">npm ci
 npm run build
 npm run lint
 npm test
+npm run test:release
 npm run smoke
 npm run smoke:install
 npx playwright install chromium
 npm run smoke:browser
 npm run docs
-npm run smoke:docs</code></pre></div><p><code>npm test</code> covers Node and Web Crypto implementations, both OAEP hashes, legacy/v1 interoperability, signatures, Unicode, binary values, errors, and authentication boundaries. <code>smoke:install</code> checks an installed tarball using CommonJS, native ESM, and TypeScript Node16 resolution. <code>smoke:browser</code> checks the installed browser build in Chromium through bundler resolution, native ESM, and the standalone global bundle. CI runs these checks on Node 22 and 24; the publish job runs them on Node 22 before publishing.</p>
+npm run smoke:docs
+npm --prefix examples/ai-integrations ci
+npm run test:ai</code></pre></div><p><code>npm test</code> covers Node and Web Crypto implementations, both OAEP hashes, legacy/v1 interoperability, signatures, JSON/schema limits, signed-message identity/time/replay boundaries, Unicode, binary values, errors, and authentication boundaries. <code>test:ai</code> type-checks and exercises the separate SDK recipes without external model calls. <code>test:release</code> checks registry/version failures and repeat-release behavior. <code>smoke:install</code> checks an installed tarball using CommonJS, native ESM, and TypeScript Node16 resolution. <code>smoke:browser</code> checks the installed browser build in Chromium through bundler resolution, native ESM, and the standalone global bundle. CI runs these checks on Node 22 and 24; the publish job runs them on Node 24 before publishing.</p>
 <p>Run the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/node-basic.js">Node example</a> with <code>node examples/node-basic.js</code>. Serve the repository using <code>python3 -m http.server 8080</code> and open <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/browser-basic.html">the browser example</a> at <code>http://localhost:8080/examples/browser-basic.html</code>. See <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/examples/README.md">examples</a>.</p>
 <p>Generated <a href="https://encrypt-rsa.js.org">API documentation</a> lives in <code>docs/</code>. <code>npm run docs</code> regenerates the class/interface documentation and the guides in <code>documentation/</code>; <code>npm run docs:serve</code> serves it at <code>http://localhost:3000</code>.</p>
 <h2>Release and contribution</h2>
-<p>Use conventional commits and run the validation commands above before opening a PR. <code>npm run changelog</code> updates the changelog; <code>npm run release -- --release-as minor</code> prepares a version bump and tag. The publish workflow on <code>master</code> uses the committed lockfile with <code>npm ci</code> and requires <code>NPM_TOKEN</code>. It publishes only when the package version exceeds the version on npm. New opt-in APIs can be released as a minor version; changing cryptographic defaults or requiring v1 payloads would require a compatibility-impacting release.</p>
+<p>Use conventional commits and run the validation commands above before opening a PR. <code>npm run changelog</code> updates the changelog; <code>npm run release -- --release-as minor</code> prepares a version bump and tag. The publish workflow on <code>master</code> uses the committed lockfile with <code>npm ci</code> and authenticates through <a href="https://docs.npmjs.com/trusted-publishers/">npm trusted publishing</a>, without <code>NPM_TOKEN</code>. It skips an unchanged version and rejects versions older than npm&#39;s latest stable version. New opt-in APIs can be released as a minor version; changing cryptographic defaults or requiring v1 payloads would require a compatibility-impacting release. See the <a href="additional-documentation/releasing.html">release setup and recovery guide</a>.</p>
 <p>Report reproducible issues through the <a href="https://github.com/miladezzat/encrypt-rsa/issues">issue tracker</a>, including your Node/browser version, import style, operation, and a non-sensitive sample. See the <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/CODE_OF_CONDUCT.md">code of conduct</a>. Licensed under <a href="https://github.com/miladezzat/encrypt-rsa/blob/master/LICENSE">MIT</a>.</p>
 
 

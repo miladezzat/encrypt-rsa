@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
-## Unreleased
+## [6.1.0](https://github.com/miladezzat/encrypt-rsa/compare/v6.0.0...v6.1.0) (2026-10-03)
 
 ### Fixes
 
@@ -10,8 +10,13 @@ All notable changes to this project will be documented in this file. See [standa
 - Provide native Node/browser ESM entries with matching conditional TypeScript declarations, preserving the CommonJS API.
 - Return rejected Promises consistently from browser wrappers and buffer methods.
 - Preserve leading Unicode BOM characters during text decryption.
+- Publish through npm trusted publishing instead of the rejected repository token, and skip publishing when the version is unchanged.
 
 ### Features
+
+- Add bounded JSON encryption/decryption with schema parsers and matching Node/browser/global APIs.
+- Add canonical signed messages with trusted identity/key resolution, expiry policy, and mandatory atomic replay protection.
+- Provide optional encrypted agent memory, full AI SDK persistence, and a validated docs assistant in a separate private example app; the core remains free of runtime dependencies.
 
 - Add opt-in RSA-OAEP/SHA-256 and self-describing v1 hybrid payloads with authenticated version/algorithm metadata. SHA-1 and legacy hybrid output remain defaults.
 - Add interoperable RSA-PSS/SHA-256 `sign` and `verify` with 32-byte salts.

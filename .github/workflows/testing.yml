@@ -29,9 +29,12 @@ jobs:
     - run: npm run lint
     - run: npm run build
     - run: npm test
+    - run: npm run test:release
     - run: npm run smoke
     - run: npm run smoke:install
+    - run: npm --prefix examples/ai-integrations ci
     - run: npx playwright install --with-deps chromium
     - run: npm run smoke:browser
     - run: npm run docs
     - run: npm run smoke:docs
+    - run: npm run test:ai

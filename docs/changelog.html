@@ -84,22 +84,35 @@
 
 <h1>Changelog</h1>
 <p>All notable changes to this project will be documented in this file. See <a href="https://github.com/conventional-changelog/standard-version">standard-version</a> for commit guidelines.</p>
-<h2>Unreleased</h2>
+<h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v6.0.0...v6.1.0">6.1.0</a> (2026-10-03)</h2>
 <h3>Fixes</h3>
 <ul>
 <li>Enforce hybrid AES-256 key, IV, and full authentication-tag lengths in both runtimes; reject truncated or repartitioned tags before decryption.</li>
 <li>Provide native Node/browser ESM entries with matching conditional TypeScript declarations, preserving the CommonJS API.</li>
 <li>Return rejected Promises consistently from browser wrappers and buffer methods.</li>
 <li>Preserve leading Unicode BOM characters during text decryption.</li>
+<li>Publish through npm trusted publishing instead of the rejected repository token, and skip publishing when the version is unchanged.</li>
 </ul>
 <h3>Features</h3>
 <ul>
-<li>Add opt-in RSA-OAEP/SHA-256 and self-describing v1 hybrid payloads with authenticated version/algorithm metadata. SHA-1 and legacy hybrid output remain defaults.</li>
-<li>Add interoperable RSA-PSS/SHA-256 <code>sign</code> and <code>verify</code> with 32-byte salts.</li>
-<li>Add asynchronous native RSA key-validation helpers; retain formatting-only PEM helpers.</li>
-<li>Generate Node RSA key pairs asynchronously to avoid blocking the event loop.</li>
-<li>Add complete contract regressions, installed CJS/ESM/TypeScript consumers, and Chromium checks for installed bundler/native/global entries.</li>
-<li>Expand documentation with API choices, payload specification, migration, key management boundaries, and runnable examples.</li>
+<li><p>Add bounded JSON encryption/decryption with schema parsers and matching Node/browser/global APIs.</p>
+</li>
+<li><p>Add canonical signed messages with trusted identity/key resolution, expiry policy, and mandatory atomic replay protection.</p>
+</li>
+<li><p>Provide optional encrypted agent memory, full AI SDK persistence, and a validated docs assistant in a separate private example app; the core remains free of runtime dependencies.</p>
+</li>
+<li><p>Add opt-in RSA-OAEP/SHA-256 and self-describing v1 hybrid payloads with authenticated version/algorithm metadata. SHA-1 and legacy hybrid output remain defaults.</p>
+</li>
+<li><p>Add interoperable RSA-PSS/SHA-256 <code>sign</code> and <code>verify</code> with 32-byte salts.</p>
+</li>
+<li><p>Add asynchronous native RSA key-validation helpers; retain formatting-only PEM helpers.</p>
+</li>
+<li><p>Generate Node RSA key pairs asynchronously to avoid blocking the event loop.</p>
+</li>
+<li><p>Add complete contract regressions, installed CJS/ESM/TypeScript consumers, and Chromium checks for installed bundler/native/global entries.</p>
+</li>
+<li><p>Expand documentation with API choices, payload specification, migration, key management boundaries, and runnable examples.</p>
+</li>
 </ul>
 <h3>Compatibility</h3>
 <ul>

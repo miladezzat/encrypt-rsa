@@ -1,5 +1,26 @@
 [
-  { "title": "Compatibility", "file": "compatibility.md" },
-  { "title": "Payload format", "file": "payload-format.md" },
-  { "title": "Migration", "file": "migration.md" }
+  {
+    "title": "Compatibility",
+    "file": "compatibility.md"
+  },
+  {
+    "title": "Payload format",
+    "file": "payload-format.md"
+  },
+  {
+    "title": "Migration",
+    "file": "migration.md"
+  },
+  {
+    "title": "Releasing",
+    "file": "releasing.md"
+  },
+  {
+    "title": "AI integrations",
+    "file": "ai-integrations.md"
+  },
+  {
+    "title": "Signed messages",
+    "file": "signed-messages.md"
+  }
 ]

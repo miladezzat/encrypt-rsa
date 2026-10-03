@@ -30,11 +30,11 @@ function walk(directory) {
 walk(root);
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert(index.includes('RSA-PSS') && index.includes('sha256'), 'README docs should describe new crypto APIs');
-for (const page of ['compatibility', 'payload-format', 'migration']) {
+for (const page of ['compatibility', 'payload-format', 'migration', 'releasing', 'ai-integrations', 'signed-messages']) {
   assert(fs.existsSync(path.join(root, 'additional-documentation', `${page}.html`)), `missing ${page} guide`);
 }
 const api = fs.readFileSync(path.join(root, 'classes/NodeRSA.html'), 'utf8');
-for (const method of ['sign', 'verify', 'encryptLarge', 'decryptLarge', 'createPrivateAndPublicKeys', 'encryptStringWithRsaPublicKey', 'decryptStringWithRsaPrivateKey', 'encryptBufferWithRsaPublicKey', 'decryptBufferWithRsaPrivateKey', 'encrypt', 'decrypt']) {
+for (const method of ['encryptJSON', 'decryptJSON', 'signMessage', 'verifyMessage', 'sign', 'verify', 'encryptLarge', 'decryptLarge', 'createPrivateAndPublicKeys', 'encryptStringWithRsaPublicKey', 'decryptStringWithRsaPrivateKey', 'encryptBufferWithRsaPublicKey', 'decryptBufferWithRsaPrivateKey', 'encrypt', 'decrypt']) {
   assert(api.includes(`name="${method}"`), `missing ${method} API docs`);
 }
 console.log(`Generated docs: ${checked} HTML pages, local links, public methods, and guides passed`);

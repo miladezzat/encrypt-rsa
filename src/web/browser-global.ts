@@ -6,6 +6,13 @@ import type {
   parametersOfSign,
   parametersOfVerify,
   returnCreateKeys,
+  JsonValue,
+  JsonParser,
+  MessageClaims,
+  parametersOfEncryptJSON,
+  parametersOfDecryptJSON,
+  parametersOfSignMessage,
+  parametersOfVerifyMessage,
 } from '../shared/types';
 
 const defaultInstance = new NodeRSA();
@@ -40,4 +47,26 @@ export function sign(args: parametersOfSign): Promise<string> {
 
 export function verify(args: parametersOfVerify): Promise<boolean> {
   return defaultInstance.verify(args);
+}
+
+export function encryptJSON(args: parametersOfEncryptJSON): Promise<string> {
+  return defaultInstance.encryptJSON(args);
+}
+
+export function decryptJSON<T>(args: parametersOfDecryptJSON<T> & { parse: JsonParser<T> }): Promise<T>;
+export function decryptJSON(args: parametersOfDecryptJSON): Promise<JsonValue>;
+export async function decryptJSON<T = JsonValue>(args: parametersOfDecryptJSON<T>): Promise<JsonValue | T> {
+  if (args.parse) return defaultInstance.decryptJSON({ ...args, parse: args.parse });
+  return defaultInstance.decryptJSON({ text: args.text, privateKey: args.privateKey, limits: args.limits });
+}
+
+export function signMessage(args: parametersOfSignMessage): Promise<string> {
+  return defaultInstance.signMessage(args);
+}
+
+export function verifyMessage<T>(args: parametersOfVerifyMessage<T> & { parse: JsonParser<T> }): Promise<MessageClaims<T>>;
+export function verifyMessage(args: parametersOfVerifyMessage): Promise<MessageClaims>;
+export async function verifyMessage<T = JsonValue>(args: parametersOfVerifyMessage<T>): Promise<MessageClaims<JsonValue | T>> {
+  if (args.parse) return defaultInstance.verifyMessage({ ...args, parse: args.parse });
+  return defaultInstance.verifyMessage({ ...args, parse: undefined });
 }
