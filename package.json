@@ -49,19 +49,20 @@
     "build:web": "tsc -p tsconfig.web.json",
     "build:browser": "node scripts/build-browser.js",
     "build:test": "tsc -p tsconfig.test.json",
-    "docs:serve": "python3 -m http.server 3000 --directory docs",
+    "docs:serve": "vitepress dev documentation --port 3000",
     "prepublishOnly": "npm run build",
     "husky": "husky",
     "lint": "eslint src tests --ext .ts",
-    "docs": "compodoc --silent -p tsconfig.doc.json -d docs --includes documentation --includesName Guides && node scripts/clean-docs.js",
+    "docs": "node scripts/build-docs.js",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release": "standard-version",
     "smoke:browser": "node tests/browser-smoke.js && node tests/ai-browser-smoke.js",
     "smoke:docs": "node tests/docs-smoke.js",
-    "test:ai": "npm --prefix examples/ai-integrations run typecheck && npm --prefix examples/ai-integrations test && npm --prefix examples/ai-integrations run memory && npm --prefix examples/ai-integrations run messages && npm --prefix examples/ai-integrations run assistant"
+    "test:ai": "npm --prefix examples/ai-integrations run typecheck && npm --prefix examples/ai-integrations test && npm --prefix examples/ai-integrations run memory && npm --prefix examples/ai-integrations run messages && npm --prefix examples/ai-integrations run assistant",
+    "docs:preview": "vitepress preview documentation --port 3000",
+    "smoke:docs:browser": "node tests/docs-browser-smoke.js"
   },
   "devDependencies": {
-    "@compodoc/compodoc": "1.1.26",
     "@types/chai": "^4.3.20",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.19.0",
@@ -77,29 +78,21 @@
     "mocha": "^10.0.0",
     "playwright": "^1.63.0",
     "standard-version": "^9.5.0",
-    "typescript": "^4.9.5"
+    "typescript": "^4.9.5",
+    "vitepress": "1.6.4"
   },
   "overrides": {
-    "@angular-devkit/core": {
-      "ajv": "^8.20.0",
-      "picomatch": "^4.0.4"
-    },
-    "@compodoc/compodoc": {
-      "@babel/core": "^7.29.7",
-      "uuid": "11.1.1"
-    },
-    "@compodoc/live-server": {
-      "http-auth": "4.2.1"
-    },
-    "http-auth": {
-      "uuid": "11.1.1"
-    },
     "minimatch@3": {
-      "brace-expansion": "^1.1.15"
+      "brace-expansion": "^1.1.21"
     },
     "mocha": {
       "serialize-javascript": "^7.0.6"
-    }
+    },
+    "vitepress": {
+      "vite": "6.4.3"
+    },
+    "brace-expansion@2": "^2.1.7",
+    "js-yaml@4": "^4.3.2"
   },
   "keywords": [
     "algorithm",

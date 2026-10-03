@@ -19,9 +19,9 @@ The package's `repository` URL must match the GitHub repository. If a protected 
 
 ## Release behavior
 
-Prepare a stable `major.minor.patch` version in `package.json` and the lockfile, update the changelog/docs, and open a reviewed PR. The registry guard fetches npm's `latest` version without authentication. An unchanged version skips publishing, an older local version fails, and a newer version runs all package/browser/docs and AI example checks before `npm publish --access public`. HTTP errors, malformed registry data, and network failures stop the release instead of assuming the package is unpublished. Prerelease versions require a separate release policy.
+Prepare a stable `major.minor.patch` version in `package.json` and the lockfile, update the changelog/docs, and open a reviewed PR. The registry guard fetches npm's `latest` version without authentication. An unchanged version skips publishing and verifies the exact existing release, an older local version fails, and a newer version runs all package/browser/docs and AI example checks before `npm publish --access public`. HTTP errors, malformed registry data, and network failures stop the release instead of assuming the package is unpublished. Prerelease versions require a separate release policy.
 
-Merging the PR starts the release. A successful publish is followed by an exact-version registry readback including integrity. OIDC automatically creates provenance for supported public GitHub repositories. An npm version is immutable: later fixes need a new version. Local tests and dry runs do not verify an actual registry publish.
+Merging the PR starts the release. After npm accepts a publish, it may spend several minutes processing the package before public reads succeed. The workflow polls the exact-version endpoint for up to ten minutes and verifies version/name/integrity, retrying temporary 404, rate-limit/server, and network failures. Permanent authentication errors or invalid metadata fail immediately. Verification never republishes. OIDC automatically creates provenance for supported public GitHub repositories. An npm version is immutable: later fixes need a new version. Local tests and dry runs do not verify an actual registry publish.
 
 ## Recover a failed run
 

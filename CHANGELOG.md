@@ -2,6 +2,11 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## Unreleased
+
+- Replace the documentation site with VitePress, complete API pages, local search, and mobile navigation while preserving legacy links.
+- Wait for npm registry processing after a successful upload; verify already published versions without republishing them.
+
 ## [6.1.0](https://github.com/miladezzat/encrypt-rsa/compare/v6.0.0...v6.1.0) (2026-10-03)
 
 ### Fixes
@@ -69,7 +74,7 @@ encryptBufferWithRsaPublicKey, decryptBufferWithRsaPrivateKey.
 * Entry points are now build/node and build/web (conditional
 exports). The old single build/index.js is no longer published.
 * decryptBufferWithRsaPrivateKey return type is now
-Promise<Uint8Array> (was Buffer). In Node the runtime value is still Buffer.
+`Promise<Uint8Array>` (was Buffer). In Node the runtime value is still Buffer.
 
 - Add src/node (Node crypto, RSA-OAEP) and src/web (Web Crypto API)
 - Add src/shared (types, helpers without Node/Buffer) for both builds
@@ -80,8 +85,6 @@ Promise<Uint8Array> (was Buffer). In Node the runtime value is still Buffer.
 - Docs: tsconfig.doc.json, FEATURE_PARITY.md, README/CHANGELOG updates
 - Changelog: conventional-changelog-cli script, .versionrc.json
 - CI: publish workflow runs on push to master (install, test, build, publish)
-
-Co-authored-by: Cursor <cursoragent@cursor.com>
 
 ### Features
 

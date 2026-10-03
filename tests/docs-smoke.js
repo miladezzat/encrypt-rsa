@@ -1,7 +1,8 @@
-const assert = require('assert');
-const fs = require('fs');
-const path = require('path');
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
 const root = path.resolve(__dirname, '../docs');
+const { default: NodeRSA, ...helpers } = require('../build/node/node');
 let checked = 0;
 
 function walk(directory) {
@@ -11,16 +12,16 @@ function walk(directory) {
     else if (entry.name.endsWith('.html')) {
       const html = fs.readFileSync(file, 'utf8');
       for (const match of html.matchAll(/(?:href|src)="([^"]+)"/g)) {
-        const href = match[1];
-        if (/^(?:https?:|mailto:|data:|javascript:|#|\/\/)/.test(href)) continue;
-        const target = href.split(/[?#]/)[0];
-        if (!target || target.includes('{{')) continue;
-        const resolved = path.resolve(path.dirname(file), target);
+        const href = match[1].replace(/&amp;/g, '&');
+        if (/^(?:https?:|mailto:|data:|javascript:|\/\/)/.test(href)) continue;
+        const url = new URL(href, `https://docs.test/${path.relative(root, file).split(path.sep).join('/')}`);
+        let resolved = path.join(root, decodeURIComponent(url.pathname));
+        if (fs.existsSync(resolved) && fs.statSync(resolved).isDirectory()) resolved = path.join(resolved, 'index.html');
         assert(fs.existsSync(resolved), `${path.relative(root, file)} has a broken link: ${href}`);
-        const anchor = href.includes('#') ? href.split('#')[1] : '';
+        const anchor = decodeURIComponent(url.hash.slice(1));
         if (anchor && resolved.endsWith('.html')) {
           const contents = fs.readFileSync(resolved, 'utf8');
-          assert(contents.includes(`id="${anchor}"`) || contents.includes(`name="${anchor}"`), `broken anchor: ${href}`);
+          assert(contents.includes(`id="${anchor}"`) || contents.includes(`name="${anchor}"`), `broken anchor in ${path.relative(root, file)}: ${href}`);
         }
       }
       checked++;
@@ -28,13 +29,25 @@ function walk(directory) {
   }
 }
 walk(root);
+assert.equal(fs.readFileSync(path.join(root, 'CNAME'), 'utf8').trim(), 'encrypt-rsa.js.org');
+assert(fs.existsSync(path.join(root, '.nojekyll')), 'GitHub Pages must preserve VitePress assets');
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
-assert(index.includes('RSA-PSS') && index.includes('sha256'), 'README docs should describe new crypto APIs');
+assert(index.includes('encryptJSON') && index.includes('RSA-OAEP/SHA-256'), 'home page should include the current quick start');
+assert(!index.includes('compodoc'), 'the previous theme must be replaced');
+for (const page of ['getting-started', 'compatibility', 'payload-format', 'migration', 'releasing', 'ai-integrations', 'signed-messages', 'examples', 'contributing', 'changelog', 'license', 'api/reference', 'api/helpers', 'api/types', '404']) {
+  assert(fs.existsSync(path.join(root, `${page}.html`)), `missing ${page} page`);
+}
+const api = fs.readFileSync(path.join(root, 'api/reference.html'), 'utf8');
+for (const method of Object.getOwnPropertyNames(NodeRSA.prototype).filter(name => name !== 'constructor')) {
+  assert(api.includes(`id="${method.toLowerCase()}"`), `missing ${method} API docs`);
+}
+const helperDocs = fs.readFileSync(path.join(root, 'api/helpers.html'), 'utf8');
+for (const name of Object.keys(helpers)) {
+  assert(helperDocs.includes(`id="${name.toLowerCase()}"`), `missing ${name} helper docs`);
+}
+assert(fs.readFileSync(path.join(root, 'api/types.html'), 'utf8').includes('INodeRSA'), 'shared source contracts must be rendered');
 for (const page of ['compatibility', 'payload-format', 'migration', 'releasing', 'ai-integrations', 'signed-messages']) {
-  assert(fs.existsSync(path.join(root, 'additional-documentation', `${page}.html`)), `missing ${page} guide`);
+  const redirect = fs.readFileSync(path.join(root, 'additional-documentation', `${page}.html`), 'utf8');
+  assert(redirect.includes(`url=/${page}.html`), `missing legacy ${page} redirect`);
 }
-const api = fs.readFileSync(path.join(root, 'classes/NodeRSA.html'), 'utf8');
-for (const method of ['encryptJSON', 'decryptJSON', 'signMessage', 'verifyMessage', 'sign', 'verify', 'encryptLarge', 'decryptLarge', 'createPrivateAndPublicKeys', 'encryptStringWithRsaPublicKey', 'decryptStringWithRsaPrivateKey', 'encryptBufferWithRsaPublicKey', 'decryptBufferWithRsaPrivateKey', 'encrypt', 'decrypt']) {
-  assert(api.includes(`name="${method}"`), `missing ${method} API docs`);
-}
-console.log(`Generated docs: ${checked} HTML pages, local links, public methods, and guides passed`);
+console.log(`VitePress: ${checked} HTML pages, local links/assets/anchors, public APIs, and legacy redirects passed`);
