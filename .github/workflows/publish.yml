@@ -79,7 +79,7 @@ jobs:
         run: npm run smoke:browser
 
       - name: Generate and validate docs
-        run: npm run docs && npm run smoke:docs
+        run: npm run docs && npm run smoke:docs && npm run smoke:docs:browser
 
       - name: Validate optional AI examples
         run: npm run test:ai
@@ -88,4 +88,16 @@ jobs:
         run: npm publish --access public
 
       - name: Verify published version
+        run: node scripts/verify-release.js
+
+  verify-existing-release:
+    needs: check-release
+    if: needs.check-release.outputs.publish == 'false'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify existing npm version
         run: node scripts/verify-release.js

@@ -246,7 +246,7 @@ npm run test:ai
 
 Run the [Node example](examples/node-basic.js) with `node examples/node-basic.js`. Serve the repository using `python3 -m http.server 8080` and open [the browser example](examples/browser-basic.html) at `http://localhost:8080/examples/browser-basic.html`. See [examples](examples/README.md).
 
-Generated [API documentation](https://encrypt-rsa.js.org) lives in `docs/`. `npm run docs` regenerates the class/interface documentation and the guides in `documentation/`; `npm run docs:serve` serves it at `http://localhost:3000`.
+The [documentation site](https://encrypt-rsa.js.org) uses VitePress with local search, dark mode, API references, and integration guides. Edit Markdown and theme files in `documentation/`; `npm run docs:serve` previews changes at `http://localhost:3000`. Run `npm run docs`, `npm run smoke:docs`, and `npm run smoke:docs:browser` before committing regenerated `docs/` for GitHub Pages. See the [docs contribution guide](documentation/contributing.md).
 
 ## Release and contribution
 

@@ -105,3 +105,7 @@ dist
 
 build
 dist
+
+# VitePress working files
+documentation/.vitepress/cache/
+documentation/.vitepress/.temp/
