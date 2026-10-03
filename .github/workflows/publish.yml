@@ -88,4 +88,4 @@ jobs:
         run: npm publish --access public
 
       - name: Verify published version
-        run: npm view "$(node -p 'const p = require("./package.json"); `${p.name}@${p.version}`')" version dist.integrity
+        run: node scripts/verify-release.js
