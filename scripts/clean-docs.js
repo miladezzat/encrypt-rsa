@@ -23,7 +23,26 @@ function walk(directory) {
     }
 
     const original = fs.readFileSync(fullPath, 'utf8');
-    const cleaned = original.replace(trackingBlockPattern, '');
+    const cleaned = original.replace(trackingBlockPattern, '').replace(/href="([^"#]+)"/g, (match, href) => {
+      const guides = {
+        'documentation/compatibility.md': 'compatibility.html',
+        'documentation/payload-format.md': 'payload-format.html',
+        'documentation/migration.md': 'migration.html',
+      };
+      const alias = href.match(/(?:^|\/)undefineds\/([^/]+)\.html$/);
+      if (alias) {
+        const target = path.join(docs, 'miscellaneous/typealiases.html');
+        return `href="${path.relative(path.dirname(fullPath), target).split(path.sep).join('/')}#${alias[1]}"`;
+      }
+      if (guides[href]) {
+        const target = path.join(docs, 'additional-documentation', guides[href]);
+        return `href="${path.relative(path.dirname(fullPath), target).split(path.sep).join('/')}"`;
+      }
+      if (href.startsWith('examples/') || href === 'LICENSE' || href === 'CODE_OF_CONDUCT.md') {
+        return `href="https://github.com/miladezzat/encrypt-rsa/blob/master/${href}"`;
+      }
+      return match;
+    }).replace(/[ \t]+$/gm, '');
     if (cleaned !== original) {
       fs.writeFileSync(fullPath, cleaned);
     }

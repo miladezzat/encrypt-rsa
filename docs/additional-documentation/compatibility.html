@@ -7,9 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
           <script>
@@ -64,7 +64,7 @@
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
-                    <a href="./" class="navbar-brand">encrypt-rsa documentation</a>
+                    <a href="../" class="navbar-brand">encrypt-rsa documentation</a>
                     <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
                </div>
         </div>
@@ -79,36 +79,10 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content overview">
+               <div class="content additional-page">
                    <div class="content-data">
 
 
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">Overview</li>
-</ol>
-
-<div class="tab-content overview">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-ios-paper"></span></h4>
-                    <p class="card-text">1 Class</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-md-information-circle-outline"></span></h4>
-                    <p class="card-text">1 Interface</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="js/libs/svg-pan-zoom.min.js"></script>
-<script src="js/svg-pan-zoom.controls.js"></script>
 
 
 
@@ -126,6 +100,79 @@
 
 
 
+
+
+<h1>Node and browser compatibility</h1>
+<p>The package exposes the same Promise-based class and shared TypeScript interface in Node and browsers. Native ESM, CommonJS, browser bundlers, and the browser global build are covered by consumer smoke checks.</p>
+<table class="table table-bordered compodoc-table">
+<thead>
+<tr>
+<th>Feature</th>
+<th>Node</th>
+<th>Browser</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Generate RSA/SPKI + PKCS#8 keys</td>
+<td>Nonblocking <code>crypto.generateKeyPair</code></td>
+<td><code>crypto.subtle.generateKey</code></td>
+</tr>
+<tr>
+<td>Direct RSA-OAEP encryption</td>
+<td>SHA-1 default; SHA-256 opt-in</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>AES-256-GCM hybrid encryption</td>
+<td>Legacy default; v1 opt-in</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>RSA-PSS signatures</td>
+<td>SHA-256, 32-byte salt</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Strict RSA key helpers</td>
+<td>Async parsing; SPKI/PKCS#8</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>PEM formatting helpers</td>
+<td>Synchronous header/footer checks</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Buffer methods</td>
+<td>Accept <code>Uint8Array</code>/<code>Buffer</code>; return <code>Buffer</code></td>
+<td>Accept/return <code>Uint8Array</code></td>
+</tr>
+<tr>
+<td>Legacy private-key <code>encrypt</code> / public-key <code>decrypt</code></td>
+<td>Supported</td>
+<td>Rejected Promise</td>
+</tr>
+<tr>
+<td>Cryptographic operation keys</td>
+<td>Also accepts legacy PKCS#1</td>
+<td>SPKI/PKCS#8 only</td>
+</tr>
+<tr>
+<td>Missing-key failure</td>
+<td>Rejected Promise</td>
+<td>Rejected Promise</td>
+</tr>
+<tr>
+<td>Unicode including leading BOM</td>
+<td>Preserved</td>
+<td>Preserved</td>
+</tr>
+</tbody>
+</table>
+<p>Node 22 and 24 are the CI targets. Browser operations require a secure context and Web Crypto. Browser code has no Node crypto or Buffer dependency. Browser tests execute in Chromium; compatibility with every browser release is not implied.</p>
+<p>Both sides may use keys generated on either side. Direct encryption requires an agreed OAEP hash; hybrid v1 payloads identify their hash. Signatures use the same fixed RSA-PSS parameters in both builds. Constructor keys are defaults for operations; key generation returns keys without changing the instance.</p>
+<p>For Node CommonJS, use <code>require(&#39;encrypt-rsa&#39;).default</code>. For Node ESM and browser bundlers, use <code>import NodeRSA from &#39;encrypt-rsa&#39;</code>. The standalone browser script exposes <code>encryptRSA.NodeRSA</code> and convenience functions for key generation, direct/hybrid strings, signatures, and strict RSA validation.</p>
 
                    </div><div class="search-results">
     <div class="has-results">
@@ -151,9 +198,9 @@
           </label>
 
        <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'overview';
-            var COMPODOC_CURRENT_PAGE_URL = 'overview.html';
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'additional-page';
+            var COMPODOC_CURRENT_PAGE_URL = 'compatibility.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
@@ -170,30 +217,30 @@
                }
           </script>
 
-       <script src="./js/libs/custom-elements.min.js"></script>
-       <script src="./js/libs/lit-html.js"></script>
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
 
-       <script src="./js/menu-wc.js" defer></script>
-       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
-       <script src="./js/libs/bootstrap-native.js"></script>
+       <script src="../js/libs/bootstrap-native.js"></script>
 
-       <script src="./js/libs/es6-shim.min.js"></script>
-       <script src="./js/libs/EventDispatcher.js"></script>
-       <script src="./js/libs/promise.min.js"></script>
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
 
-       <script src="./js/compodoc.js"></script>
+       <script src="../js/compodoc.js"></script>
 
-       <script src="./js/tabs.js"></script>
-       <script src="./js/menu.js"></script>
-       <script src="./js/libs/clipboard.min.js"></script>
-       <script src="./js/libs/prism.js"></script>
-       <script src="./js/sourceCode.js"></script>
-          <script src="./js/search/search.js"></script>
-          <script src="./js/search/lunr.min.js"></script>
-          <script src="./js/search/search-lunr.js"></script>
-          <script src="./js/search/search_index.js"></script>
-       <script src="./js/lazy-load-graphs.js"></script>
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
 
 
     </body>

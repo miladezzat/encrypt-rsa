@@ -84,6 +84,29 @@
 
 <h1>Changelog</h1>
 <p>All notable changes to this project will be documented in this file. See <a href="https://github.com/conventional-changelog/standard-version">standard-version</a> for commit guidelines.</p>
+<h2>Unreleased</h2>
+<h3>Fixes</h3>
+<ul>
+<li>Enforce hybrid AES-256 key, IV, and full authentication-tag lengths in both runtimes; reject truncated or repartitioned tags before decryption.</li>
+<li>Provide native Node/browser ESM entries with matching conditional TypeScript declarations, preserving the CommonJS API.</li>
+<li>Return rejected Promises consistently from browser wrappers and buffer methods.</li>
+<li>Preserve leading Unicode BOM characters during text decryption.</li>
+</ul>
+<h3>Features</h3>
+<ul>
+<li>Add opt-in RSA-OAEP/SHA-256 and self-describing v1 hybrid payloads with authenticated version/algorithm metadata. SHA-1 and legacy hybrid output remain defaults.</li>
+<li>Add interoperable RSA-PSS/SHA-256 <code>sign</code> and <code>verify</code> with 32-byte salts.</li>
+<li>Add asynchronous native RSA key-validation helpers; retain formatting-only PEM helpers.</li>
+<li>Generate Node RSA key pairs asynchronously to avoid blocking the event loop.</li>
+<li>Add complete contract regressions, installed CJS/ESM/TypeScript consumers, and Chromium checks for installed bundler/native/global entries.</li>
+<li>Expand documentation with API choices, payload specification, migration, key management boundaries, and runnable examples.</li>
+</ul>
+<h3>Compatibility</h3>
+<ul>
+<li>Upgrade readers before emitting v1 payloads; older releases cannot read the new format.</li>
+<li>Hybrid payloads require the generated IV12/tag16/AES-key32 format. Legacy whitespace/unpadded standard base64 remains accepted; invalid punctuation/base64url is rejected.</li>
+<li>RSA-PSS signatures are a new format and do not replace legacy private-key ciphertext interchangeably.</li>
+</ul>
 <h2><a href="https://github.com/miladezzat/encrypt-rsa/compare/v5.0.1...v6.0.0">6.0.0</a> (2026-06-28)</h2>
 <h3>⚠ BREAKING CHANGES</h3>
 <ul>

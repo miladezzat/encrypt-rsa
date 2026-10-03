@@ -1,183 +1,135 @@
-/**
- * Node-specific crypto implementation using Node's crypto module and Buffer.
- * Uses RSA-OAEP with SHA-1 for cross-compatibility with Web Crypto.
- */
+/** Node crypto implementation. SHA-1 remains the default for existing ciphertext. */
 import * as crypto from 'crypto';
-import { decode } from '../shared/helpers';
+import { decode, hasPEMEnvelope } from '../shared/helpers';
+import {
+  resolveOaepHash, hybridOptions, serializeHybrid, parseHybrid, requireAes256Key, strictBase64,
+} from '../shared/hybrid';
 import type {
-  parametersOfDecrypt,
-  parametersOfDecryptPublic,
-  parametersOfEncrypt,
-  parametersOfEncryptPrivate,
-  returnCreateKeys,
+  parametersOfDecrypt, parametersOfDecryptPublic, parametersOfEncrypt, parametersOfEncryptLarge,
+  parametersOfEncryptPrivate, parametersOfSign, parametersOfVerify, returnCreateKeys, OaepHash,
 } from '../shared/types';
 
-const OAEP_OPTIONS = {
-  padding: crypto.constants.RSA_PKCS1_OAEP_PADDING,
-  oaepHash: 'sha1' as const,
-};
+function oaepOptions(hash?: OaepHash) {
+  return { padding: crypto.constants.RSA_PKCS1_OAEP_PADDING, oaepHash: resolveOaepHash(hash) };
+}
+
+function publicKeyFrom(encoded: string): crypto.KeyObject {
+  try {
+    const key = crypto.createPublicKey(decode(encoded));
+    if (key.asymmetricKeyType !== 'rsa') throw new Error('Expected RSA');
+    return key;
+  } catch (_) {
+    throw new Error('Invalid public key format. Expected an RSA public key in PEM format.');
+  }
+}
+
+function privateKeyFrom(encoded: string): crypto.KeyObject {
+  try {
+    const key = crypto.createPrivateKey(decode(encoded));
+    if (key.asymmetricKeyType !== 'rsa') throw new Error('Expected RSA');
+    return key;
+  } catch (_) {
+    throw new Error('Invalid private key format. Expected an RSA private key in PEM format.');
+  }
+}
 
 export function encryptStringWithRsaPublicKey(args: parametersOfEncrypt): string {
-  const { text, publicKey } = args;
-  try {
-    const publicKeyDecoded: string = decode(publicKey as string);
-    const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = crypto.publicEncrypt(
-      { key: publicKeyDecoded, ...OAEP_OPTIONS },
-      buffer as unknown as Uint8Array,
-    );
-    return encrypted.toString('base64');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
-    }
-    if (errorMsg.includes('too long')) {
-      throw new Error('Data too large to encrypt. RSA-OAEP/SHA-1 can encrypt up to 214 bytes with 2048-bit keys. Use encryptLarge for larger data.');
-    }
-    throw error;
-  }
+  const key = publicKeyFrom(args.publicKey as string);
+  return crypto.publicEncrypt({ key, ...oaepOptions(args.oaepHash) }, Buffer.from(args.text)).toString('base64');
 }
 
 export function decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): string {
-  const { text, privateKey } = args;
-  try {
-    const privateKeyDecoded: string = decode(privateKey as string);
-    const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = crypto.privateDecrypt(
-      { key: privateKeyDecoded, ...OAEP_OPTIONS },
-      buffer as unknown as Uint8Array,
-    );
-    return decrypted.toString('utf8');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
-    }
-    if (errorMsg.includes('decrypt') || errorMsg.includes('padding')) {
-      throw new Error('Decryption failed. Ensure you are using the correct private key that matches the public key used for encryption.');
-    }
-    throw error;
-  }
+  const key = privateKeyFrom(args.privateKey as string);
+  return crypto.privateDecrypt({ key, ...oaepOptions(args.oaepHash) }, Buffer.from(args.text, 'base64')).toString('utf8');
 }
 
-/**
- * Hybrid encryption: encrypts arbitrary-length text by encrypting it with a
- * one-time AES-256-GCM key, then wrapping that AES key with RSA-OAEP (SHA-1).
- * This removes the RSA size limit that causes ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE.
- *
- * Output is a single base64 string: `encKey:iv:tag:ciphertext`.
- */
-export function encryptLarge(args: parametersOfEncrypt): string {
-  const { text, publicKey } = args;
-  try {
-    const publicKeyDecoded: string = decode(publicKey as string);
-
-    const aesKey: Buffer = crypto.randomBytes(32);
-    const iv: Buffer = crypto.randomBytes(12);
-    const cipher = crypto.createCipheriv('aes-256-gcm', aesKey as unknown as Uint8Array, iv as unknown as Uint8Array);
-    const ciphertext: Buffer = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
-    const tag: Buffer = cipher.getAuthTag();
-
-    const encryptedKey: Buffer = crypto.publicEncrypt(
-      { key: publicKeyDecoded, ...OAEP_OPTIONS },
-      aesKey as unknown as Uint8Array,
-    );
-
-    return [encryptedKey, iv, tag, ciphertext]
-      .map((b) => b.toString('base64'))
-      .join(':');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
-    }
-    throw error;
-  }
+/** Legacy by default; opt into v1 for an authenticated algorithm header. */
+export function encryptLarge(args: parametersOfEncryptLarge): string {
+  const key = publicKeyFrom(args.publicKey as string);
+  const { hash, header } = hybridOptions(args);
+  const aesKey = crypto.randomBytes(32);
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', aesKey, iv, { authTagLength: 16 });
+  if (header) cipher.setAAD(Buffer.from(header, 'utf8'));
+  const ciphertext = Buffer.concat([cipher.update(args.text, 'utf8'), cipher.final()]);
+  const encryptedKey = crypto.publicEncrypt({ key, ...oaepOptions(hash) }, aesKey);
+  return serializeHybrid(header, [encryptedKey, iv, cipher.getAuthTag(), ciphertext]);
 }
 
-/**
- * Decrypts a value produced by encryptLarge: unwraps the AES key with the RSA
- * private key, then decrypts the ciphertext with AES-256-GCM.
- */
 export function decryptLarge(args: parametersOfDecrypt): string {
-  const { text, privateKey } = args;
+  const payload = parseHybrid(args.text, args.oaepHash);
+  const key = privateKeyFrom(args.privateKey as string);
   try {
-    const privateKeyDecoded: string = decode(privateKey as string);
-
-    const parts = text.split(':');
-    if (parts.length !== 4) {
-      throw new Error('Invalid payload format. Expected "encKey:iv:tag:ciphertext" produced by encryptLarge.');
-    }
-    const [encryptedKey, iv, tag, ciphertext] = parts.map((p) => Buffer.from(p, 'base64'));
-
-    const aesKey: Buffer = crypto.privateDecrypt(
-      { key: privateKeyDecoded, ...OAEP_OPTIONS },
-      encryptedKey as unknown as Uint8Array,
-    );
-
-    const decipher = crypto.createDecipheriv('aes-256-gcm', aesKey as unknown as Uint8Array, iv as unknown as Uint8Array);
-    decipher.setAuthTag(tag as unknown as Uint8Array);
-    const decrypted: Buffer = Buffer.concat([decipher.update(ciphertext as unknown as Uint8Array), decipher.final()]);
-    return decrypted.toString('utf8');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
-    }
-    if (errorMsg.includes('decrypt') || errorMsg.includes('padding') || errorMsg.includes('auth')) {
-      throw new Error('Decryption failed. Ensure you are using the correct private key and an unmodified payload produced by encryptLarge.');
-    }
-    throw error;
+    const aesKey = crypto.privateDecrypt({ key, ...oaepOptions(payload.hash) }, payload.encryptedKey);
+    requireAes256Key(aesKey);
+    const decipher = crypto.createDecipheriv('aes-256-gcm', aesKey, payload.iv, { authTagLength: 16 });
+    if (payload.header) decipher.setAAD(Buffer.from(payload.header, 'utf8'));
+    decipher.setAuthTag(payload.tag);
+    return Buffer.concat([decipher.update(payload.ciphertext), decipher.final()]).toString('utf8');
+  } catch (_) {
+    throw new Error('Decryption failed. Ensure you are using the correct private key and an unmodified payload produced by encryptLarge.');
   }
 }
 
+/** Legacy private-key operation; use sign/verify for authentication. */
 export function encryptPrivate(args: parametersOfEncryptPrivate): string {
-  const { text, privateKey } = args;
-  try {
-    const privateKeyDecoded: string = decode(privateKey as string);
-    const buffer: Buffer = Buffer.from(text);
-    const encrypted: Buffer = crypto.privateEncrypt(privateKeyDecoded, buffer as unknown as Uint8Array);
-    return encrypted.toString('base64');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid private key format. Ensure the key is valid PEM format starting with "-----BEGIN PRIVATE KEY-----"');
-    }
-    throw error;
-  }
+  return crypto.privateEncrypt(privateKeyFrom(args.privateKey as string), Buffer.from(args.text)).toString('base64');
 }
 
 export function decryptPublic(args: parametersOfDecryptPublic): string {
-  const { text, publicKey } = args;
+  return crypto.publicDecrypt(publicKeyFrom(args.publicKey as string), Buffer.from(args.text, 'base64')).toString('utf8');
+}
+
+export function sign(args: parametersOfSign): string {
+  return crypto.sign('sha256', Buffer.from(args.text, 'utf8'), {
+    key: privateKeyFrom(args.privateKey as string),
+    padding: crypto.constants.RSA_PKCS1_PSS_PADDING,
+    saltLength: 32,
+  }).toString('base64');
+}
+
+export function verify(args: parametersOfVerify): boolean {
+  const key = publicKeyFrom(args.publicKey as string);
+  let signature: Uint8Array;
   try {
-    const publicKeyDecoded: string = decode(publicKey as string);
-    const buffer: Buffer = Buffer.from(text, 'base64');
-    const decrypted: Buffer = crypto.publicDecrypt(publicKeyDecoded, buffer as unknown as Uint8Array);
-    return decrypted.toString('utf8');
-  } catch (error) {
-    const errorMsg = error instanceof Error ? error.message : String(error);
-    if (errorMsg.includes('parse') || errorMsg.includes('invalid')) {
-      throw new Error('Invalid public key format. Ensure the key is valid PEM format starting with "-----BEGIN PUBLIC KEY-----"');
-    }
-    throw error;
+    signature = strictBase64(args.signature);
+  } catch (_) {
+    return false;
+  }
+  return crypto.verify('sha256', Buffer.from(args.text, 'utf8'), {
+    key, padding: crypto.constants.RSA_PKCS1_PSS_PADDING, saltLength: 32,
+  }, signature);
+}
+
+/** Parses SPKI RSA public key material; formatting alone is insufficient. */
+export async function isValidRSAPublicKey(key: unknown): Promise<boolean> {
+  if (!hasPEMEnvelope(key, 'public')) return false;
+  try {
+    return crypto.createPublicKey(key as string).asymmetricKeyType === 'rsa';
+  } catch (_) {
+    return false;
   }
 }
 
-export function createPrivateAndPublicKeys(modulusLength: number = 2048): returnCreateKeys {
-  if (typeof crypto.generateKeyPairSync === 'function') {
-    const { privateKey, publicKey } = crypto.generateKeyPairSync('rsa', {
-      modulusLength,
-      publicKeyEncoding: {
-        type: 'spki',
-        format: 'pem',
-      },
-      privateKeyEncoding: {
-        type: 'pkcs8',
-        format: 'pem',
-      },
-    });
-    return { publicKey, privateKey };
+/** Parses PKCS#8 RSA private key material, matching keys generated by this package. */
+export async function isValidRSAPrivateKey(key: unknown): Promise<boolean> {
+  if (!hasPEMEnvelope(key, 'private')) return false;
+  try {
+    return crypto.createPrivateKey(key as string).asymmetricKeyType === 'rsa';
+  } catch (_) {
+    return false;
   }
-  throw new Error('RSA key generation is not available in this runtime');
+}
+
+export function createPrivateAndPublicKeys(modulusLength: number = 2048): Promise<returnCreateKeys> {
+  return new Promise((resolve, reject) => {
+    crypto.generateKeyPair('rsa', {
+      modulusLength,
+      publicKeyEncoding: { type: 'spki', format: 'pem' },
+      privateKeyEncoding: { type: 'pkcs8', format: 'pem' },
+    }, (error, publicKey, privateKey) => {
+      if (error) reject(error);
+      else resolve({ publicKey, privateKey });
+    });
+  });
 }

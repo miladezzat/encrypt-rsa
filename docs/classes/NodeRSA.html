@@ -100,15 +100,15 @@
 
 <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">
-            <a href="#info" 
+            <a href="#info"
                 class="nav-link"
                 class="nav-link active"
                 role="tab" id="info-tab" data-bs-toggle="tab" data-link="info">Info</a>
         </li>
         <li class="nav-item">
-            <a href="#source" 
+            <a href="#source"
                 class="nav-link"
-                
+
                 role="tab" id="source-tab" data-bs-toggle="tab" data-link="source">Source</a>
         </li>
 </ul>
@@ -185,6 +185,7 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
                                 <a href="#decryptBufferWithRsaPrivateKey" >decryptBufferWithRsaPrivateKey</a>
                             </li>
                             <li>
@@ -204,6 +205,7 @@
                             </li>
                             <li>
                                     <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
                                 <a href="#encryptBufferWithRsaPublicKey" >encryptBufferWithRsaPublicKey</a>
                             </li>
                             <li>
@@ -215,6 +217,16 @@
                                     <span class="modifier">Public</span>
                                     <span class="modifier">Async</span>
                                 <a href="#encryptStringWithRsaPublicKey" >encryptStringWithRsaPublicKey</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#sign" >sign</a>
+                            </li>
+                            <li>
+                                    <span class="modifier">Public</span>
+                                    <span class="modifier">Async</span>
+                                <a href="#verify" >verify</a>
                             </li>
                         </ul>
                     </td>
@@ -239,12 +251,14 @@
                 </tr>
                         <tr>
                             <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/node/index.ts:56</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/node/index.ts:64</a></div>
                             </td>
                         </tr>
 
                 <tr>
                     <td class="col-md-4">
+                            <div class="io-description"><p>Stores default keys and modulus length; key generation returns keys without updating these defaults.</p>
+</div>
                             <div>
                                     <b>Parameters :</b>
                                     <table class="params">
@@ -258,39 +272,39 @@
                                         <tbody>
                                                 <tr>
                                                         <td>publicKey</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             Yes
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                         <td>privateKey</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             Yes
                                                     </td>
-                                                    
+
                                                 </tr>
                                                 <tr>
                                                         <td>modulusLength</td>
-                                                  
+
                                                         <td>
                                                                         <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
                                                         </td>
-                                                  
+
                                                     <td>
                                                             Yes
                                                     </td>
-                                                    
+
                                                 </tr>
                                         </tbody>
                                     </table>
@@ -302,7 +316,7 @@
 </section>
 
             <section data-compodoc="block-properties">
-    
+
     <h3 id="inputs">
         Properties
     </h3>
@@ -325,7 +339,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="56" class="link-to-prism">src/node/index.ts:56</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="64" class="link-to-prism">src/node/index.ts:64</a></div>
                         </td>
                     </tr>
 
@@ -352,7 +366,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="54" class="link-to-prism">src/node/index.ts:54</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="62" class="link-to-prism">src/node/index.ts:62</a></div>
                         </td>
                     </tr>
 
@@ -379,7 +393,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="52" class="link-to-prism">src/node/index.ts:52</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="60" class="link-to-prism">src/node/index.ts:60</a></div>
                         </td>
                     </tr>
 
@@ -406,7 +420,7 @@
                 </tr>
                     <tr>
                         <td class="col-md-4">
-                                <div class="io-line">Defined in <a href="" data-line="50" class="link-to-prism">src/node/index.ts:50</a></div>
+                                <div class="io-line">Defined in <a href="" data-line="58" class="link-to-prism">src/node/index.ts:58</a></div>
                         </td>
                     </tr>
 
@@ -416,7 +430,7 @@
 </section>
 
             <section data-compodoc="block-methods">
-    
+
     <h3 id="methods">
         Methods
     </h3>
@@ -443,18 +457,20 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="121"
-                                    class="link-to-prism">src/node/index.ts:121</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="146"
+                                    class="link-to-prism">src/node/index.ts:146</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Generates interoperable SPKI/PKCS#8 RSA PEM keys asynchronously. Default modulus: 2048 bits.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -488,7 +504,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -510,15 +526,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>decrypt(args: <a href="../undefineds/parametersOfDecryptPublic.html" target="_self">parametersOfDecryptPublic</a>)</code>
+                    <code>decrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfDecryptPublic" target="_self">parametersOfDecryptPublic</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="113"
-                                    class="link-to-prism">src/node/index.ts:113</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="125"
+                                    class="link-to-prism">src/node/index.ts:125</a></div>
                         </td>
                     </tr>
 
@@ -528,7 +544,7 @@
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -558,7 +574,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -571,6 +587,7 @@
                     <a name="decryptBufferWithRsaPrivateKey"></a>
                     <span class="name">
                             <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>decryptBufferWithRsaPrivateKey</b></span>
                         <a href="#decryptBufferWithRsaPrivateKey"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -586,18 +603,20 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="134"
-                                    class="link-to-prism">src/node/index.ts:134</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="161"
+                                    class="link-to-prism">src/node/index.ts:161</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Restores binary data from a value produced by encryptBufferWithRsaPublicKey.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -639,7 +658,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -661,27 +680,27 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>decryptLarge(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+                    <code>decryptLarge(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="97"
-                                    class="link-to-prism">src/node/index.ts:97</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="109"
+                                    class="link-to-prism">src/node/index.ts:109</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
-                        <div class="io-description"><p>Decrypts a value produced by encryptLarge using the RSA private key.</p>
+                        <div class="io-description"><p>Decrypts legacy or v1 hybrid data. Enforces AES key32/IV12/tag16 and rejects tampering.</p>
 </div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -711,7 +730,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -733,25 +752,27 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>decryptStringWithRsaPrivateKey(args: <a href="../undefineds/parametersOfDecrypt.html" target="_self">parametersOfDecrypt</a>)</code>
+                    <code>decryptStringWithRsaPrivateKey(args: <a href="../miscellaneous/typealiases.html#parametersOfDecrypt" target="_self">parametersOfDecrypt</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="72"
-                                    class="link-to-prism">src/node/index.ts:72</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="83"
+                                    class="link-to-prism">src/node/index.ts:83</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Decrypts base64 RSA-OAEP ciphertext using the same hash as encryption; preserves leading BOMs.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -781,7 +802,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -803,15 +824,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encrypt(args: <a href="../undefineds/parametersOfEncryptPrivate.html" target="_self">parametersOfEncryptPrivate</a>)</code>
+                    <code>encrypt(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptPrivate" target="_self">parametersOfEncryptPrivate</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="105"
-                                    class="link-to-prism">src/node/index.ts:105</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="117"
+                                    class="link-to-prism">src/node/index.ts:117</a></div>
                         </td>
                     </tr>
 
@@ -821,7 +842,7 @@
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -851,7 +872,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -864,6 +885,7 @@
                     <a name="encryptBufferWithRsaPublicKey"></a>
                     <span class="name">
                             <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
                         <span ><b>encryptBufferWithRsaPublicKey</b></span>
                         <a href="#encryptBufferWithRsaPublicKey"><span class="icon ion-ios-link"></span></a>
                     </span>
@@ -879,18 +901,20 @@
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="125"
-                                    class="link-to-prism">src/node/index.ts:125</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="151"
+                                    class="link-to-prism">src/node/index.ts:151</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Base64-encodes binary data before direct RSA/SHA-1; at most 159 raw bytes for a 2048-bit key.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -932,7 +956,7 @@
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -954,15 +978,15 @@
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encryptLarge(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+                    <code>encryptLarge(args: <a href="../miscellaneous/typealiases.html#parametersOfEncryptLarge" target="_self">parametersOfEncryptLarge</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="86"
-                                    class="link-to-prism">src/node/index.ts:86</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="98"
+                                    class="link-to-prism">src/node/index.ts:98</a></div>
                         </td>
                     </tr>
 
@@ -972,12 +996,13 @@
                         <div class="io-description"><p>Encrypts arbitrary-length text using hybrid encryption (AES-256-GCM + RSA-OAEP).
 Use this instead of encryptStringWithRsaPublicKey when the data is larger than
 the RSA key can hold (avoids ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE).
+SHA-1 legacy output remains default. Use payloadVersion v1 or oaepHash sha256 for an authenticated header.
 Decrypt with decryptLarge using the matching private key.</p>
 </div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -990,7 +1015,7 @@ Decrypt with decryptLarge using the matching private key.</p>
                                         <tr>
                                                 <td>args</td>
                                             <td>
-                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self" >parametersOfEncrypt</a></code>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfEncryptLarge" target="_self" >parametersOfEncryptLarge</a></code>
                                             </td>
 
                                             <td>
@@ -1007,7 +1032,7 @@ Decrypt with decryptLarge using the matching private key.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
                             </div>
                 </td>
             </tr>
@@ -1029,25 +1054,27 @@ Decrypt with decryptLarge using the matching private key.</p>
             <tr>
                 <td class="col-md-4">
                         <span class="modifier-icon icon ion-ios-reset"></span>
-                    <code>encryptStringWithRsaPublicKey(args: <a href="../undefineds/parametersOfEncrypt.html" target="_self">parametersOfEncrypt</a>)</code>
+                    <code>encryptStringWithRsaPublicKey(args: <a href="../miscellaneous/typealiases.html#parametersOfEncrypt" target="_self">parametersOfEncrypt</a>)</code>
                 </td>
             </tr>
 
 
                     <tr>
                         <td class="col-md-4">
-                            <div class="io-line">Defined in <a href="" data-line="64"
-                                    class="link-to-prism">src/node/index.ts:64</a></div>
+                            <div class="io-line">Defined in <a href="" data-line="74"
+                                    class="link-to-prism">src/node/index.ts:74</a></div>
                         </td>
                     </tr>
 
 
             <tr>
                 <td class="col-md-4">
+                        <div class="io-description"><p>Encrypts UTF-8 text using RSA-OAEP; SHA-1 by default, or explicit SHA-256.</p>
+</div>
 
                             <div class="io-description">
                                 <b>Parameters :</b>
-                                
+
                                 <table class="params">
                                     <thead>
                                         <tr>
@@ -1077,7 +1104,151 @@ Decrypt with decryptLarge using the matching private key.</p>
 
                         </div>
                             <div class="io-description">
-                                
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="sign"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>sign</b></span>
+                        <a href="#sign"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>sign(args: <a href="../miscellaneous/typealiases.html#parametersOfSign" target="_self">parametersOfSign</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="134"
+                                    class="link-to-prism">src/node/index.ts:134</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Signs UTF-8 text with RSA-PSS/SHA-256 and a 32-byte salt.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfSign" target="_self" >parametersOfSign</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verify"></a>
+                    <span class="name">
+                            <span class="modifier">Public</span>
+                            <span class="modifier">Async</span>
+                        <span ><b>verify</b></span>
+                        <a href="#verify"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+                        <span class="modifier-icon icon ion-ios-reset"></span>
+                    <code>verify(args: <a href="../miscellaneous/typealiases.html#parametersOfVerify" target="_self">parametersOfVerify</a>)</code>
+                </td>
+            </tr>
+
+
+                    <tr>
+                        <td class="col-md-4">
+                            <div class="io-line">Defined in <a href="" data-line="140"
+                                    class="link-to-prism">src/node/index.ts:140</a></div>
+                        </td>
+                    </tr>
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Verifies a base64 RSA-PSS/SHA-256 signature. Does not decrypt data.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfVerify" target="_self" >parametersOfVerify</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;boolean&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+
                             </div>
                 </td>
             </tr>
@@ -1102,11 +1273,16 @@ import {
   encryptPrivate,
   encryptLarge,
   decryptLarge,
+  sign as signText,
+  verify as verifyText,
 } from &#x27;./crypto&#x27;;
 import type {
   parametersOfDecrypt,
   parametersOfDecryptPublic,
   parametersOfEncrypt,
+  parametersOfEncryptLarge,
+  parametersOfSign,
+  parametersOfVerify,
   parametersOfEncryptPrivate,
   returnCreateKeys,
   INodeRSA,
@@ -1121,8 +1297,12 @@ function requireKey(key: string | undefined, keyName: &#x27;public&#x27; | &#x27
 }
 
 export type {
+  OaepHash,
   returnCreateKeys,
   parametersOfEncrypt,
+  parametersOfEncryptLarge,
+  parametersOfSign,
+  parametersOfVerify,
   parametersOfDecrypt,
   parametersOfEncryptPrivate,
   parametersOfDecryptPublic,
@@ -1146,12 +1326,14 @@ class NodeRSA implements INodeRSA {
 
   private keyBase64: &#x27;base64&#x27; &#x3D; &#x27;base64&#x27;;
 
+  /** Stores default keys and modulus length; key generation returns keys without updating these defaults. */
   constructor(publicKey?: string, privateKey?: string, modulusLength?: number) {
     this.publicKey &#x3D; publicKey;
     this.privateKey &#x3D; privateKey;
     this.modulusLength &#x3D; modulusLength ?? 2048;
   }
 
+  /** Encrypts UTF-8 text using RSA-OAEP; SHA-1 by default, or explicit SHA-256. */
   public async encryptStringWithRsaPublicKey(args: parametersOfEncrypt): Promise&lt;string&gt; {
     const { publicKey &#x3D; this.publicKey } &#x3D; args;
     return encryptStringWithRsaPublicKey({
@@ -1160,6 +1342,7 @@ class NodeRSA implements INodeRSA {
     });
   }
 
+  /** Decrypts base64 RSA-OAEP ciphertext using the same hash as encryption; preserves leading BOMs. */
   public async decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise&lt;string&gt; {
     const { privateKey &#x3D; this.privateKey } &#x3D; args;
     return decryptStringWithRsaPrivateKey({
@@ -1172,9 +1355,10 @@ class NodeRSA implements INodeRSA {
    * Encrypts arbitrary-length text using hybrid encryption (AES-256-GCM + RSA-OAEP).
    * Use this instead of encryptStringWithRsaPublicKey when the data is larger than
    * the RSA key can hold (avoids ERR_OSSL_RSA_DATA_TOO_LARGE_FOR_KEY_SIZE).
+   * SHA-1 legacy output remains default. Use payloadVersion v1 or oaepHash sha256 for an authenticated header.
    * Decrypt with decryptLarge using the matching private key.
    */
-  public async encryptLarge(args: parametersOfEncrypt): Promise&lt;string&gt; {
+  public async encryptLarge(args: parametersOfEncryptLarge): Promise&lt;string&gt; {
     const { publicKey &#x3D; this.publicKey } &#x3D; args;
     return encryptLarge({
       ...args,
@@ -1183,7 +1367,7 @@ class NodeRSA implements INodeRSA {
   }
 
   /**
-   * Decrypts a value produced by encryptLarge using the RSA private key.
+   * Decrypts legacy or v1 hybrid data. Enforces AES key32/IV12/tag16 and rejects tampering.
    */
   public async decryptLarge(args: parametersOfDecrypt): Promise&lt;string&gt; {
     const { privateKey &#x3D; this.privateKey } &#x3D; args;
@@ -1209,11 +1393,25 @@ class NodeRSA implements INodeRSA {
     });
   }
 
+  /** Signs UTF-8 text with RSA-PSS/SHA-256 and a 32-byte salt. */
+  public async sign(args: parametersOfSign): Promise&lt;string&gt; {
+    const { privateKey &#x3D; this.privateKey } &#x3D; args;
+    return signText({ ...args, privateKey: convertKeyToBase64(requireKey(privateKey, &#x27;private&#x27;)) });
+  }
+
+  /** Verifies a base64 RSA-PSS/SHA-256 signature. Does not decrypt data. */
+  public async verify(args: parametersOfVerify): Promise&lt;boolean&gt; {
+    const { publicKey &#x3D; this.publicKey } &#x3D; args;
+    return verifyText({ ...args, publicKey: convertKeyToBase64(requireKey(publicKey, &#x27;public&#x27;)) });
+  }
+
+  /** Generates interoperable SPKI/PKCS#8 RSA PEM keys asynchronously. Default modulus: 2048 bits. */
   public async createPrivateAndPublicKeys(modulusLength: number &#x3D; this.modulusLength): Promise&lt;returnCreateKeys&gt; {
     return createPrivateAndPublicKeys(modulusLength);
   }
 
-  public encryptBufferWithRsaPublicKey(
+  /** Base64-encodes binary data before direct RSA/SHA-1; at most 159 raw bytes for a 2048-bit key. */
+  public async encryptBufferWithRsaPublicKey(
     buffer: Uint8Array,
     publicKey?: string,
   ): Promise&lt;string&gt; {
@@ -1222,7 +1420,8 @@ class NodeRSA implements INodeRSA {
     return this.encryptStringWithRsaPublicKey({ text: base64String, publicKey });
   }
 
-  public decryptBufferWithRsaPrivateKey(
+  /** Restores binary data from a value produced by encryptBufferWithRsaPublicKey. */
+  public async decryptBufferWithRsaPrivateKey(
     encryptedText: string,
     privateKey?: string,
   ): Promise&lt;Uint8Array&gt; {
@@ -1231,6 +1430,8 @@ class NodeRSA implements INodeRSA {
     );
   }
 }
+
+export { isValidRSAPublicKey, isValidRSAPrivateKey } from &#x27;./crypto&#x27;;
 
 export default NodeRSA;
 </code></pre>

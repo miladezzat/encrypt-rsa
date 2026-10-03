@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## Unreleased
+
+### Fixes
+
+- Enforce hybrid AES-256 key, IV, and full authentication-tag lengths in both runtimes; reject truncated or repartitioned tags before decryption.
+- Provide native Node/browser ESM entries with matching conditional TypeScript declarations, preserving the CommonJS API.
+- Return rejected Promises consistently from browser wrappers and buffer methods.
+- Preserve leading Unicode BOM characters during text decryption.
+
+### Features
+
+- Add opt-in RSA-OAEP/SHA-256 and self-describing v1 hybrid payloads with authenticated version/algorithm metadata. SHA-1 and legacy hybrid output remain defaults.
+- Add interoperable RSA-PSS/SHA-256 `sign` and `verify` with 32-byte salts.
+- Add asynchronous native RSA key-validation helpers; retain formatting-only PEM helpers.
+- Generate Node RSA key pairs asynchronously to avoid blocking the event loop.
+- Add complete contract regressions, installed CJS/ESM/TypeScript consumers, and Chromium checks for installed bundler/native/global entries.
+- Expand documentation with API choices, payload specification, migration, key management boundaries, and runnable examples.
+
+### Compatibility
+
+- Upgrade readers before emitting v1 payloads; older releases cannot read the new format.
+- Hybrid payloads require the generated IV12/tag16/AES-key32 format. Legacy whitespace/unpadded standard base64 remains accepted; invalid punctuation/base64url is rejected.
+- RSA-PSS signatures are a new format and do not replace legacy private-key ciphertext interchangeably.
+
 ## [6.0.0](https://github.com/miladezzat/encrypt-rsa/compare/v5.0.1...v6.0.0) (2026-06-28)
 
 ### ⚠ BREAKING CHANGES

@@ -7,9 +7,9 @@
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <link rel="icon" type="image/x-icon" href="./images/favicon.ico">
-	   <link rel="stylesheet" href="./styles/style.css">
-        <link rel="stylesheet" href="./styles/dark.css">
+        <link rel="icon" type="image/x-icon" href="../images/favicon.ico">
+	   <link rel="stylesheet" href="../styles/style.css">
+        <link rel="stylesheet" href="../styles/dark.css">
     </head>
     <body>
           <script>
@@ -64,7 +64,7 @@
 
         <div class="navbar navbar-default navbar-fixed-top d-md-none p-0">
                <div class="d-flex">
-                    <a href="./" class="navbar-brand">encrypt-rsa documentation</a>
+                    <a href="../" class="navbar-brand">encrypt-rsa documentation</a>
                     <button type="button" class="btn btn-default btn-menu ion-ios-menu" id="btn-menu"></button>
                </div>
         </div>
@@ -79,36 +79,10 @@
                    <compodoc-menu mode="normal"></compodoc-menu>
                </div>
                <!-- START CONTENT -->
-               <div class="content overview">
+               <div class="content additional-page">
                    <div class="content-data">
 
 
-<ol class="breadcrumb">
-    <li class="breadcrumb-item">Overview</li>
-</ol>
-
-<div class="tab-content overview">
-    <div class="row">
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-ios-paper"></span></h4>
-                    <p class="card-text">1 Class</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-3">
-            <div class="card text-center">
-                <div class="card-block">
-                    <h4 class="card-title"><span class="icon ion-md-information-circle-outline"></span></h4>
-                    <p class="card-text">1 Interface</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<script src="js/libs/svg-pan-zoom.min.js"></script>
-<script src="js/svg-pan-zoom.controls.js"></script>
 
 
 
@@ -126,6 +100,23 @@
 
 
 
+
+
+<h1>Migration and new capabilities</h1>
+<h2>Existing 6.x applications</h2>
+<p>Keep existing method calls unchanged: SHA-1 OAEP and legacy hybrid output remain defaults. Native ESM imports now return the constructor directly. CommonJS stays <code>require(&#39;encrypt-rsa&#39;).default</code>. Promise failure behavior is consistent across Node and browser builds, including buffer methods.</p>
+<p>Key generation is now nonblocking in Node. It still returns a Promise of SPKI/PKCS#8 PEM keys and does not set keys on the instance. Text decryption preserves a leading U+FEFF character in both builds.</p>
+<p>Hybrid readers now reject malformed tag/IV lengths and wrapped AES keys of the wrong size. Do not depend on permissive Node base64 parsing of invalid punctuation or base64url. The supported legacy format uses standard base64; whitespace and unpadded standard base64 remain accepted.</p>
+<h2>Enable SHA-256 and versioned hybrid data</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const payload = await rsa.encryptLarge({ text, publicKey, oaepHash: &#39;sha256&#39; });
+const restored = await rsa.decryptLarge({ text: payload, privateKey });</code></pre></div><p>First upgrade readers to recognize v1. Then enable v1 writers. Direct RSA ciphertext has no format header, so both sides must explicitly select <code>oaepHash: &#39;sha256&#39;</code>; its 2048-bit payload limit is 190 bytes.</p>
+<h2>Replace private-key operations with signatures</h2>
+<b>Example :</b><div><pre class="line-numbers"><code class="language-ts">const signature = await rsa.sign({ text, privateKey });
+const valid = await rsa.verify({ text, signature, publicKey });</code></pre></div><p>This is RSA-PSS/SHA-256 with a fixed 32-byte salt. Existing private/public <code>encrypt</code> and <code>decrypt</code> outputs are not RSA-PSS signatures and cannot be verified with the new API. Keep old readers for legacy data until you migrate its consumers. Browser signing and verification are supported; the old private/public encryption flow remains Node only.</p>
+<h2>Upgrade validation</h2>
+<p>Use <code>await isValidRSAPublicKey(key)</code> and <code>await isValidRSAPrivateKey(key)</code> for native key parsing. Existing <code>isValidPEM*</code> functions only check formatting. Strict helpers target SPKI/PKCS#8 and do not check pair matching or impose a modulus-strength policy.</p>
+<h2>Upgrade from 3.x</h2>
+<p>Crypto methods return Promises. Add <code>await</code> or <code>.then()</code>/<code>.catch()</code> to every call. Import from the package root instead of unsupported internal build paths. Buffer methods return <code>Uint8Array</code> in shared types; the Node runtime value is a <code>Buffer</code>. The removed misspelled <code>convertKetToBase64</code> internal files remain unsupported.</p>
 
                    </div><div class="search-results">
     <div class="has-results">
@@ -151,9 +142,9 @@
           </label>
 
        <script>
-            var COMPODOC_CURRENT_PAGE_DEPTH = 0;
-            var COMPODOC_CURRENT_PAGE_CONTEXT = 'overview';
-            var COMPODOC_CURRENT_PAGE_URL = 'overview.html';
+            var COMPODOC_CURRENT_PAGE_DEPTH = 1;
+            var COMPODOC_CURRENT_PAGE_CONTEXT = 'additional-page';
+            var COMPODOC_CURRENT_PAGE_URL = 'migration.html';
             var MAX_SEARCH_RESULTS = 15;
        </script>
 
@@ -170,30 +161,30 @@
                }
           </script>
 
-       <script src="./js/libs/custom-elements.min.js"></script>
-       <script src="./js/libs/lit-html.js"></script>
+       <script src="../js/libs/custom-elements.min.js"></script>
+       <script src="../js/libs/lit-html.js"></script>
 
-       <script src="./js/menu-wc.js" defer></script>
-       <script nomodule src="./js/menu-wc_es5.js" defer></script>
+       <script src="../js/menu-wc.js" defer></script>
+       <script nomodule src="../js/menu-wc_es5.js" defer></script>
 
-       <script src="./js/libs/bootstrap-native.js"></script>
+       <script src="../js/libs/bootstrap-native.js"></script>
 
-       <script src="./js/libs/es6-shim.min.js"></script>
-       <script src="./js/libs/EventDispatcher.js"></script>
-       <script src="./js/libs/promise.min.js"></script>
+       <script src="../js/libs/es6-shim.min.js"></script>
+       <script src="../js/libs/EventDispatcher.js"></script>
+       <script src="../js/libs/promise.min.js"></script>
 
-       <script src="./js/compodoc.js"></script>
+       <script src="../js/compodoc.js"></script>
 
-       <script src="./js/tabs.js"></script>
-       <script src="./js/menu.js"></script>
-       <script src="./js/libs/clipboard.min.js"></script>
-       <script src="./js/libs/prism.js"></script>
-       <script src="./js/sourceCode.js"></script>
-          <script src="./js/search/search.js"></script>
-          <script src="./js/search/lunr.min.js"></script>
-          <script src="./js/search/search-lunr.js"></script>
-          <script src="./js/search/search_index.js"></script>
-       <script src="./js/lazy-load-graphs.js"></script>
+       <script src="../js/tabs.js"></script>
+       <script src="../js/menu.js"></script>
+       <script src="../js/libs/clipboard.min.js"></script>
+       <script src="../js/libs/prism.js"></script>
+       <script src="../js/sourceCode.js"></script>
+          <script src="../js/search/search.js"></script>
+          <script src="../js/search/lunr.min.js"></script>
+          <script src="../js/search/search-lunr.js"></script>
+          <script src="../js/search/search_index.js"></script>
+       <script src="../js/lazy-load-graphs.js"></script>
 
 
     </body>

@@ -1,77 +1,43 @@
-# Examples
+# Runnable examples
 
-This directory contains examples of how to use the `encrypt-rsa` library in both Node.js and browser environments.
+Build before running examples:
 
-## Files
-
-### `node-basic.js`
-A Node.js example demonstrating:
-- Generating RSA key pairs (2048-bit)
-- Encrypting a message with the public key
-- Decrypting the message with the private key
-- Error handling for oversized messages
-
-**Run it:**
 ```bash
+npm ci
 npm run build
+```
+
+## Node
+
+```bash
 node examples/node-basic.js
 ```
 
-### `browser-basic.html`
-A browser example with an interactive UI that demonstrates:
-- Generating RSA key pairs
-- Encrypting messages in real-time
-- Decrypting encrypted messages
-- Error handling with user-friendly messages
+This example generates keys asynchronously, performs direct SHA-1/SHA-256 encryption, encrypts larger text with legacy and versioned hybrid payloads, signs/verifies with RSA-PSS, rejects a changed message, and parses the generated RSA keys. It throws if any round trip fails. The private key is not printed.
 
-**How to use:**
-1. Run `npm run build`
-2. Serve the repository over localhost, for example `python3 -m http.server 8080`
-3. Open `http://localhost:8080/examples/browser-basic.html` in a web browser
-4. Click "Generate 2048-bit RSA Keys"
-5. Enter a message in the text area (up to 214 bytes for direct RSA with 2048-bit keys)
-6. Click "Encrypt" to encrypt the message
-7. Click "Decrypt" to decrypt the message
+For application imports, use `import NodeRSA from 'encrypt-rsa'` in ESM or `const { default: NodeRSA } = require('encrypt-rsa')` in CommonJS. The example points at the local build so it can run before publishing.
 
-## Key Limitations
+## Browser
 
-### Message Size Limits
+```bash
+python3 -m http.server 8080
+```
 
-RSA encryption with OAEP padding has size limitations based on the key size:
+Open `http://localhost:8080/examples/browser-basic.html`. Generate keys, enter text, and choose an encryption mode. The default is versioned hybrid SHA-256; legacy hybrid SHA-1 and both direct RSA hashes are available. Encrypt, then decrypt. Decryption uses the mode recorded with the encrypted value, even if the selection changes afterward.
 
-- **2048-bit key**: Maximum 214 bytes
-- **4096-bit key**: Maximum 470 bytes
+Use **Sign Message** then **Verify Signature**. Change the message or signature and verify again to see rejection. Signing authenticates text; it does not encrypt it. The displayed private key is for this local demonstration and must not be shared.
 
-This is because:
-- OAEP padding requires overhead for security
-- The formula is: max_bytes = key_size_bytes - 2*hash_size_bytes - 2
-- With SHA-1: max_bytes = 256 - 42 = 214 bytes
+Direct RSA with a 2048-bit key allows 214 UTF-8 bytes with SHA-1 and 190 with SHA-256. Hybrid encryption supports larger text in memory. Empty strings are supported by the library; the interactive encrypt form asks for a message.
 
-### When to Use This Library
+## Automated validation
 
-✓ **Good for:**
-- Encrypting encryption keys (hybrid encryption)
-- Encrypting passwords or tokens
-- Small to medium sized data
-- Public key encryption scenarios
+```bash
+npm run smoke
+npm run smoke:install
+npx playwright install chromium
+npm run smoke:browser
+```
 
-✗ **Not ideal for:**
-- Large files or media
-- Bulk data encryption
-- Scenarios requiring perfect forward secrecy
+These check the Node example, actual installed CJS/ESM/TypeScript consumers, installed browser entries and global functions, and the browser demo's encryption/signature flows. The browser checks require Chromium and localhost access.
 
-## Error Handling
-
-Both examples include error handling. Common errors and solutions:
-
-| Error | Cause | Solution |
-|-------|-------|----------|
-| "data too large for key size" | Message exceeds key capacity | Use smaller message or larger key |
-| "error:0906D06C:PEM routines" | Invalid PEM format | Ensure PEM headers/footers are intact |
-| "error decrypting" | Wrong private key or corrupted data | Verify you're using the correct key pair |
-
-## Next Steps
-
-- Check the [main README.md](../README.md) for API documentation
-- Review [tests/](../tests/) for more advanced usage examples
-- See the [source code](../src/) for implementation details
+See the [main README](../README.md), [compatibility guide](../documentation/compatibility.md), [payload specification](../documentation/payload-format.md), and [migration guide](../documentation/migration.md).
