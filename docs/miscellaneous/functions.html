@@ -121,6 +121,15 @@
                             <a href="#bytesToBase64" title="src/shared/helpers.ts" ><b>bytesToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
+                            <a href="#checkJsonPayload" title="src/shared/json.ts" ><b>checkJsonPayload</b>&nbsp;&nbsp;&nbsp;(src/.../json.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#checkTime" title="src/shared/messages.ts" ><b>checkTime</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#claimsFrom" title="src/shared/messages.ts" ><b>claimsFrom</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
+                        </li>
+                        <li>
                             <a href="#convertKeyToBase64" title="src/node/convertKeyToBase64.ts" ><b>convertKeyToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../convertKeyToBase64.ts)</a>
                         </li>
                         <li>
@@ -145,6 +154,9 @@
                             <a href="#encryptStringWithRsaPublicKey" title="src/node/crypto.ts" ><b>encryptStringWithRsaPublicKey</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
+                            <a href="#exactKeys" title="src/shared/messages.ts" ><b>exactKeys</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
+                        </li>
+                        <li>
                             <a href="#hasPEMEnvelope" title="src/shared/helpers.ts" ><b>hasPEMEnvelope</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
@@ -152,6 +164,9 @@
                         </li>
                         <li>
                             <a href="#hybridOptions" title="src/shared/hybrid.ts" ><b>hybridOptions</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#identifier" title="src/shared/messages.ts" ><b>identifier</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
                         </li>
                         <li>
                             <a href="#isValidPEMKey" title="src/shared/helpers.ts" ><b>isValidPEMKey</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
@@ -172,10 +187,16 @@
                             <a href="#joinChunks" title="src/shared/helpers.ts" ><b>joinChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
+                            <a href="#jsonLimits" title="src/shared/json.ts" ><b>jsonLimits</b>&nbsp;&nbsp;&nbsp;(src/.../json.ts)</a>
+                        </li>
+                        <li>
                             <a href="#oaepOptions" title="src/node/crypto.ts" ><b>oaepOptions</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
                             <a href="#parseHybrid" title="src/shared/hybrid.ts" ><b>parseHybrid</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#parseJson" title="src/shared/json.ts" ><b>parseJson</b>&nbsp;&nbsp;&nbsp;(src/.../json.ts)</a>
                         </li>
                         <li>
                             <a href="#pemToBase64" title="src/shared/helpers.ts" ><b>pemToBase64</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
@@ -188,6 +209,9 @@
                         </li>
                         <li>
                             <a href="#publicKeyFrom" title="src/node/crypto.ts" ><b>publicKeyFrom</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#record" title="src/shared/messages.ts" ><b>record</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
                         </li>
                         <li>
                             <a href="#requireAes256Key" title="src/shared/hybrid.ts" ><b>requireAes256Key</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
@@ -205,13 +229,28 @@
                             <a href="#sign" title="src/node/crypto.ts" ><b>sign</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
                         </li>
                         <li>
+                            <a href="#signMessage" title="src/shared/messages.ts" ><b>signMessage</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
+                        </li>
+                        <li>
                             <a href="#splitIntoChunks" title="src/shared/helpers.ts" ><b>splitIntoChunks</b>&nbsp;&nbsp;&nbsp;(src/.../helpers.ts)</a>
                         </li>
                         <li>
                             <a href="#strictBase64" title="src/shared/hybrid.ts" ><b>strictBase64</b>&nbsp;&nbsp;&nbsp;(src/.../hybrid.ts)</a>
                         </li>
                         <li>
+                            <a href="#stringifyJson" title="src/shared/json.ts" ><b>stringifyJson</b>&nbsp;&nbsp;&nbsp;(src/.../json.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#timestamp" title="src/shared/messages.ts" ><b>timestamp</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#validString" title="src/shared/json.ts" ><b>validString</b>&nbsp;&nbsp;&nbsp;(src/.../json.ts)</a>
+                        </li>
+                        <li>
                             <a href="#verify" title="src/node/crypto.ts" ><b>verify</b>&nbsp;&nbsp;&nbsp;(src/.../crypto.ts)</a>
+                        </li>
+                        <li>
+                            <a href="#verifyMessage" title="src/shared/messages.ts" ><b>verifyMessage</b>&nbsp;&nbsp;&nbsp;(src/.../messages.ts)</a>
                         </li>
                     </ul>
                 </td>
@@ -976,6 +1015,956 @@ For RSA-OAEP with SHA-1 and a 2048-bit key, this is 214 bytes.</p>
                         </div>
                             <div class="io-description">
                                 <p>Array of text chunks.</p>
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/shared/json.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkJsonPayload"></a>
+                    <span class="name">
+                        <span ><b>checkJsonPayload</b></span>
+                        <a href="#checkJsonPayload"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>checkJsonPayload(text: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: <a href="typealiases.html#JsonLimits" target="_self">JsonLimits</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Check encrypted input before decoding or RSA processing.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>text</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonLimits" target="_self" >JsonLimits</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="jsonLimits"></a>
+                    <span class="name">
+                        <span ><b>jsonLimits</b></span>
+                        <a href="#jsonLimits"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>jsonLimits(options: <a href="typealiases.html#JsonLimits" target="_self">JsonLimits</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Resolve bounded JSON limits; bytes count UTF-8, and depth starts at zero for the root.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonLimits" target="_self" >JsonLimits</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#ResolvedJsonLimits" target="_self" >ResolvedJsonLimits</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="parseJson"></a>
+                    <span class="name">
+                        <span ><b>parseJson</b></span>
+                        <a href="#parseJson"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>parseJson(text: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, options: <a href="typealiases.html#JsonLimits" target="_self">JsonLimits</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Parse bounded JSON and validate its supported value/depth/Unicode contract.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>text</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonLimits" target="_self" >JsonLimits</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#JsonValue" target="_self" >JsonValue</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="stringifyJson"></a>
+                    <span class="name">
+                        <span ><b>stringifyJson</b></span>
+                        <a href="#stringifyJson"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>stringifyJson(value, options: <a href="typealiases.html#JsonLimits" target="_self">JsonLimits</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Serialize the supported JSON subset in canonical UTF-16 property order.
+Rejects lossy values, sparse arrays, hidden properties, getters, custom prototypes, and cycles.
+Never calls toJSON. Number/string encoding follows JSON.stringify (RFC 8785); negative zero is rejected.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                                <td>Default value</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                            </td>
+
+                                        </tr>
+                                        <tr>
+                                                <td>options</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonLimits" target="_self" >JsonLimits</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+                                            <td>
+                                                    <code>{}</code>
+                                            </td>
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="validString"></a>
+                    <span class="name">
+                        <span ><b>validString</b></span>
+                        <a href="#validString"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>validString(value: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank">string</a>, maxBytes: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>maxBytes</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</section>    <h3>src/shared/messages.ts</h3>
+    <section data-compodoc="block-methods">
+    <h3></h3>    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="checkTime"></a>
+                    <span class="name">
+                        <span ><b>checkTime</b></span>
+                        <a href="#checkTime"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>checkTime(claims: <a href="typealiases.html#MessageClaims" target="_self">MessageClaims</a>, now: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, skew: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>, maxLifetime: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank">number</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>claims</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#MessageClaims" target="_self" >MessageClaims</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>now</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>skew</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>maxLifetime</td>
+                                            <td>
+                                                            <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="claimsFrom"></a>
+                    <span class="name">
+                        <span ><b>claimsFrom</b></span>
+                        <a href="#claimsFrom"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>claimsFrom(value: Record)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                        <code>Record</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#MessageClaims" target="_self" >MessageClaims</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="exactKeys"></a>
+                    <span class="name">
+                        <span ><b>exactKeys</b></span>
+                        <a href="#exactKeys"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>exactKeys(value: Record, expected)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                        <code>Record</code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>expected</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://www.typescriptlang.org/docs/handbook/basic-types.html" target="_blank" >void</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="identifier"></a>
+                    <span class="name">
+                        <span ><b>identifier</b></span>
+                        <a href="#identifier"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>identifier(value: <a href="typealiases.html#JsonValue" target="_self">JsonValue</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonValue" target="_self" >JsonValue</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/string" target="_blank" >string</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="record"></a>
+                    <span class="name">
+                        <span ><b>record</b></span>
+                        <a href="#record"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>record(value: <a href="typealiases.html#JsonValue" target="_self">JsonValue</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonValue" target="_self" >JsonValue</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="../miscellaneous/typealiases.html#JsonValue" target="_self" >Record&lt;string, JsonValue&gt;</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="signMessage"></a>
+                    <span class="name">
+                        <span ><b>signMessage</b></span>
+                        <a href="#signMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>signMessage(args: <a href="typealiases.html#parametersOfSignMessage" target="_self">parametersOfSignMessage</a>, sign)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Sign a snapshot of all claims using canonical JSON and a distinct signing domain.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfSignMessage" target="_self" >parametersOfSignMessage</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>sign</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;string&gt;</code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="timestamp"></a>
+                    <span class="name">
+                        <span ><b>timestamp</b></span>
+                        <a href="#timestamp"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>timestamp(value: <a href="typealiases.html#JsonValue" target="_self">JsonValue</a>)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>value</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#JsonValue" target="_self" >JsonValue</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>        <code><a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/number" target="_blank" >number</a></code>
+
+                        </div>
+                            <div class="io-description">
+
+                            </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="table table-sm table-bordered">
+        <tbody>
+            <tr>
+                <td class="col-md-4">
+                    <a name="verifyMessage"></a>
+                    <span class="name">
+                        <span ><b>verifyMessage</b></span>
+                        <a href="#verifyMessage"><span class="icon ion-ios-link"></span></a>
+                    </span>
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-4">
+<code>verifyMessage(args: <a href="typealiases.html#parametersOfVerifyMessage" target="_self">parametersOfVerifyMessage</a>, verify)</code>
+                </td>
+            </tr>
+
+
+
+
+            <tr>
+                <td class="col-md-4">
+                        <div class="io-description"><p>Verify the complete canonical envelope, trusted identities/key, time policy, schema, and atomic nonce claim.
+Replay storage is mandatory and must retain the scoped nonce until validUntil. Failures reject without returning payload data.</p>
+</div>
+
+                            <div class="io-description">
+                                <b>Parameters :</b>
+
+                                <table class="params">
+                                    <thead>
+                                        <tr>
+                                            <td>Name</td>
+                                                <td>Type</td>
+                                            <td>Optional</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                                <td>args</td>
+                                            <td>
+                                                            <code><a href="../miscellaneous/typealiases.html#parametersOfVerifyMessage" target="_self" >parametersOfVerifyMessage</a></code>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                        <tr>
+                                                <td>verify</td>
+                                            <td>
+                                            </td>
+
+                                            <td>
+                                                    No
+                                            </td>
+
+
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        <div class="io-description">
+                            <b>Returns : </b>    <code>Promise&lt;MessageClaims&lt;T | JsonValue&gt;&gt;</code>
+
+                        </div>
+                            <div class="io-description">
 
                             </div>
                 </td>

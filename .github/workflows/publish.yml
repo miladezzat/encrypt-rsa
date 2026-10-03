@@ -1,27 +1,53 @@
-# Runs on push to master: install deps, test, build, then publish to npm (if version bumped).
-# Requires: NPM_TOKEN secret in repo Settings > Secrets and variables > Actions.
+# Publish a new stable version using npm's GitHub Actions trusted publisher.
+# npm package settings must authorize miladezzat/encrypt-rsa, publish.yml.
 
 name: NPM publish
 
 on:
   push:
     branches: [ master ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: npm-publish
+  cancel-in-progress: false
 
 jobs:
-  build-and-publish:
+  check-release:
+    if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [22.x]
+    outputs:
+      publish: ${{ steps.release.outputs.publish }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Check registry version
+        id: release
+        run: node scripts/check-release.js
+
+  build-and-publish:
+    needs: check-release
+    if: needs.check-release.outputs.publish == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v4
 
-      - name: Use Node.js ${{ matrix.node-version }}
+      - name: Use Node.js 24
         uses: actions/setup-node@v4
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
+          node-version: '24'
           registry-url: 'https://registry.npmjs.org'
+
+      - name: Use an OIDC-capable npm CLI
+        run: npm install --global npm@11.13.0
 
       - name: Install dependencies
         run: npm ci
@@ -35,13 +61,16 @@ jobs:
         run: npm run build
 
       - name: Run tests
-        run: npm test
+        run: npm test && npm run test:release
 
       - name: Run package smoke tests
         run: npm run smoke
 
       - name: Run packed install smoke test
         run: npm run smoke:install
+
+      - name: Install optional AI example dependencies
+        run: npm --prefix examples/ai-integrations ci
 
       - name: Install browser
         run: npx playwright install --with-deps chromium
@@ -52,19 +81,11 @@ jobs:
       - name: Generate and validate docs
         run: npm run docs && npm run smoke:docs
 
-      # Fail fast with a clear message if NPM_TOKEN is missing/expired/wrong-scoped.
-      # Without this, npm-publish reports auth failures as a misleading "404 on PUT".
-      - name: Verify npm auth
-        run: npm whoami
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Validate optional AI examples
+        run: npm run test:ai
 
       - name: Publish to npm
-        id: publish
-        uses: JS-DevTools/npm-publish@v3
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
+        run: npm publish --access public
 
-      - if: steps.publish.outputs.type != 'none'
-        run: |
-          echo "Published version ${{ steps.publish.outputs.version }} (previous: ${{ steps.publish.outputs.old-version }})"
+      - name: Verify published version
+        run: npm view "$(node -p 'const p = require("./package.json"); `${p.name}@${p.version}`')" version dist.integrity

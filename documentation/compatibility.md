@@ -8,6 +8,8 @@ The package exposes the same Promise-based class and shared TypeScript interface
 | Direct RSA-OAEP encryption | SHA-1 default; SHA-256 opt-in | Same |
 | AES-256-GCM hybrid encryption | Legacy default; v1 opt-in | Same |
 | RSA-PSS signatures | SHA-256, 32-byte salt | Same |
+| JSON encryption | Bounded v1 SHA-256 hybrid + schema parser | Same |
+| Signed messages | Canonical claims, expiry, atomic replay callback | Same |
 | Strict RSA key helpers | Async parsing; SPKI/PKCS#8 | Same |
 | PEM formatting helpers | Synchronous header/footer checks | Same |
 | Buffer methods | Accept `Uint8Array`/`Buffer`; return `Buffer` | Accept/return `Uint8Array` |

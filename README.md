@@ -49,6 +49,8 @@ Use `encryptLarge` for text that may exceed the RSA plaintext limit. It encrypts
 | Encrypt short UTF-8 text | `encryptStringWithRsaPublicKey` / `decryptStringWithRsaPrivateKey` | Yes | Yes |
 | Encrypt arbitrary-length UTF-8 text | `encryptLarge` / `decryptLarge` | Yes | Yes |
 | Encrypt a small binary value | `encryptBufferWithRsaPublicKey` / `decryptBufferWithRsaPrivateKey` | Yes | Yes |
+| Encrypt validated JSON | `encryptJSON` / `decryptJSON` | Yes | Yes |
+| Sign scoped messages with replay protection | `signMessage` / `verifyMessage` | Yes | Yes |
 | Sign and verify text | `sign` / `verify` | Yes | Yes |
 | Generate keys | `createPrivateAndPublicKeys` | Yes, nonblocking | Yes |
 | Legacy private-key operation | `encrypt` / `decrypt` | Yes | Rejects with a Promise |
@@ -114,6 +116,23 @@ The default still emits `encryptedKey:iv:tag:ciphertext`. The v1 form adds a ver
 
 An explicitly supplied decryption `oaepHash` must match the payload's algorithm. `{ oaepHash: 'sha256', payloadVersion: 'legacy' }` is rejected: legacy payloads cannot describe that algorithm. Older releases cannot read v1 payloads; upgrade readers before enabling v1 writers. See the [payload specification](documentation/payload-format.md) for encoding and rollout details.
 
+## JSON and AI integrations
+
+```ts
+const text = await rsa.encryptJSON({ value: { note: 'Hello' }, publicKey });
+const value = await rsa.decryptJSON({ text, privateKey }); // JsonValue, not an assumed schema
+```
+
+JSON helpers use v1 hybrid SHA-256, reject lossy/non-JSON values, and bound UTF-8 bytes and nesting. Supply a synchronous or asynchronous `parse` callback to validate an application schema and infer its result type. Defaults are 1 MiB JSON, 2 MiB encoded input, and depth 128. See the [JSON and AI guide](documentation/ai-integrations.md) for supported values, limits, tenant-bound encrypted memory, key rotation, and full AI SDK conversation persistence.
+
+AI SDK is installed only in the [private example app](examples/ai-integrations/README.md). The core library stays dependency-free. The app includes offline fixture tests and a local docs assistant that selects validated templates without accepting secrets or executing generated code. Real provider calls are an explicit CLI opt-in. At-rest encryption does not hide plaintext sent to an AI provider.
+
+## Signed messages
+
+`signMessage` signs a canonical envelope containing `purpose`, `issuer`, `audience`, `keyId`, `issuedAt`, `expiresAt`, `nonce`, and a JSON `payload`. `verifyMessage` requires expected identities, a trusted key resolver, and an atomic nonce store; it checks signature, expiry, maximum lifetime, and replay before returning the payload. An optional schema parser validates the payload. Defaults allow a five-minute lifetime with zero clock skew. See the [complete contract and replay-store requirements](documentation/signed-messages.md) and [runnable example](examples/ai-integrations/message-demo.mjs).
+
+Use separate signing/encryption keys. Signatures authenticate the signer and data; they do not establish truth, authorize tools, or prevent prompt injection.
+
 ## Binary values
 
 ```ts
@@ -172,14 +191,18 @@ Every class method returns a Promise, including failure paths.
 | `decryptLarge({ text, privateKey?, oaepHash? })` | UTF-8 plaintext |
 | `encryptBufferWithRsaPublicKey(bytes, publicKey?)` | Base64 ciphertext |
 | `decryptBufferWithRsaPrivateKey(ciphertext, privateKey?)` | `Uint8Array` |
+| `encryptJSON({ value, publicKey?, limits? })` | v1 SHA-256 hybrid payload |
+| `decryptJSON({ text, privateKey?, limits?, parse? })` | `JsonValue` or validated parser result |
+| `signMessage({ message, privateKey?, limits? })` | Canonical signed JSON envelope |
+| `verifyMessage({ text, expected, resolvePublicKey, consumeNonce, limits?, parse?, now?, clockSkewMs?, maxLifetimeMs? })` | Verified message claims with validated payload |
 | `sign({ text, privateKey? })` | Base64 RSA-PSS signature |
 | `verify({ text, signature, publicKey? })` | `boolean` |
 | `encrypt({ text, privateKey? })` | Legacy private-key operation; Node only |
 | `decrypt({ text, publicKey? })` | Legacy public-key operation; Node only |
 
-Named exports: `isValidRSAPublicKey`, `isValidRSAPrivateKey`, `isValidPEMPublicKey`, `isValidPEMPrivateKey`, `isValidPEMKey`, `splitIntoChunks`, `joinChunks`. Exported types include `INodeRSA`, `OaepHash`, `parametersOfEncrypt`, `parametersOfEncryptLarge`, `parametersOfDecrypt`, `parametersOfEncryptPrivate`, `parametersOfDecryptPublic`, `parametersOfSign`, `parametersOfVerify`, and `returnCreateKeys`.
+Named exports: `isValidRSAPublicKey`, `isValidRSAPrivateKey`, `isValidPEMPublicKey`, `isValidPEMPrivateKey`, `isValidPEMKey`, `splitIntoChunks`, `joinChunks`. Exported types include `INodeRSA`, `OaepHash`, `parametersOfEncrypt`, `parametersOfEncryptLarge`, `parametersOfDecrypt`, `parametersOfEncryptPrivate`, `parametersOfDecryptPublic`, `parametersOfSign`, `parametersOfVerify`, `returnCreateKeys`, `JsonValue`, `JsonLimits`, `JsonParser`, `MessageClaims`, `NonceClaim`, and the JSON/message parameter types.
 
-The standalone browser global exports `NodeRSA` (also `default`), `createPrivateAndPublicKeys`, direct string encryption/decryption, `encryptLarge`, `decryptLarge`, `sign`, `verify`, and the two strict RSA validation helpers. Use its class for buffer methods and constructor-key defaults.
+The standalone browser global exports `NodeRSA` (also `default`), `createPrivateAndPublicKeys`, direct string encryption/decryption, `encryptLarge`, `decryptLarge`, `encryptJSON`, `decryptJSON`, `signMessage`, `verifyMessage`, `sign`, `verify`, and the two strict RSA validation helpers. Use its class for buffer methods and constructor-key defaults.
 
 ## Errors and operational boundaries
 
@@ -199,7 +222,7 @@ await rsa.encryptLarge({ text: 'message' }).catch((error) => {
 | Invalid signature or modified message | `verify` resolves `false` |
 | Unsupported browser private/public legacy operation | Rejected Promise |
 
-Protect private keys, authenticate public keys, and use HTTPS for network transport. Encryption alone does not authenticate the sender. This package does not manage keys, rotate them, provide forward secrecy, or prevent replay. Avoid logging private keys or decrypted secrets.
+Protect private keys, authenticate public keys, and use HTTPS for network transport. Encryption alone does not authenticate the sender. This package does not manage keys, rotate them, provide forward secrecy, or supply replay storage. `verifyMessage` enforces replay protection through the atomic store you provide. Avoid logging private keys or decrypted secrets.
 
 ## Examples and development
 
@@ -208,15 +231,18 @@ npm ci
 npm run build
 npm run lint
 npm test
+npm run test:release
 npm run smoke
 npm run smoke:install
 npx playwright install chromium
 npm run smoke:browser
 npm run docs
 npm run smoke:docs
+npm --prefix examples/ai-integrations ci
+npm run test:ai
 ```
 
-`npm test` covers Node and Web Crypto implementations, both OAEP hashes, legacy/v1 interoperability, signatures, Unicode, binary values, errors, and authentication boundaries. `smoke:install` checks an installed tarball using CommonJS, native ESM, and TypeScript Node16 resolution. `smoke:browser` checks the installed browser build in Chromium through bundler resolution, native ESM, and the standalone global bundle. CI runs these checks on Node 22 and 24; the publish job runs them on Node 22 before publishing.
+`npm test` covers Node and Web Crypto implementations, both OAEP hashes, legacy/v1 interoperability, signatures, JSON/schema limits, signed-message identity/time/replay boundaries, Unicode, binary values, errors, and authentication boundaries. `test:ai` type-checks and exercises the separate SDK recipes without external model calls. `test:release` checks registry/version failures and repeat-release behavior. `smoke:install` checks an installed tarball using CommonJS, native ESM, and TypeScript Node16 resolution. `smoke:browser` checks the installed browser build in Chromium through bundler resolution, native ESM, and the standalone global bundle. CI runs these checks on Node 22 and 24; the publish job runs them on Node 24 before publishing.
 
 Run the [Node example](examples/node-basic.js) with `node examples/node-basic.js`. Serve the repository using `python3 -m http.server 8080` and open [the browser example](examples/browser-basic.html) at `http://localhost:8080/examples/browser-basic.html`. See [examples](examples/README.md).
 
@@ -224,6 +250,6 @@ Generated [API documentation](https://encrypt-rsa.js.org) lives in `docs/`. `npm
 
 ## Release and contribution
 
-Use conventional commits and run the validation commands above before opening a PR. `npm run changelog` updates the changelog; `npm run release -- --release-as minor` prepares a version bump and tag. The publish workflow on `master` uses the committed lockfile with `npm ci` and requires `NPM_TOKEN`. It publishes only when the package version exceeds the version on npm. New opt-in APIs can be released as a minor version; changing cryptographic defaults or requiring v1 payloads would require a compatibility-impacting release.
+Use conventional commits and run the validation commands above before opening a PR. `npm run changelog` updates the changelog; `npm run release -- --release-as minor` prepares a version bump and tag. The publish workflow on `master` uses the committed lockfile with `npm ci` and authenticates through [npm trusted publishing](https://docs.npmjs.com/trusted-publishers/), without `NPM_TOKEN`. It skips an unchanged version and rejects versions older than npm's latest stable version. New opt-in APIs can be released as a minor version; changing cryptographic defaults or requiring v1 payloads would require a compatibility-impacting release. See the [release setup and recovery guide](documentation/releasing.md).
 
 Report reproducible issues through the [issue tracker](https://github.com/miladezzat/encrypt-rsa/issues), including your Node/browser version, import style, operation, and a non-sensitive sample. See the [code of conduct](CODE_OF_CONDUCT.md). Licensed under [MIT](LICENSE).

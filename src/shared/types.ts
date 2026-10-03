@@ -1,6 +1,44 @@
 /** OAEP hash shared by Node and Web; SHA-1 remains the compatibility default. */
 export type OaepHash = 'sha1' | 'sha256';
 
+/** JSON data supported without silent serialization losses. */
+export type JsonValue = null | boolean | number | string | JsonValue[] | { [key: string]: JsonValue };
+/** UTF-8 and depth bounds for new JSON/message helpers; existing string APIs are unaffected. */
+export type JsonLimits = { maxBytes?: number; maxPayloadBytes?: number; maxDepth?: number };
+/** Fully resolved JSON limits. */
+export type ResolvedJsonLimits = Required<JsonLimits>;
+/** A schema parser validates unknown application data and may transform it. */
+export type JsonParser<T> = (value: JsonValue) => T | Promise<T>;
+/** Encrypt strict JSON using SHA-256 and the v1 hybrid format. */
+export type parametersOfEncryptJSON = { value: JsonValue; publicKey?: string; limits?: JsonLimits };
+/** Without an application parser, decrypted data is JsonValue, never an unchecked application type. */
+export type parametersOfDecryptJSON<T = JsonValue> = {
+  text: string; privateKey?: string; limits?: JsonLimits; parse?: JsonParser<T>;
+};
+/** Signed message claims. Timestamps are Unix milliseconds; nonce must be randomly generated. */
+export type MessageClaims<T = JsonValue> = {
+  purpose: string; issuer: string; audience: string; keyId: string;
+  issuedAt: number; expiresAt: number; nonce: string; payload: T;
+};
+/** Sign a canonical, domain-separated RSA-PSS message envelope. */
+export type parametersOfSignMessage = { message: MessageClaims; privateKey?: string; limits?: JsonLimits };
+/** Replay store input. validUntil includes the verifier's allowed clock skew. */
+export type NonceClaim = {
+  issuer: string; audience: string; purpose: string; nonce: string; validUntil: number;
+};
+/** Trusted key resolution and atomic replay protection are mandatory. Store failures reject verification. */
+export type parametersOfVerifyMessage<T = JsonValue> = {
+  text: string;
+  expected: { issuer: string; audience: string; purpose: string };
+  resolvePublicKey: (identity: { issuer: string; keyId: string }) => string | Promise<string>;
+  consumeNonce: (claim: NonceClaim) => boolean | Promise<boolean>;
+  parse?: JsonParser<T>;
+  limits?: JsonLimits;
+  now?: () => number;
+  clockSkewMs?: number;
+  maxLifetimeMs?: number;
+};
+
 /**
  * Type representing the return value of a function that creates RSA keys.
  *
@@ -84,6 +122,12 @@ export interface INodeRSA {
   decryptStringWithRsaPrivateKey(args: parametersOfDecrypt): Promise<string>;
   encryptLarge(args: parametersOfEncryptLarge): Promise<string>;
   decryptLarge(args: parametersOfDecrypt): Promise<string>;
+  encryptJSON(args: parametersOfEncryptJSON): Promise<string>;
+  decryptJSON<T>(args: parametersOfDecryptJSON<T> & { parse: JsonParser<T> }): Promise<T>;
+  decryptJSON(args: parametersOfDecryptJSON): Promise<JsonValue>;
+  signMessage(args: parametersOfSignMessage): Promise<string>;
+  verifyMessage<T>(args: parametersOfVerifyMessage<T> & { parse: JsonParser<T> }): Promise<MessageClaims<T>>;
+  verifyMessage(args: parametersOfVerifyMessage): Promise<MessageClaims>;
   sign(args: parametersOfSign): Promise<string>;
   verify(args: parametersOfVerify): Promise<boolean>;
   encrypt(args: parametersOfEncryptPrivate): Promise<string>;

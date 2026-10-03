@@ -41,3 +41,7 @@ npm run smoke:browser
 These check the Node example, actual installed CJS/ESM/TypeScript consumers, installed browser entries and global functions, and the browser demo's encryption/signature flows. The browser checks require Chromium and localhost access.
 
 See the [main README](../README.md), [compatibility guide](../documentation/compatibility.md), [payload specification](../documentation/payload-format.md), and [migration guide](../documentation/migration.md).
+
+## JSON, agents, and AI SDK
+
+See the [optional example app](ai-integrations/README.md) for encrypted memory, atomic revision checks/key rotation, signed messages, SDK persistence, and a local documentation assistant. Install its dependencies separately; none are included in the published core package.

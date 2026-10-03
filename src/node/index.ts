@@ -2,6 +2,8 @@
  * Node build: NodeRSA with a Promise API and nonblocking key generation.
  */
 import convertKeyToBase64 from './convertKeyToBase64';
+import { checkJsonPayload, parseJson, stringifyJson } from '../shared/json';
+import { signMessage as signEnvelope, verifyMessage as verifyEnvelope } from '../shared/messages';
 import {
   createPrivateAndPublicKeys,
   decryptStringWithRsaPrivateKey,
@@ -23,6 +25,13 @@ import type {
   parametersOfEncryptPrivate,
   returnCreateKeys,
   INodeRSA,
+  JsonValue,
+  JsonParser,
+  MessageClaims,
+  parametersOfEncryptJSON,
+  parametersOfDecryptJSON,
+  parametersOfSignMessage,
+  parametersOfVerifyMessage,
 } from '../shared/types';
 
 function requireKey(key: string | undefined, keyName: 'public' | 'private'): string {
@@ -35,6 +44,15 @@ function requireKey(key: string | undefined, keyName: 'public' | 'private'): str
 
 export type {
   OaepHash,
+  JsonValue,
+  JsonLimits,
+  JsonParser,
+  MessageClaims,
+  NonceClaim,
+  parametersOfEncryptJSON,
+  parametersOfDecryptJSON,
+  parametersOfSignMessage,
+  parametersOfVerifyMessage,
   returnCreateKeys,
   parametersOfEncrypt,
   parametersOfEncryptLarge,
@@ -112,6 +130,35 @@ class NodeRSA implements INodeRSA {
       ...args,
       privateKey: convertKeyToBase64(requireKey(privateKey, 'private')),
     });
+  }
+
+  /** Encrypts strict, bounded JSON using SHA-256 and authenticated v1 hybrid encryption. */
+  public async encryptJSON(args: parametersOfEncryptJSON): Promise<string> {
+    const text = stringifyJson(args.value, args.limits);
+    return this.encryptLarge({
+      text, publicKey: args.publicKey, oaepHash: 'sha256', payloadVersion: 'v1',
+    });
+  }
+
+  /** Decrypts bounded JSON; use a schema parser to obtain a validated application type. */
+  public decryptJSON<T>(args: parametersOfDecryptJSON<T> & { parse: JsonParser<T> }): Promise<T>;
+  public decryptJSON(args: parametersOfDecryptJSON): Promise<JsonValue>;
+  public async decryptJSON<T = JsonValue>(args: parametersOfDecryptJSON<T>): Promise<JsonValue | T> {
+    checkJsonPayload(args.text, args.limits);
+    const value = parseJson(await this.decryptLarge({ text: args.text, privateKey: args.privateKey }), args.limits);
+    return args.parse ? args.parse(value) : value;
+  }
+
+  /** Signs all message claims in a canonical, domain-separated RSA-PSS envelope. */
+  public async signMessage(args: parametersOfSignMessage): Promise<string> {
+    return signEnvelope(args, (parameters) => this.sign(parameters));
+  }
+
+  /** Verifies trusted identities, time policy, schema, and mandatory atomic replay protection. */
+  public verifyMessage<T>(args: parametersOfVerifyMessage<T> & { parse: JsonParser<T> }): Promise<MessageClaims<T>>;
+  public verifyMessage(args: parametersOfVerifyMessage): Promise<MessageClaims>;
+  public async verifyMessage<T = JsonValue>(args: parametersOfVerifyMessage<T>): Promise<MessageClaims<JsonValue | T>> {
+    return verifyEnvelope(args, (parameters) => this.verify(parameters));
   }
 
   public async encrypt(args: parametersOfEncryptPrivate): Promise<string> {

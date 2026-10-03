@@ -24,11 +24,8 @@ function walk(directory) {
 
     const original = fs.readFileSync(fullPath, 'utf8');
     const cleaned = original.replace(trackingBlockPattern, '').replace(/href="([^"#]+)"/g, (match, href) => {
-      const guides = {
-        'documentation/compatibility.md': 'compatibility.html',
-        'documentation/payload-format.md': 'payload-format.html',
-        'documentation/migration.md': 'migration.html',
-      };
+      const guides = Object.fromEntries(JSON.parse(fs.readFileSync(path.join(root, 'documentation/summary.json'), 'utf8'))
+        .map((guide) => [`documentation/${guide.file}`, guide.file.replace(/\.md$/, '.html')]));
       const alias = href.match(/(?:^|\/)undefineds\/([^/]+)\.html$/);
       if (alias) {
         const target = path.join(docs, 'miscellaneous/typealiases.html');
