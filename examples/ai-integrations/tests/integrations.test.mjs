@@ -82,6 +82,53 @@ test('SDK validates metadata/data/tools and preserves full tool output', async (
   await assert.rejects(loadMessages(memory, context, 'chat', validation));
 });
 
+test('replayed tools use async model output conversion while encrypted history retains raw results', async () => {
+  const { memory } = setup();
+  const numberSchema = jsonSchema({ type: 'number' }, { validate: value => typeof value === 'number' ? { success: true, value } : { success: false, error: new Error('number required') } });
+  const toolPart = { type: 'tool-count', toolCallId: 'call-1', state: 'output-available', input: 1, output: 2 };
+  const history = [{ id: 'tool-1', role: 'assistant', parts: [toolPart] }, messages[0]];
+  await memory.write(context, 'chat', history, 0);
+  let conversions = 0;
+  const tools = { count: { inputSchema: numberSchema, outputSchema: numberSchema, toModelOutput: async args => {
+    assert.deepEqual(args, { toolCallId: 'call-1', input: 1, output: 2 });
+    conversions++;
+    return { type: 'text', value: 'count is 2' };
+  } } };
+  let prompt;
+  const model = new MockLanguageModelV4({ doStream: async options => {
+    prompt = options.prompt;
+    return fixtureModel('Continued answer').doStream(options);
+  } });
+  const loaded = await loadMessages(memory, context, 'chat', { tools });
+  const completed = await persistConversation({ memory, context, id: 'chat', messages: loaded.messages,
+    revision: loaded.revision, model, tools });
+  assert.equal(conversions, 1);
+  assert.deepEqual(prompt.find(message => message.role === 'tool').content[0].output, { type: 'text', value: 'count is 2' });
+  assert.deepEqual(completed.messages[0].parts[0], toolPart);
+  const persisted = await loadMessages(memory, context, 'chat', { tools });
+  assert.equal(persisted.revision, 2);
+  assert.deepEqual(persisted.messages, completed.messages);
+});
+
+test('tool output conversion failures preserve history and do not start generation', async () => {
+  const { memory } = setup();
+  const numberSchema = jsonSchema({ type: 'number' }, { validate: value => typeof value === 'number' ? { success: true, value } : { success: false, error: new Error('number required') } });
+  const history = [{ id: 'tool-1', role: 'assistant', parts: [
+    { type: 'tool-count', toolCallId: 'call-1', state: 'output-available', input: 1, output: 2 },
+  ] }, messages[0]];
+  await memory.write(context, 'chat', history, 0);
+  const tools = { count: { inputSchema: numberSchema, outputSchema: numberSchema,
+    toModelOutput: async () => { throw new Error('conversion unavailable'); } } };
+  let generations = 0;
+  const model = new MockLanguageModelV4({ doStream: async options => {
+    generations++;
+    return fixtureModel().doStream(options);
+  } });
+  await assert.rejects(persistConversation({ memory, context, id: 'chat', messages: history, revision: 1, model, tools }), /conversion unavailable/);
+  assert.equal(generations, 0);
+  assert.deepEqual(await memory.read(context, 'chat'), { revision: 1, value: history });
+});
+
 test('failed generation, malformed messages and write conflicts never overwrite history', async () => {
   const { memory } = setup(); await memory.write(context, 'chat', messages, 0);
   const failed = new MockLanguageModelV4({ doStream: async () => { throw new Error('provider failed'); } });

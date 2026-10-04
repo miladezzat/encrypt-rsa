@@ -48,10 +48,12 @@ export async function loadMessages(memory, context, id, validation = {}) {
  * onSnapshot is an optional UI delivery hook, not the persistence owner. A caller
  * can stop UI delivery on disconnect while this promise continues. Await it with
  * the host's background-task mechanism (e.g. waitUntil), never a fire-and-forget job.
+ * Use the same tools for validation, model output conversion, and generation;
+ * keep the original tool results in persisted UI history.
  */
 export async function persistConversation({ memory, context, id, messages, revision, model, tools, validation = {}, onSnapshot, abortSignal }) {
   const original = await validateUIMessages({ ...validation, tools, messages: jsonData(messages) });
-  const result = streamText({ model, tools, messages: await convertToModelMessages(original), maxRetries: 0, abortSignal, onError: () => {} });
+  const result = streamText({ model, tools, messages: await convertToModelMessages(original, { tools }), maxRetries: 0, abortSignal, onError: () => {} });
   let outcome;
   const stream = toUIMessageStream({
     stream: result.stream, tools, originalMessages: original, generateMessageId: randomUUID,

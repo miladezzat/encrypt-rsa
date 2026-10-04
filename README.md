@@ -127,6 +127,8 @@ JSON helpers use v1 hybrid SHA-256, reject lossy/non-JSON values, and bound UTF-
 
 AI SDK is installed only in the [private example app](examples/ai-integrations/README.md). The core library stays dependency-free. The app includes offline fixture tests and a local docs assistant that selects validated templates without accepting secrets or executing generated code. Real provider calls are an explicit CLI opt-in. At-rest encryption does not hide plaintext sent to an AI provider.
 
+The conversation persistence recipe uses configured tool output converters when replaying history to a model, while encrypted storage retains the full original tool results. Pass the same tools when loading messages and generating a continuation; see the [persistence guide](documentation/ai/conversation-persistence.md).
+
 ## Signed messages
 
 `signMessage` signs a canonical envelope containing `purpose`, `issuer`, `audience`, `keyId`, `issuedAt`, `expiresAt`, `nonce`, and a JSON `payload`. `verifyMessage` requires expected identities, a trusted key resolver, and an atomic nonce store; it checks signature, expiry, maximum lifetime, and replay before returning the payload. An optional schema parser validates the payload. Defaults allow a five-minute lifetime with zero clock skew. See the [complete contract and replay-store requirements](documentation/signed-messages.md) and [runnable example](examples/ai-integrations/message-demo.mjs).
