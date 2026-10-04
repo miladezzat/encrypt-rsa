@@ -30,13 +30,15 @@ These functions are defined in [`persistence.mjs`](https://github.com/miladezzat
 The separate `persistence.mjs` recipe:
 
 1. Decrypts and validates full `UIMessage` objects using `validateUIMessages`, including declared metadata/data schemas and tool schemas.
-2. Converts validated UI messages with `convertToModelMessages` before `streamText`.
+2. Converts validated UI messages with `convertToModelMessages(original, { tools })` before `streamText`, using each configured tool's `toModelOutput` converter for replayed results.
 3. Owns consumption of the full server stream with `toUIMessageStream` and `readUIMessageStream`. A failed UI delivery hook disables delivery while consumption continues.
 4. Stores full completed history (IDs, parts, tool input/output, data, metadata) only when the SDK reports a completed outcome. Failures/aborts preserve existing history. A revision conflict rejects instead of overwriting another request.
 
 ### Preserve complete message values
 
 SDK optional undefined object fields are omitted explicitly; other non-JSON values reject. Do not flatten history into text or silently reset invalid history. Declare the same schemas/tools on reload. Validate tool input/output and authorize tool execution independently; encrypting a tool result does not make it trustworthy. The recipe supports the pinned SDK version, not an untested generic adapter for every provider/version.
+
+Pass the same tool definitions to `loadMessages(..., { tools })` and `persistConversation({ ..., tools })`. A tool can use `toModelOutput` to format its stored result for the model, including a custom text or multimodal representation. Conversion changes the model prompt only; encrypted UI history keeps the complete original result for later validation and display. A converter failure rejects before generation starts or history is updated.
 
 ### Own the server task
 
@@ -53,6 +55,6 @@ npm --prefix examples/ai-integrations run typecheck
 npm --prefix examples/ai-integrations test
 ```
 
-Fixture tests exercise completed history, metadata/tool validation, UI disconnects, failed/aborted generation, and write conflicts. They make no paid provider calls. See the [AI SDK persistence documentation](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence) when adapting the recipe to your pinned SDK version.
+Fixture tests exercise completed history, metadata/tool validation, replayed tool output conversion, converter failures, UI disconnects, failed/aborted generation, and write conflicts. They make no paid provider calls. See the [AI SDK persistence documentation](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence) when adapting the recipe to your pinned SDK version.
 
 Continue with the [docs assistant](./docs-assistant.md) for approved JSON and signed-message code templates.

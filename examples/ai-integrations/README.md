@@ -19,7 +19,7 @@ The last command opens a local HTTP service at `http://127.0.0.1:3001` (set `POR
 Files:
 
 - `memory.mjs`: encrypted tenant/subject-bound records, optimistic revision checks, and key rotation. Its Map backend is an example; production needs database CAS and authenticated context.
-- `persistence.mjs`: validates full SDK UIMessage history, drains the server stream independently of UI delivery, and saves completed history with revision checks. Declare the application's tools/metadata/data schemas when loading. Do not flatten messages to text.
+- `persistence.mjs`: validates full SDK UIMessage history, drains the server stream independently of UI delivery, and saves completed history with revision checks. Pass the same tools to loading and generation so replayed results use each tool's `toModelOutput` converter. Encrypted history retains the original results. Declare the application's metadata/data schemas when loading. Do not flatten messages to text.
 - `message-demo.mjs`: canonical signed result, trusted key resolution, payload validation, and nonce rejection. Its Map replay store is only for one process.
 - `assistant.mjs`: a ToolLoopAgent selects a strict template ID; the app verifies that it matches the requested operation. It displays approved code and never executes model output.
 - `tests/`: fixture integration tests for isolation, swaps/tampering, rotation/conflicts, complete history/tool values, disconnects/failures, and every template.
