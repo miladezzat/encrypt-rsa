@@ -74,7 +74,7 @@ Accepts legacy and v1 payloads. Reads the hash from v1; legacy implies SHA-1. An
 encryptJSON({ value, publicKey?, limits? }): Promise<string>
 ```
 
-Encrypts strict, canonical JSON with authenticated v1 hybrid SHA-256. Supports JSON primitives, arrays, and plain objects; rejects lossy serialization, cycles, classes, accessors, sparse arrays, and invalid Unicode. Optional `limits` bound plaintext bytes, encoded input bytes, and depth. See [supported values and limits](../ai-integrations.md#encrypt-and-validate-json).
+Encrypts strict, canonical JSON with authenticated v1 hybrid SHA-256. Supports JSON primitives, arrays, and plain objects; rejects lossy serialization, cycles, classes, accessors, sparse arrays, and invalid Unicode. Optional `limits` bound plaintext bytes, encoded input bytes, and depth. See [supported values and limits](../json.md#encrypt-and-validate-json).
 
 ## decryptJSON
 

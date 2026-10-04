@@ -34,7 +34,7 @@ assert(fs.existsSync(path.join(root, '.nojekyll')), 'GitHub Pages must preserve 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 assert(index.includes('encryptJSON') && index.includes('RSA-OAEP/SHA-256'), 'home page should include the current quick start');
 assert(!index.includes('compodoc'), 'the previous theme must be replaced');
-for (const page of ['getting-started', 'compatibility', 'payload-format', 'migration', 'releasing', 'ai-integrations', 'signed-messages', 'examples', 'contributing', 'changelog', 'license', 'api/reference', 'api/helpers', 'api/types', '404']) {
+for (const page of ['getting-started', 'json', 'compatibility', 'payload-format', 'migration', 'releasing', 'ai-integrations', 'ai/encrypted-memory', 'ai/conversation-persistence', 'ai/docs-assistant', 'signed-messages', 'examples', 'contributing', 'changelog', 'license', 'api/reference', 'api/helpers', 'api/types', '404']) {
   assert(fs.existsSync(path.join(root, `${page}.html`)), `missing ${page} page`);
 }
 const api = fs.readFileSync(path.join(root, 'api/reference.html'), 'utf8');

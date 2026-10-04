@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## Unreleased
 
+- Highlight AI integrations on the homepage and organize JSON, encrypted memory, conversation persistence, and assistant guides with contextual navigation.
+- Correct the displayed author name to Milad Fahmy in the site, license, and package metadata.
 - Replace the documentation site with VitePress, complete API pages, local search, and mobile navigation while preserving legacy links.
 - Wait for npm registry processing after a successful upload; verify already published versions without republishing them.
 

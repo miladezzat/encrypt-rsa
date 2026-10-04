@@ -39,7 +39,7 @@ Schema parsers should be pure: they run after signature verification but before 
 
 The returned string is canonical JSON with claims plus `version: 1`, `algorithm: 'RSA-PSS-SHA256'`, and a base64 `signature`. The signature covers the UTF-8 string `encrypt-rsa:signed-message:v1\n` followed by the canonical body without the signature. RSA-PSS uses a 32-byte salt. Canonical property sorting uses UTF-16 order and JSON number/string encoding; the supported JSON subset follows RFC 8785 encoding but rejects negative zero. Unicode normalization is not performed.
 
-Receivers require the exact canonical string and reject reordered/whitespace-modified envelopes, duplicate/unknown keys, unsupported algorithms, malformed signatures, changed claims, and invalid payloads. Transport the string unchanged. Node/browser/global builds interoperate. See the JSON guide for byte/depth limits.
+Receivers require the exact canonical string and reject reordered/whitespace-modified envelopes, duplicate/unknown keys, unsupported algorithms, malformed signatures, changed claims, and invalid payloads. Transport the string unchanged. Node/browser/global builds interoperate. See the [JSON guide](./json.md#bound-resource-use) for byte/depth limits.
 
 A valid signature authenticates the key holder and signed content. It does not establish that an agent's claims are true, remove prompt injection, authorize a tool, hide data, or provide forward secrecy. Treat payloads as untrusted data and enforce schema, permissions, and operation-specific rules. Use HTTPS and application size/rate limits. Review this new protocol before adopting it for high-assurance interoperability.
 
