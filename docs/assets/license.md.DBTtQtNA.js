@@ -1,6 +1,6 @@
-import{_ as n,o as a,c as e,a2 as p}from"./chunks/framework.D7WGirly.js";const E=JSON.parse('{"title":"License","description":"","frontmatter":{"editLink":false},"headers":[],"relativePath":"license.md","filePath":"license.md"}'),i={name:"license.md"};function t(l,s,o,c,r,T){return a(),e("div",null,[...s[0]||(s[0]=[p(`<h1 id="license" tabindex="-1">License <a class="header-anchor" href="#license" aria-label="Permalink to &quot;License&quot;">​</a></h1><div class="language-txt vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">txt</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>MIT License</span></span>
+import{_ as n,o as a,c as e,a2 as p}from"./chunks/framework.D7WGirly.js";const I=JSON.parse('{"title":"License","description":"","frontmatter":{"editLink":false},"headers":[],"relativePath":"license.md","filePath":"license.md"}'),i={name:"license.md"};function t(l,s,o,c,r,T){return a(),e("div",null,[...s[0]||(s[0]=[p(`<h1 id="license" tabindex="-1">License <a class="header-anchor" href="#license" aria-label="Permalink to &quot;License&quot;">​</a></h1><div class="language-txt vp-adaptive-theme"><button title="Copy Code" class="copy"></button><span class="lang">txt</span><pre class="shiki shiki-themes github-light github-dark vp-code" tabindex="0"><code><span class="line"><span>MIT License</span></span>
 <span class="line"><span></span></span>
-<span class="line"><span>Copyright (c) 2021 Milad Ezzat</span></span>
+<span class="line"><span>Copyright (c) 2021 Milad Fahmy</span></span>
 <span class="line"><span></span></span>
 <span class="line"><span>Permission is hereby granted, free of charge, to any person obtaining a copy</span></span>
 <span class="line"><span>of this software and associated documentation files (the &quot;Software&quot;), to deal</span></span>
@@ -18,4 +18,4 @@ import{_ as n,o as a,c as e,a2 as p}from"./chunks/framework.D7WGirly.js";const E
 <span class="line"><span>AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span></span>
 <span class="line"><span>LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,</span></span>
 <span class="line"><span>OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE</span></span>
-<span class="line"><span>SOFTWARE.</span></span></code></pre></div>`,2)])])}const I=n(i,[["render",t]]);export{E as __pageData,I as default};
+<span class="line"><span>SOFTWARE.</span></span></code></pre></div>`,2)])])}const E=n(i,[["render",t]]);export{I as __pageData,E as default};

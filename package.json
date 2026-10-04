@@ -111,7 +111,7 @@
     "Crypto-js RSA",
     "Javascript RSA encryption"
   ],
-  "author": "Milad E. Fahmy <miladezzat.f@gmail.com> (https://milad-ezzat.vercel.app)",
+  "author": "Milad Fahmy <miladezzat.f@gmail.com> (https://milad-ezzat.vercel.app)",
   "directories": {
     "test": "tests"
   },

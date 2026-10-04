@@ -1,79 +1,70 @@
-# JSON, agent memory, and AI SDK persistence
+# AI integrations
 
-`encrypt-rsa` 6.1 adds JSON helpers and signed messages that applications can use around AI workflows. The core package contains no AI SDK, model provider, network client, or runtime dependency. AI SDK 7 is pinned only in the private [example app](https://github.com/miladezzat/encrypt-rsa/tree/master/examples/ai-integrations).
+Use `encrypt-rsa` around your AI application to encrypt stored memory and conversation history, or verify signed agent messages. Start with a recipe below, then adapt its storage, identity, and key handling to your application.
 
-## Encrypt and validate JSON
+## Choose a recipe
 
-```ts
-import NodeRSA, { type JsonValue } from 'encrypt-rsa';
-const rsa = new NodeRSA();
-const text = await rsa.encryptJSON({ value: { note: 'Hello' }, publicKey });
-const note = await rsa.decryptJSON({ text, privateKey, parse: (value: JsonValue) => {
-  if (!value || typeof value !== 'object' || Array.isArray(value) ||
-      Object.keys(value).join(',') !== 'note' || typeof value.note !== 'string') {
-    throw new Error('Invalid note');
-  }
-  return { note: value.note };
-} });
-```
+| Your goal | Guide | Runnable source |
+|---|---|---|
+| Encrypt scoped agent memory and rotate keys | [Encrypted agent memory](./ai/encrypted-memory.md) | [`memory-demo.mjs`](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/memory-demo.mjs) |
+| Persist complete AI SDK message history | [Conversation persistence](./ai/conversation-persistence.md) | [`persistence.mjs`](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/persistence.mjs) |
+| Explore reviewed code templates | [Local docs assistant](./ai/docs-assistant.md) | [`assistant.mjs`](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/assistant.mjs) |
+| Authenticate an expiring agent result | [Signed messages and replay prevention](./signed-messages.md) | [`message-demo.mjs`](https://github.com/miladezzat/encrypt-rsa/blob/master/examples/ai-integrations/message-demo.mjs) |
 
-`encryptJSON` uses canonical JSON, a fresh AES-256-GCM key, and RSA-OAEP/SHA-256 to wrap that key. It always emits the authenticated v1 hybrid format. `decryptJSON` also accepts legacy hybrid ciphertext containing valid JSON. Writers/readers must both support v1 before rollout. Neither helper changes existing string API defaults.
+## What gets installed?
 
-All JSON roots are supported: null, booleans, finite numbers, strings, arrays, and plain objects (including null-prototype objects). Undefined, negative zero, NaN, Infinity, bigint, symbols, functions, dates/classes, sparse arrays, extra array properties, cycles, hidden/accessor properties, and unpaired Unicode surrogates reject. Serialization reads data descriptors, never getters or `toJSON`. Use ordinary data objects; proxies are not a sandbox boundary. Object property order is canonicalized; repeated references are copied as JSON values.
+| Install | Includes |
+|---|---|
+| `npm install encrypt-rsa` | The async crypto API for Node.js and browsers, with zero runtime dependencies |
+| Install the separate example app | AI SDK 7 and its locked development/example dependencies |
 
-Decryption resolves `JsonValue`. A synchronous or asynchronous `parse(value)` can validate a schema and transform the result; its return type is inferred. A generic type argument requires a parser, because a TypeScript type alone cannot validate decrypted input. Schema validation is optional for generic JSON but required by your application before using the data. Parsers should be pure and must throw/reject on invalid values. JSON parsing follows standard `JSON.parse` duplicate-key behavior; signed envelopes require canonical bytes and reject duplicate fields.
-
-## Bound resource use
-
-The optional `limits` object applies to JSON helpers and signed messages:
-
-| Limit | Default | Maximum | Meaning |
-|---|---:|---:|---|
-| `maxBytes` | 1 MiB | 64 MiB | Serialized/decrypted UTF-8 JSON bytes, including JSON syntax |
-| `maxPayloadBytes` | 2 MiB | 128 MiB | Input ciphertext or signed-envelope UTF-8 bytes, checked before crypto/parsing |
-| `maxDepth` | 128 | 256 | Nested value depth; root is depth zero |
-
-Limits are positive safe integers. Signed envelopes count the entire canonical envelope, including signature, toward `maxBytes`. If you increase plaintext limits, also allow for ciphertext base64/header overhead in `maxPayloadBytes`. Data is processed in memory; this is not a streaming file API. Apply request size limits before buffering HTTP bodies and set application quotas/rate limits.
-
-## Agent memory example
-
-The runnable memory recipe stores encrypted records bound to tenant, authenticated subject, record ID, revision, and key ID. Tenant keyrings are trusted server configuration. Reads reject swapped records; writes use compare-and-set to prevent lost updates. Rotation decrypts with the old key and writes with the active key using the same revision check. Keep old private keys until migration and retention requirements are satisfied.
-
-The example backend is a Map. Replace it with a database transaction/atomic conditional update before using multiple processes. Derive tenant/subject from authentication and enforce authorization before calling it. Do not accept tenant key mappings or private keys from request bodies or model outputs.
-
-Encryption protects confidentiality at rest and detects altered ciphertext. Anyone with the public key can create new ciphertext: encryption does not authenticate a writer or prevent restoring an older valid database snapshot. Protect database writes/revisions, and add signed records or an external trusted revision store when that threat matters. The library does not supply a KMS, database, key lifecycle, or access control.
-
-Memory records carry schema version 1. Readers reject incompatible versions and corrupt records rather than resetting history. For a schema migration, validate the old record with its old schema, transform it, and write the new checkpoint with a revision check. Keep migration code and retired decryption keys until the application confirms that all retained records are readable. The example does not automatically migrate unknown formats.
-
-## AI SDK conversation persistence
-
-The separate `persistence.mjs` recipe:
-
-1. Decrypts and validates full `UIMessage` objects using `validateUIMessages`, including declared metadata/data schemas and tool schemas.
-2. Converts validated UI messages with `convertToModelMessages` before `streamText`.
-3. Owns consumption of the full server stream with `toUIMessageStream` and `readUIMessageStream`. A failed UI delivery hook disables delivery while consumption continues.
-4. Stores full completed history (IDs, parts, tool input/output, data, metadata) only when the SDK reports a completed outcome. Failures/aborts preserve existing history. A revision conflict rejects instead of overwriting another request.
-
-SDK optional undefined object fields are omitted explicitly; other non-JSON values reject. Do not flatten history into text or silently reset invalid history. Declare the same schemas/tools on reload. Validate tool input/output and authorize tool execution independently; encrypting a tool result does not make it trustworthy. The recipe supports the pinned SDK version, not an untested generic adapter for every provider/version.
-
-Keep the server task alive using the host's background-task facility and await/report the persistence promise. A client disconnect must stop UI delivery, not cancel that task. An explicit server abort cancels generation and does not save partial history. For long-lived jobs use a durable worker; serverless processes may end after the response. Add idempotency, conflict resolution, retries, retention/deletion, rate limits, and durable storage for a deployed application.
-
-Plaintext is available to the application and to any provider receiving model messages. At-rest encryption does not provide end-to-end secrecy from an AI provider. Minimize/redact submitted data and apply your provider/privacy policy. Never send private keys or credentials to a model.
+The core contains no AI SDK, model provider, network client, database, or KMS. Memory stores, persistence adapters, and the docs assistant are recipes in the [private example app](https://github.com/miladezzat/encrypt-rsa/tree/master/examples/ai-integrations), not additional exports from the package. Here, **private** means the app is not published to npm; its source is public in the repository.
 
 ## Run the examples
 
-From the repository root, run `npm ci && npm run build`, then:
+Clone the [repository](https://github.com/miladezzat/encrypt-rsa), then run from its root:
 
 ```bash
+npm ci
+npm run build
 npm --prefix examples/ai-integrations ci
 npm --prefix examples/ai-integrations run typecheck
 npm --prefix examples/ai-integrations test
+```
+
+Choose a demo:
+
+```bash
 npm --prefix examples/ai-integrations run memory
 npm --prefix examples/ai-integrations run messages
 npm --prefix examples/ai-integrations run assistant
 npm --prefix examples/ai-integrations run demo
 ```
 
-The local docs assistant at `http://127.0.0.1:3001` accepts two public choices (runtime and operation), uses a fixture model by default, and displays validated, approved templates. It has no free-form secret input and executes no generated code. A separate CLI `assistant -- --live` can use AI Gateway with `AI_GATEWAY_API_KEY` and optional `AI_MODEL` (default `openai/gpt-6.1-sol`); that opt-in makes external calls and may incur charges. Keep credentials in the server environment. The web demo always uses fixtures.
+Node 22 and 24 are the tested example runtimes. Memory and message demos make no model calls. The assistant CLI and local web demo use fixtures by default; no provider credentials are needed. See [optional live CLI usage](./ai/docs-assistant.md#optional-live-cli) for the separate opt-in and possible charges.
 
-Fixture tests verify integration mechanics without a paid call. They do not prove a provider's availability, output quality, or privacy guarantees. See [AI SDK persistence documentation](https://ai-sdk.dev/docs/ai-sdk-ui/chatbot-message-persistence) and the [signed-message guide](https://github.com/miladezzat/encrypt-rsa/blob/master/documentation/signed-messages.md).
+## JSON foundations {#encrypt-and-validate-json}
+
+<span id="bound-resource-use"></span>
+
+Use the [JSON encryption guide](./json.md) for supported values, canonical serialization, and schema parsers. The [resource limits table](./json.md#bound-resource-use) documents the default 1 MiB JSON size, 2 MiB encoded input size, and depth 128. These are core features usable without AI.
+
+## Agent memory example
+
+The [memory recipe](./ai/encrypted-memory.md) binds encrypted records to a tenant, user, record ID, revision, and key ID. It rejects swapped records, detects revision conflicts, and demonstrates key rotation. Replace its Map backend with durable atomic storage for a deployed application.
+
+## AI SDK conversation persistence
+
+The [persistence recipe](./ai/conversation-persistence.md) reloads validated full `UIMessage` history and saves only completed generation. It preserves structured message parts and owns server stream consumption independently of UI delivery. Keep the server task alive and apply conflict/idempotency policy in your application.
+
+## Before deploying an integration
+
+- Derive tenant/user identity from authentication and enforce authorization before accessing records.
+- Keep private keys in trusted server storage, apply a rotation/retention policy, and use separate signing and encryption pairs.
+- Add durable storage with atomic revision checks and, for signed messages, a shared atomic replay store.
+- Validate decrypted records, tool input/output, and message schemas before use.
+- Set size/rate limits, retention/deletion rules, and durable background-job handling where needed.
+
+Encryption protects data **at rest**. Your application and any model provider receiving decrypted messages see their plaintext. Anyone with a public encryption key can create ciphertext; encryption alone does not authenticate a writer. A valid signature authenticates signed content and its key holder, not the truth of an agent's response or permission to run a tool.
+
+Continue with [encrypted memory](./ai/encrypted-memory.md), [conversation persistence](./ai/conversation-persistence.md), or the [docs assistant](./ai/docs-assistant.md).

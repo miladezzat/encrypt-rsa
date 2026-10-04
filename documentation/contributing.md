@@ -29,3 +29,9 @@ Commit source edits and regenerated `docs/` together. GitHub Pages publishes `ma
 ## Keep the API accurate
 
 Update the [NodeRSA reference](./api/reference.md) and guides when behavior changes. The [types page](./api/types.md) includes the shared source contracts directly. Changelog and license pages include the root files rather than maintaining duplicate copies. Local search runs in the browser without an external search service.
+
+## Organize a new guide
+
+Keep core encryption topics in the [JSON guide](./json.md), compatibility guide, and API reference. Keep AI recipes in `documentation/ai/`, with an entry in the [AI overview](./ai-integrations.md). Each recipe should state its prerequisites, runnable source, validation steps, and application responsibilities. Clearly distinguish package exports from example helpers.
+
+Add the page to the appropriate sidebar group in `.vitepress/config.mts`. For a new AI recipe, update the overview and homepage cards in `.vitepress/theme/HomeAI.vue`. Use relative Markdown links between guides; the static build checks their pages and anchors. Preserve existing anchors when moving content so shared bookmarks remain useful.

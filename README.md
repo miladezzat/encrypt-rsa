@@ -123,7 +123,7 @@ const text = await rsa.encryptJSON({ value: { note: 'Hello' }, publicKey });
 const value = await rsa.decryptJSON({ text, privateKey }); // JsonValue, not an assumed schema
 ```
 
-JSON helpers use v1 hybrid SHA-256, reject lossy/non-JSON values, and bound UTF-8 bytes and nesting. Supply a synchronous or asynchronous `parse` callback to validate an application schema and infer its result type. Defaults are 1 MiB JSON, 2 MiB encoded input, and depth 128. See the [JSON and AI guide](documentation/ai-integrations.md) for supported values, limits, tenant-bound encrypted memory, key rotation, and full AI SDK conversation persistence.
+JSON helpers use v1 hybrid SHA-256, reject lossy/non-JSON values, and bound UTF-8 bytes and nesting. Supply a synchronous or asynchronous `parse` callback to validate an application schema and infer its result type. Defaults are 1 MiB JSON, 2 MiB encoded input, and depth 128. See the [JSON guide](documentation/json.md) for supported values and limits, and the [AI integration guides](documentation/ai-integrations.md) for tenant-bound encrypted memory, key rotation, and full AI SDK conversation persistence.
 
 AI SDK is installed only in the [private example app](examples/ai-integrations/README.md). The core library stays dependency-free. The app includes offline fixture tests and a local docs assistant that selects validated templates without accepting secrets or executing generated code. Real provider calls are an explicit CLI opt-in. At-rest encryption does not hide plaintext sent to an AI provider.
 

@@ -47,4 +47,4 @@ npm --prefix examples/ai-integrations run assistant
 npm --prefix examples/ai-integrations run demo
 ```
 
-The assistant demo opens at `http://127.0.0.1:3001`. It uses offline fixtures and approved templates. Real provider calls require a separate explicit CLI opt-in and credentials; they can incur charges. See [integration constraints and persistence details](./ai-integrations.md).
+The assistant demo opens at `http://127.0.0.1:3001`. It uses offline fixtures and approved templates. Real provider calls require a separate explicit CLI opt-in and credentials; they can incur charges. Follow the [memory recipe](./ai/encrypted-memory.md), [persistence recipe](./ai/conversation-persistence.md), or [assistant walkthrough](./ai/docs-assistant.md) for the next steps.

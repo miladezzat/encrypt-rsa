@@ -60,7 +60,7 @@ const note = await rsa.decryptJSON({
 });
 ```
 
-The schema parser infers the result type and rejects invalid application data. Without it, `decryptJSON` returns `JsonValue`. JSON encryption uses AES-256-GCM and RSA-OAEP/SHA-256 in the authenticated v1 format. Defaults limit JSON to 1 MiB, encoded input to 2 MiB, and nesting to 128 levels. See [JSON limits and supported values](./ai-integrations.md#bound-resource-use).
+The schema parser infers the result type and rejects invalid application data. Without it, `decryptJSON` returns `JsonValue`. JSON encryption uses AES-256-GCM and RSA-OAEP/SHA-256 in the authenticated v1 format. Defaults limit JSON to 1 MiB, encoded input to 2 MiB, and nesting to 128 levels. See [JSON limits and supported values](./json.md#bound-resource-use).
 
 ## Choose an operation
 
@@ -68,7 +68,7 @@ The schema parser infers the result type and rejects invalid application data. W
 |---|---|---|
 | Short UTF-8 text | `encryptStringWithRsaPublicKey` / `decryptStringWithRsaPrivateKey` | [Direct RSA](./api/reference.md#encryptstringwithrsapublickey) |
 | Text beyond RSA capacity | `encryptLarge` / `decryptLarge` | [Hybrid encryption](./api/reference.md#encryptlarge) |
-| Structured data | `encryptJSON` / `decryptJSON` | [JSON and AI integrations](./ai-integrations.md) |
+| Structured data | `encryptJSON` / `decryptJSON` | [JSON encryption](./json.md) |
 | A small binary value | `encryptBufferWithRsaPublicKey` / `decryptBufferWithRsaPrivateKey` | [Binary methods](./api/reference.md#encryptbufferwithrsapublickey) |
 | Authenticate exact text | `sign` / `verify` | [RSA-PSS signatures](./api/reference.md#sign) |
 | Authenticate scoped, expiring messages | `signMessage` / `verifyMessage` | [Signed messages](./signed-messages.md) |

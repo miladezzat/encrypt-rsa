@@ -5,11 +5,11 @@ import { fixtureModel } from './fixtures.mjs';
 const templates = {
   'node-json': {
     code: `import NodeRSA from 'encrypt-rsa';\nconst rsa = new NodeRSA();\nconst text = await rsa.encryptJSON({ value: { note: 'Hello' }, publicKey });\nconst value = await rsa.decryptJSON({ text, privateKey, parse: validateNote });`,
-    guide: 'https://github.com/miladezzat/encrypt-rsa/blob/master/documentation/ai-integrations.md',
+    guide: 'https://github.com/miladezzat/encrypt-rsa/blob/master/documentation/json.md',
   },
   'browser-json': {
     code: `// Bundlers resolve the browser entry. Serve over HTTPS or localhost.\nimport NodeRSA from 'encrypt-rsa';\nconst rsa = new NodeRSA();\nconst text = await rsa.encryptJSON({ value: { note: 'Hello' }, publicKey });\n// Decrypt only where the application can safely hold the private key.\nconst value = await rsa.decryptJSON({ text, privateKey, parse: validateNote });`,
-    guide: 'https://github.com/miladezzat/encrypt-rsa/blob/master/documentation/ai-integrations.md',
+    guide: 'https://github.com/miladezzat/encrypt-rsa/blob/master/documentation/json.md',
   },
   'node-message': {
     code: `import NodeRSA from 'encrypt-rsa';\nimport { randomBytes } from 'node:crypto';\nconst rsa = new NodeRSA();\nconst issuedAt = Date.now();\nconst text = await rsa.signMessage({ privateKey: signingPrivateKey, message: {\n  purpose: 'agent-result', issuer: 'agent-a', audience: 'service-b', keyId: 'signing-2026',\n  issuedAt, expiresAt: issuedAt + 60000, nonce: randomBytes(24).toString('base64url'),\n  payload: { result: 'Hello' }\n} });\nconst message = await rsa.verifyMessage({ text,\n  expected: { purpose: 'agent-result', issuer: 'agent-a', audience: 'service-b' },\n  resolvePublicKey: trustedKeyResolver, consumeNonce: atomicReplayStore, parse: validateResult\n});`,
