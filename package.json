@@ -40,6 +40,7 @@
   "scripts": {
     "test": "npm run build:test && mocha \"build/test/tests/**/*.spec.js\"",
     "test:release": "node --test tests/release.test.js",
+    "test:maintenance": "node --test tests/issue-link.test.js",
     "smoke": "node tests/package-smoke.js && node examples/node-basic.js",
     "smoke:install": "node tests/package-install-smoke.js",
     "prepare": "husky install",

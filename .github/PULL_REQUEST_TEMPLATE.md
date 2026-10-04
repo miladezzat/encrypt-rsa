@@ -1,29 +1,23 @@
+Closes #<!-- existing issue number -->
+
+Create or reuse an issue in this repository before implementing the change. Replace the placeholder above with its number and verify that GitHub shows the issue connection.
+
 ## Pull Request Checklist
 
-Please ensure that your pull request meets the following requirements:
-
 - [ ] My code follows the existing code style and structure.
-- [ ] I have run `npm test` and all tests have passed.
-- [ ] I have added/updated unit tests for any new or modified functionality.
+- [ ] I have run the relevant checks and recorded their results below.
+- [ ] I have added/updated regression tests for behavior changes.
 - [ ] I have updated the documentation (if needed).
-- [ ] This pull request is ready for review and merging.
+- [ ] This pull request has a linked GitHub issue and is ready for review.
 
 ## Description of Changes
 
-Please provide a brief description of the changes made in this pull request:
-- What does this pull request do?
-- What problems does it solve?
-- Are there any side effects or breaking changes?
+Explain the problem and the resulting behavior. Keep the PR focused on its linked issue and note compatibility impacts.
 
-## Related Issues
+## Validation
 
-If this pull request addresses one or more issues, please list them below (e.g., `Fixes #123`):
-
-- Fixes #
+List the checks run and their results. Note anything that remains unverified.
 
 ## Additional Context
 
-Provide any additional context or screenshots that may be helpful during the review process:
-
-- **Context**: [Link to any relevant context, issue, or resources]
-- **Screenshots** (if applicable):
+Include relevant context or screenshots when they help assess the change.

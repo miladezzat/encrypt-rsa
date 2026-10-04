@@ -1,0 +1,33 @@
+name: Pull request issue link
+
+on:
+  pull_request_target:
+    types: [opened, edited, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: read
+  issues: read
+  pull-requests: read
+
+concurrency:
+  group: issue-link-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  linked-issue:
+    name: Linked GitHub issue
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Metadata-only: use trusted default-branch code, never the PR checkout.
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.repository.default_branch }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify the actual GitHub issue connection
+        run: node scripts/check-pr-issue-link.js
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

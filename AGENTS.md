@@ -53,3 +53,10 @@
 - Keep README, examples, changelog, and generated docs consistent with actual package behavior.
 - If public API or build output changes, update the examples and package smoke tests in the same change.
 - Keep license metadata consistent with `LICENSE`.
+
+## Issues and Maintenance
+
+- Every PR must have a corresponding issue in this repository. Search existing work, then create or reuse the issue before implementing a change.
+- Put `Closes #<issue>` in the PR description and verify that GitHub shows the issue connection. Target `master` for closing keywords to take effect.
+- Follow `MAINTENANCE.md` for scheduled reviews, validation, compatibility, and feature approval.
+- Commits and PRs are authored by the configured user alone. Never use an `--author` override, append `Co-Authored-By`, or add generated/tool branding.
