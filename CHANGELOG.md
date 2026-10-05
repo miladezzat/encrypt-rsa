@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## Unreleased
 
+- Retry interrupted npm registry response bodies within the release-verification deadline, while malformed JSON and invalid metadata still fail immediately.
 - Honor configured AI tool output converters when replaying encrypted conversation history; preserve original stored results and reject converter failures before generation.
 - Highlight AI integrations on the homepage and organize JSON, encrypted memory, conversation persistence, and assistant guides with contextual navigation.
 - Correct the displayed author name to Milad Fahmy in the site, license, and package metadata.
