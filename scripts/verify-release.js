@@ -1,6 +1,6 @@
 const pkg = require('../package.json');
 
-/** Wait for npm processing/replication after an accepted publish; never republish. */
+/** Wait for npm processing/replication; retry transport failures through body reads, never republish. */
 async function verifyRelease({ name, version }, {
   fetchRegistry = fetch,
   wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms)),
@@ -15,14 +15,21 @@ async function verifyRelease({ name, version }, {
   while (now() < deadline) {
     attempt += 1;
     let response;
+    let released;
     try {
       response = await fetchRegistry(`https://registry.npmjs.org/${encodeURIComponent(name)}/${encodeURIComponent(version)}`, {
         signal: AbortSignal.timeout(Math.max(1, Math.min(15000, deadline - now()))),
         cache: 'no-store', headers: { 'Cache-Control': 'no-cache' },
       });
-    } catch (error) { lastError = error.message; }
+      if (response.ok) released = await response.json();
+    } catch (error) {
+      // JSON syntax and unexpected body errors remain permanent failures.
+      if (response?.ok && !['TypeError', 'AbortError', 'TimeoutError'].includes(error.name)) throw error;
+      lastError = error.message;
+      // Successful headers alone do not mean the response body was received.
+      response = undefined;
+    }
     if (response?.ok) {
-      const released = await response.json();
       if (released.name !== name || released.version !== version || typeof released.dist?.integrity !== 'string'
           || !/^sha512-[A-Za-z0-9+/]+={0,2}$/.test(released.dist.integrity)) {
         throw new Error('Registry returned invalid release metadata');
